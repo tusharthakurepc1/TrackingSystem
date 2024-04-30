@@ -1,9 +1,9 @@
-import './App.css'
+import WFHRoutes from './WFHRoutes'
 
 function App() {
   return (
     <div>
-      <h1> Hello World App Component</h1>
+      <WFHRoutes />
     </div>
   )
 }

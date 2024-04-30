@@ -24,7 +24,7 @@ const SendMail = async (req, res) => {
         secure: false,
         auth: {
             user: 'tusharchandthakurepc205@gmail.com',
-            pass: ''
+            pass: 'vjvz ybun hocf gzxx'                     //need to change....
         }
     });
 
