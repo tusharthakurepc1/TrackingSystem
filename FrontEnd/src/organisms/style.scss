@@ -7,3 +7,25 @@ form{
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
+table{
+    border: 1px solid black;
+    margin: 0px auto;
+}
+th{
+    padding: 5px 10px 5px 10px
+}
+
+.react-calendar{
+    width: 470px;
+    margin: 0px auto;
+    border: none;
+}
+.react-calendar__navigation{
+    width: 470px;
+    border: none;
+}
+.react-calendar__viewContainer{
+    width: 470px;
+    border: none;
+}

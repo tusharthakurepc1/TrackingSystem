@@ -1,9 +1,14 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Input from '../atoms/Input'
 import "./style.scss"
 import Button from '../atoms/Button';
+import DashBoardOrganizationUser from './DashboardOrganizationUser';
+import Cookie from 'js-cookie'
 
 const LoginOrganizationUserForm = () =>{
+
+    const navigate = useNavigate();
     const [emailVal, setEmailVal] = useState("")
     const [passwordVal, setPasswordVal] = useState("")
     const [otpVal, setOtpVal] = useState("")
@@ -18,10 +23,9 @@ const LoginOrganizationUserForm = () =>{
         setOtpVal(value.target.value)
     }
 
-
-
     const submitReq = async(event) => {
         event.preventDefault()
+        // returnToken(emailVal, passwordVal, otpVal)
         const OTP_URL = "http://localhost:5500/user-login";
         const user = {
             email: emailVal,
@@ -37,7 +41,12 @@ const LoginOrganizationUserForm = () =>{
                 },
                 body: JSON.stringify(user)
             })
-            console.log("Login Done", resp);
+            const data = await resp.json()
+            if(data.accessToken){
+                Cookie.set("accessToken", data.accessToken)
+                navigate("/user-dashboard")
+            }
+            
         }catch(err){
             console.log("Can't send OTP.", err);
         }

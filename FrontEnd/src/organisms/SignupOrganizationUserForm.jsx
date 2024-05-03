@@ -50,7 +50,7 @@ const SignupOrganizationUserForm = () =>{
             doj: dojVal
         }
 
-        console.log(user);
+        console.log(JSON.stringify(user));
 
         try{
             var ack = await fetch(`http://localhost:5500/user-signup`, {
@@ -60,7 +60,7 @@ const SignupOrganizationUserForm = () =>{
                 },
                 body: JSON.stringify(user)
             });
-            console.log("Done");
+            console.log("Done", ack);
         }catch(err){
             console.log(err);
         }

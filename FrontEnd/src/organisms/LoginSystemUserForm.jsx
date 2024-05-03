@@ -1,9 +1,12 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Input from '../atoms/Input'
 import "./style.scss"
 import Button from '../atoms/Button';
+import Cookies from 'js-cookie'
 
 const LoginSystemUserForm = () =>{
+    const navigate = useNavigate();
     const [emailVal, setEmailVal] = useState("")
     const [passwordVal, setPasswordVal] = useState("")
     const [otpVal, setOtpVal] = useState("")
@@ -18,16 +21,35 @@ const LoginSystemUserForm = () =>{
         setOtpVal(value.target.value)
     }
 
+    const returnToken = (username, password, otp) => {
+        const URL = "http://localhost:5500/sysuser-login"
+        const api = fetch(URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username, 
+                password, 
+                otp
+            })
+        })
+
+        console.log(api);
+        console.log(api?.accessToken);
+    }
 
 
     const submitReq = async(event) => {
         event.preventDefault()
-        const OTP_URL = "http://localhost:5500/user-login";
+        const OTP_URL = "http://localhost:5500/sysuser-login";
         const user = {
             email: emailVal,
             password: passwordVal,
             otp: otpVal
         }
+        console.log(JSON.stringify(user));
+
 
         try{
             const resp = await fetch(OTP_URL, {
@@ -37,12 +59,15 @@ const LoginSystemUserForm = () =>{
                 },
                 body: JSON.stringify(user)
             })
-            console.log("Login Done", resp);
+            const data = await resp.json();
+            if(data.accessToken){
+                Cookies.set('accessToken', data.accessToken)
+                navigate("/sysuser-dashboard")
+            }
+            
         }catch(err){
-            console.log("Can't send OTP.", err);
+            console.log("Can't login", err);
         }
-
-        console.log(emailVal);
 
     }
 
@@ -68,7 +93,7 @@ const LoginSystemUserForm = () =>{
     return (
         <div className='form'>
             <form>
-                <h3>Orginization User</h3>
+                <h3>System User</h3>
 
                 <Input type={"email"} content={"Email ID"} setValue={setValueEmail}/><br />
                 <Input type={"password"} content={"Password"} setValue={setValuePass}/><br />

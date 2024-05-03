@@ -8,7 +8,7 @@ const cors = require("cors")
 const server = express()
 
 DBConnection()
-// mongoose.createConnection()
+mongoose.createConnection()
 
 server.use(bodyParser.urlencoded({extended: true}))
 server.use(bodyParser.json())
