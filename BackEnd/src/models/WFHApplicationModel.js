@@ -1,12 +1,11 @@
 const mongoose = require("mongoose")
 
-
 const WFHApplicationSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
     },
-    date: {
+    createdDate: {
         type: Date,
         required: true
     },
@@ -17,6 +16,14 @@ const WFHApplicationSchema = new mongoose.Schema({
     status: {                   // 1 states for approved, 2 states for rejected, 3 states for pending
         type: Number,
         required: true
+    },
+    reason: {
+        type: String,
+        required: true
+    },
+    approvedDate: {
+        type: Date,
+        required: true,
     }
 })
 

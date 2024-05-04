@@ -3,27 +3,26 @@ const WFHApplicationModel = require('../models/WFHApplicationModel')
 
 const WFHApplication = async (req, res) => {
     let {email} = req.user;
-    let {date, orgName} = req.body
+    let {createdDate, orgName, reason} = req.body
 
-    console.log(email, date, orgName);
+    console.log(email, createdDate, orgName, reason);
     if(
-        [email, date, orgName].some((el)=> {
-            !el || el === ""
+        [email, createdDate, orgName, reason].some((el)=> {
+            return !el || el === ""
         })
     ){
         return res.status(400).json({msg: "Data Insufficient"})
     }
 
-    // console.log(email, date, orgName);
-    // const newApplication = await WFHApplicationModel.create({
-    //     email,
-    //     date,
-    //     orgName,
-    //     status: 3,
-    // })
-    // newApplication.save()
-
-    const allApplication = await WFHApplicationModel.find({email})
+    const newApplication = await WFHApplicationModel.create({
+        email,
+        createdDate,
+        orgName,
+        status: 3,
+        reason,
+        approvedDate: new Date(0, 0, 0)
+    })
+    newApplication.save()
 
 
     return res.status(200).json({msg: "Application Filled"})

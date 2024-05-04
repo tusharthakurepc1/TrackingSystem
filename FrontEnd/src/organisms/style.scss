@@ -16,16 +16,37 @@ th{
     padding: 5px 10px 5px 10px
 }
 
+
+.calendar-body{
+    border: 1px solid black;
+    display: flex;
+}
 .react-calendar{
-    width: 470px;
-    margin: 0px auto;
-    border: none;
+    flex-grow: 1;
 }
-.react-calendar__navigation{
-    width: 470px;
-    border: none;
+.react-calendar__month-view__days__day--weekend{
+    color: black !important;
 }
-.react-calendar__viewContainer{
-    width: 470px;
-    border: none;
+
+.highlight-red{
+    background-color: red !important;
 }
+.highlight-yellow{
+    background-color: yellow !important;
+}
+.highlight-green{
+    background-color: green !important;
+}
+
+.background-float-form{
+    position: absolute;
+    top: 0px;
+    background-color: #c4c4c4a9;
+    width: 100%;
+    height: 100%;
+}
+
+.float-form{
+    background-color: aliceblue;
+}
+

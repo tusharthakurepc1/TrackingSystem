@@ -1,7 +1,6 @@
 const OrganizationUserModel = require("../models/OrganizationUserModel")
 
 const DashBoardSystemUser = async (req, res) =>{
-    let { user } = req.user;
 
     const user_data = await OrganizationUserModel.find({})
 

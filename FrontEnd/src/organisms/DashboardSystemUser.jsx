@@ -29,10 +29,8 @@ const DashBoardSystemUser =  () =>{
         }
         setAdminData(response.user);
         setUserData(response.user_data);
-
-        // if(!response.user || !response.user_data){
-        //     return <h1>Data not Found</h1>
-        // }
+        console.log(response.user_data);
+        
     }
 
     
@@ -58,6 +56,7 @@ const DashBoardSystemUser =  () =>{
                     <th>Data of Birth</th>
                     <th>Date of Joining</th>
                     <th>Organization</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>

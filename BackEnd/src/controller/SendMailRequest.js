@@ -8,7 +8,7 @@ const SendMail = async (req, res) => {
 
     if(
         [ email, otp ].some((el)=>{
-            !el || el === ""
+            return !el || el === ""
         })
     ){
         return res.status(200).json({

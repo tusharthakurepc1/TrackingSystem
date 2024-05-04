@@ -9,6 +9,9 @@ const DashBoardSystemUser = require("../controller/DashBoardSystemUser");
 const DashBoardOrganizationUser = require('../controller/DashBoardOrganizationUser')
 const DeleteOrganizationUser = require("../controller/DeleteOrganizationUser")
 const WFHApplication = require("../controller/WFH_Application");
+const MakeAdmin = require("../controller/MakeAdmin")
+const GetAdmin = require("../controller/GetAdmin")
+const UpdateWFH_Application = require("../controller/UpdateWFH_Application");
 const Auth = require("../controller/Auth");
 
 const router = express.Router()
@@ -27,10 +30,13 @@ router.post('/user-delete', DeleteOrganizationUser)
 
 //Organization 
 router.post("/org-signup", SignupOrganization)
+router.post("/org-admin", MakeAdmin)
+router.post("/org-getadmin", GetAdmin)
 
 
 router.post("/mail", SendMailRequest)
 router.post('/application', Auth, WFHApplication)
+router.post('/application-status', UpdateWFH_Application)
 
 
 

@@ -13,6 +13,10 @@ const OrganizationSchema = new mongoose.Schema({
     userEmail: {
         type: Array,
         required: true,
+    }, 
+    admin: {
+        type: String,
+        required: true,
     }
 })
 

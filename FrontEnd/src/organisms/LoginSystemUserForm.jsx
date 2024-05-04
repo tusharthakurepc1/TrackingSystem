@@ -60,6 +60,10 @@ const LoginSystemUserForm = () =>{
                 body: JSON.stringify(user)
             })
             const data = await resp.json();
+            if(data.msg){
+                alert(data.msg)
+            }
+
             if(data.accessToken){
                 Cookies.set('accessToken', data.accessToken)
                 navigate("/sysuser-dashboard")

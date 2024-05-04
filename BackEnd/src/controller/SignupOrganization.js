@@ -1,8 +1,7 @@
 const Organization = require("../models/OrganizationModel")
 
 const SignupOrganization = async (req, res) =>{
-    let name = req.body.name
-    let max_wfh = req.body.max_wfh
+    let { name, max_wfh } = req.body;
 
     if(name === "" || !name || !max_wfh){
         return res.status(200).json({status: "false", msg: "Fill the details"})
@@ -16,7 +15,8 @@ const SignupOrganization = async (req, res) =>{
     const new_orgi = await Organization.create({
         name: name,
         max_wfh: max_wfh,
-        userEmail: []
+        userEmail: [],
+        admin: "none"
     })
     new_orgi.save();
 

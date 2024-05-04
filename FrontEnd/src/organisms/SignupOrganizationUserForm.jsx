@@ -2,8 +2,11 @@ import React, {useState} from 'react';
 import Input from '../atoms/Input'
 import "./style.scss"
 import Button from '../atoms/Button';
+import { useNavigate } from 'react-router-dom';
 
 const SignupOrganizationUserForm = () =>{
+    const navigate = useNavigate()
+
     const [firstNameVal, setFirstNameVal] = useState("")
     const [lastNameVal, setLastNameVal] = useState("")
     const [orgVal, setOrgVal] = useState("")
@@ -53,18 +56,27 @@ const SignupOrganizationUserForm = () =>{
         console.log(JSON.stringify(user));
 
         try{
-            var ack = await fetch(`http://localhost:5500/user-signup`, {
+            var response = await fetch(`http://localhost:5500/user-signup`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(user)
             });
-            console.log("Done", ack);
+            
+            const data = await response.json()
+            console.log(response.status);
+            if(data.msg){
+                alert(data.msg)
+            }
+            if(response.status === 200){
+                navigate("/user-login")
+            }
+            
+
         }catch(err){
             console.log(err);
         }
-        console.log(ack);
 
     }
 

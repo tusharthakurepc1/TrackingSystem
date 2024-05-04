@@ -5,15 +5,15 @@ const SignupSystemUser = async (req, res) => {
     
     if(
         [firstName, lastName, email, password, dob].some((el)=>{
-            !el || el===""
+            return !el || el === ""
         })
     ){
         res.status(400).json({flag: false, msg: "Fill the details"})
     }
 
-    const user = await SystemUser.find({email})
-    if(!user){
-        res.status(400).json({flag: false, msg: "System User already Exists"})
+    const user = await SystemUser.findOne({email})
+    if(user){
+        return res.status(400).json({flag: false, msg: "System User already Exists"})
     }
 
     const new_user = await SystemUser.create({
@@ -24,7 +24,7 @@ const SignupSystemUser = async (req, res) => {
         dob
     })
 
-    return res.status(200).json({flag: true, msg: "System User Created Sucessfully"})
+    return res.status(200).json({flag: true, msg: "System User Created Sucessfully", new_user})
 }
 
 module.exports = SignupSystemUser

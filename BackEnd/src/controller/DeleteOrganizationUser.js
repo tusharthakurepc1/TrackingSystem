@@ -8,7 +8,7 @@ const DeleteOrganizationUser = async (req, res) => {
 
     if(
         [_id, email, organizationValue].some((el)=>{
-            !el || el === ""
+            return !el || el === ""
         })
     ){
         return res.status(400).json({status: false, msg: "Organization not defined"})

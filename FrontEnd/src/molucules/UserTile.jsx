@@ -38,6 +38,30 @@ const UserTile = (props) => {
 
     }
 
+    const makeUserAdmin = async () => {
+        if(organizationValue === 'Select'){
+            return
+        }
+        console.log(email, organizationValue);
+        const URL = "http://localhost:5500/org-admin"
+        const response = await fetch(URL, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email, 
+                orgName: organizationValue
+            })
+        })
+        const data = await response.json()
+        if(data.msg){
+            alert(data.msg)
+        }
+        console.log(data);
+
+    }
+
     const changeOrgValue = (event) => {
         setOrganizationValue(event.target.value)
     }
@@ -50,7 +74,7 @@ const UserTile = (props) => {
             <td>{doj}</td>
             <td>
                 
-                <select onChange={changeOrgValue}>
+                <select onChange={changeOrgValue} >
                     <option value={"Select"}>Select</option>
                     {
                         orgList.map((value)=>(
@@ -61,6 +85,7 @@ const UserTile = (props) => {
             </td>
             <td><Button content={"Update"} /></td>
             <td><Button content={"Delete"} onClickRef={deleteUser}/></td>
+            <td><Button content={"Make Admin"} onClickRef={makeUserAdmin}/></td>
             
         </tr>
     )

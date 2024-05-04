@@ -42,6 +42,9 @@ const LoginOrganizationUserForm = () =>{
                 body: JSON.stringify(user)
             })
             const data = await resp.json()
+            if(data.msg){
+                alert(data.msg)
+            }
             if(data.accessToken){
                 Cookie.set("accessToken", data.accessToken)
                 navigate("/user-dashboard")
@@ -49,9 +52,8 @@ const LoginOrganizationUserForm = () =>{
             
         }catch(err){
             console.log("Can't send OTP.", err);
+            alert("Invalid Credentials")
         }
-
-        console.log(emailVal);
 
     }
 
