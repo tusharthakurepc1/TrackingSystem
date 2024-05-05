@@ -17,19 +17,9 @@ const WFHRoutes = () =>{
                     {/* Home Route */}
                     <Route path='/' element={ <Home/> }/>        
 
-                    {/* Organization User Routes */}
-                    <Route path='/user-signup' element={<SignupOrganizationUserForm/>} />
-                    <Route path='/user-login' element={<LoginOrganizationUserForm/>} />
-
-                    {/* System User Routes */}
-                    <Route path='/sysuser-signup' element={<SignupSystemUserForm/>} />
-                    <Route path='/sysuser-login' element={<LoginSystemUserForm/>} />
-
-
                     {/* User's DashBoard */}
                     <Route path='/user-dashboard' element={ <DashBoardOrganizationUser/> }/>
                     <Route path='/sysuser-dashboard' element={ <DashBoardSystemUser/> } />
-
 
                     {/* Dump */}
                     <Route path='/temp' element={<DumpRoute />} />

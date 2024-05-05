@@ -70,7 +70,7 @@ const SignupOrganizationUserForm = () =>{
                 alert(data.msg)
             }
             if(response.status === 200){
-                navigate("/user-login")
+                navigate("/")
             }
             
 

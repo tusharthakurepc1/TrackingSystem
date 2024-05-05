@@ -57,7 +57,7 @@ const SignupSystemUserForm = () =>{
                 alert(data.msg);
             }
             if(response.status === 200){
-                navigate("/sysuser-login")
+                navigate("/")
             }
             console.log(data);
 
