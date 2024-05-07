@@ -1,0 +1,25 @@
+
+h1, p{
+    text-align: center;
+}
+
+.calendar-body{
+    display: flex;
+}
+.react-calendar{
+    flex-grow: 1;
+    width: 80% !important;
+}
+.react-calendar__month-view__days__day--weekend{
+    color: black !important;
+}
+
+.highlight-red{
+    background-color: red !important;
+}
+.highlight-yellow{
+    background-color: yellow !important;
+}
+.highlight-green{
+    background-color: green !important;
+}

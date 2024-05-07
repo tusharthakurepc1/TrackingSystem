@@ -33,13 +33,9 @@ router.post("/org-signup", SignupOrganization)
 router.post("/org-admin", MakeAdmin)
 router.post("/org-getadmin", GetAdmin)
 
-
+//Utility Route
 router.post("/mail", SendMailRequest)
 router.post('/application', Auth, WFHApplication)
 router.post('/application-status', UpdateWFH_Application)
-
-
-
-
 
 module.exports = router;

@@ -4,7 +4,7 @@ import Input from '../atoms/Input'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom';
 
-const WFH_Application = ({availedDate, formFlag, setFormFlag}) => {
+const WFH_Application = ({availedDate, formFlag, setFormFlag, orgData}) => {
     const navigate = useNavigate()
     const [orgVal, setOrgVal] = useState("")
     const [dateVal, setDateVal] = useState(availedDate)
@@ -26,7 +26,7 @@ const WFH_Application = ({availedDate, formFlag, setFormFlag}) => {
         const URL = "http://localhost:5500/application"
         const token = Cookies.get("accessToken")
         if(!token){
-            navigate("/user-login")
+            navigate("/")
         }
 
         const response = await fetch(URL, {
@@ -53,11 +53,19 @@ const WFH_Application = ({availedDate, formFlag, setFormFlag}) => {
     if(formFlag){
         return (
             <div className='background-float-form'>
-            {dateVal}
+            {orgVal}
             <form className='float-form'>
                     <h3>Work From Home Application</h3>
     
-                    <Input type={"text"} content={"Organization Name"} setValue={setValueOrg}/><br />
+                    <select className='orgname-dropdown' onChange={setValueOrg}>
+                        <option value={"Select"}>Organization Name</option>
+                        {
+                            orgData.map((value)=>{
+                                return <option value={value}>{value}</option>
+                            })
+                        }
+                    </select>
+
                     <Input type={"text"} content={"Reason"} setValue={setValueReason} />
                     
                     <Button content={"Submit"} onClickRef={applicationReq}/>

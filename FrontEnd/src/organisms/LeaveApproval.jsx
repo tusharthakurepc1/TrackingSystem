@@ -71,7 +71,7 @@ const ApplicationRow = (props)=> {
 const LeaveApproval = ({adminOrgData, wfhApplication}) => {
     return (
         <>
-            <h1> Leave Component </h1>
+            <h1> Leave Requests </h1>
 
             <table>
                 <tr>

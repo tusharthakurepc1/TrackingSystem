@@ -4,15 +4,17 @@ const Organization = require("../models/OrganizationModel")
 const SignupOrganizationUser = async (req, res) =>{
     let {_orginizationName, firstName, lastName, email, password, dob, doj} = req.body;
     
+    console.log(_orginizationName, firstName, lastName, email, password, dob, doj);
     if(
         [_orginizationName, firstName, email, password, dob, doj].some((el)=>{
-            return el === "" || typeof(el) === 'undefined'
+            return !el || el === ""
         })
     ){
         return res.status(400).json({status: "false", msg: "Fill the details"})
     }
 
     let orgData = await Organization.findOne({name: _orginizationName})
+    console.log(orgData);
     if(!orgData){
         return res.status(400).json({status: "false", msg: "Organization not exists"})
     }

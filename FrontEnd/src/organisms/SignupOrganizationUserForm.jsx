@@ -56,22 +56,19 @@ const SignupOrganizationUserForm = () =>{
         console.log(JSON.stringify(user));
 
         try{
-            var response = await fetch(`http://localhost:5500/user-signup`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(user)
-            });
-            
-            const data = await response.json()
-            console.log(response.status);
-            if(data.msg){
-                alert(data.msg)
+            const headers = {
+                'Content-Type': 'application/json'
             }
-            if(response.status === 200){
-                navigate("/")
-            }
+
+            var response = await axios.post(`http://localhost:5500/user-signup`, JSON.stringify(user), headers);
+            const data = response.data
+            console.log(data);
+            // if(data.msg){
+            //     alert(data.msg)
+            // }
+            // if(response.status === 200){
+            //     navigate("/")
+            // }
             
 
         }catch(err){
