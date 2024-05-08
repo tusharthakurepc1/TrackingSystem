@@ -68,4 +68,37 @@ export const organizationUserSignupRequest = async({_orginizationName, isAdmin, 
     }
 }
 
+export const acceptedLeaveRequest = async (_id: string) => {
+    const URL = "http://localhost:5500/application-status";
+
+    try{
+        const headers = {
+            'Content-Type': 'application/json',
+        }
+        const post_dashboard_api = await axios.post(URL, JSON.stringify({_id, statusValue: 1}), {headers})
+        return post_dashboard_api.data;
+    }
+    catch(err){
+        return err;
+    }
+
+}
+
+export const rejectedLeaveRequest = async (_id: string) => {
+    // setNewStatus(2);
+    const URL = "http://localhost:5500/application-status";
+
+    try{
+        const headers = {
+            'Content-Type': 'application/json'
+        }
+        const post_dashboard_api = await axios.post(URL, JSON.stringify({_id, statusValue: 2}), {headers})
+        return post_dashboard_api.data;
+    }
+    catch(err){
+        return err;
+    }
+
+}
+
 

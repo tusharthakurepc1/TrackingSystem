@@ -1,10 +1,11 @@
 interface ApplicationStructure{
+  _id: string,
   email: string, 
-  createdDate: string,
+  createdDate: Date,
   orgName: string,
   status: number,
   reason: string,
-  approvedDate: string
+  approvedDate: Date
 }
 interface UserStructure{
   email: string,

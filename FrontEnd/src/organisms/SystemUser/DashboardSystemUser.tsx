@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
-import {User} from '../../interface/UserWhole'
+import {User} from '../../typings/UserWhole'
 import { Table, Button, SelectPicker } from 'rsuite';
 import { UserStructure } from './type'
 import SystemUserServices from '../../services/SystemUser'
@@ -79,12 +79,14 @@ const DashBoardSystemUser =  () =>{
     
 
     const navigate = useNavigate()
-    const token: any = Cookies.get("accessToken")
+    const token: string | undefined = Cookies.get("accessToken")
     if(!token){
         navigate("/sysuser-login");
     }
     if(makeReq){
-        dashboardReq(token)
+        if(typeof token === 'string'){
+            dashboardReq(token)
+        }
         setMakeReq(false)
     }
 

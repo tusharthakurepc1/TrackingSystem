@@ -1,10 +1,13 @@
-interface UserStructure {
-  _id: string,
+
+
+interface ApplicationStructure{
+  _id: string
+  email: string, 
+  createdDate: Date,
   orgName: string,
-  email: string,
-  createdDate: string,
+  status: number,
   reason: string,
-  status: number
+  approvedDate: Date
 }
 
-export type {UserStructure}
+export type { ApplicationStructure }

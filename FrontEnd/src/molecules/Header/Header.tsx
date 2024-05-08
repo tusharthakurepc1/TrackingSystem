@@ -6,7 +6,7 @@ import HomeIcon from '@rsuite/icons/legacy/Home';
 import { useNavigate } from "react-router-dom";
 import './style.scss'
 
-const CustomNavbar = ({onSelect, ...props}: any) => {
+const CustomNavbar = ({onSelect}: CustomNavbarProps) => {
     const navigate = useNavigate()
     const [active, setActive] = useState('home');
 

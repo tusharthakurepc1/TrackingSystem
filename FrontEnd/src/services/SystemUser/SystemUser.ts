@@ -1,5 +1,5 @@
 import axios from 'axios'
-import LoginUser from '../../interface/LoginUser'
+import LoginUser from '../../typings/LoginUser'
 import { SystemUser, UserDeleteType, UserAdminType } from './type'
 
 export const SystemUserDashBoardRequest = async (token: string) => {

@@ -1,5 +1,5 @@
-import Application from "../../interface/Applications"
-import User from "../../interface/User"
+import Application from "../../typings/Applications"
+import User from "../../typings/User"
 
 interface SystemUser {
   firstName: string,

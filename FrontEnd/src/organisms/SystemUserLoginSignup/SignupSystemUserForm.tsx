@@ -1,73 +1,165 @@
-import {useState} from 'react';
-import "./style.scss"
+import { useState } from "react";
+import "./style.scss";
 
-import {Button, ButtonGroup, Input} from 'rsuite'
-import WFHApplicationServices from '../../services/WFHApplication';
-import { Props } from './type';
+import { Button, ButtonGroup, Input } from "rsuite";
+import WFHApplicationServices from "../../services/WFHApplication";
+import { Props } from "./type";
 
-const SignupSystemUserForm = ({setLogin}: Props) =>{
-    const [firstNameVal, setFirstNameVal] = useState("")
-    const [lastNameVal, setLastNameVal] = useState("")
+const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
+  const [firstNameVal, setFirstNameVal] = useState("");
+  const [firstNameFlag, setFirstNameFlag] = useState(false);
 
-    const [emailVal, setEmailVal] = useState("")
-    const [passwordVal, setPasswordVal] = useState("")
+  const [lastNameVal, setLastNameVal] = useState("");
+  const [lastNameFlag, setLastNameFlag] = useState(false);
 
-    const [dobVal, setDobVal] = useState("")
+  const [emailVal, setEmailVal] = useState("");
+  const [emailFlag, setEmailFlag] = useState(false);
 
-    const setValueFirstName = (value: string) =>{
-        setFirstNameVal(value)
-    }
-    const setValueLastName = (value: string) => {
-        setLastNameVal(value)
-    }
-    const setValueEmail = (value: string) =>{
-        setEmailVal(value)
-    }
-    const setValuePass = (value: string) => {
-        setPasswordVal(value)
-    }
-    const setValueDob = (value: string) =>{
-        setDobVal(value)
-    }
-    
+  const [passwordVal, setPasswordVal] = useState("");
+  const [passwordFlag, setPasswordFlag] = useState(false);
 
-    const signupReq = async(event: any) => {
-        event.preventDefault()
-        const user = {
-            firstName: firstNameVal,
-            lastName: lastNameVal,
-            email: emailVal,
-            password: passwordVal,
-            dob: dobVal,
-        }
+  const [dobVal, setDobVal] = useState("");
+  const [dobFlag, setDobFlag] = useState(false);
 
-        //Api call from Services
-        const data = await WFHApplicationServices.wFHApplicationSignupRequest(user)
-        console.log(data);
-    }
+  const setValueFirstName = (value: string) => {
+    if (value === "") setFirstNameFlag(true);
+    else setFirstNameFlag(false);
 
+    setFirstNameVal(value);
+  };
+  const setValueLastName = (value: string) => {
+    if (value === "") setLastNameFlag(true);
+    else setLastNameFlag(true);
 
+    setLastNameVal(value);
+  };
+  const setValueEmail = (value: string) => {
+    if (value === "") setEmailFlag(true);
+    else setEmailFlag(false);
 
-    return (
-        <form>
-            <ButtonGroup size='lg' justified style={{marginBottom: 10}}>
-                <Button onClick={()=> setLogin(true)} appearance='primary' active >Login</Button>
-                <Button onClick={()=> setLogin(false)} appearance='primary' active >Signup</Button>
-            </ButtonGroup>
-            <h3>System User</h3>
-            <Input type={"text"} placeholder={"First Name"} onChange={setValueFirstName} name=''/><br />
-            <Input type={"text"} placeholder={"Last Name"} onChange={setValueLastName} name=''/><br />
+    setEmailVal(value);
+  };
+  const setValuePass = (value: string) => {
+    if (value === "") setPasswordFlag(true);
+    else setPasswordFlag(false);
 
-            <Input type={"email"} placeholder={"Email ID"} onChange={setValueEmail} name=''/><br />
-            <Input type={"password"} placeholder={"Password"} onChange={setValuePass} name=''/><br />
+    setPasswordVal(value);
+  };
+  const setValueDob = (value: string) => {
+    if (value === "") setDobFlag(true);
+    else setDobFlag(false);
 
-            <Input type={"date"} placeholder={"Date of Birth"} onChange={setValueDob} name=''/>
+    setDobVal(value);
+  };
 
-            <Button onClick={signupReq} appearance='ghost'>Signup</Button>
+  const signupReq = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    const user = {
+      firstName: firstNameVal,
+      lastName: lastNameVal,
+      email: emailVal,
+      password: passwordVal,
+      dob: dobVal,
+    };
 
-        </form>
-    )
-}
+    //Api call from Services
+    const data = await WFHApplicationServices.wFHApplicationSignupRequest(user);
+    console.log(data);
+  };
 
+  return (
+    <form>
+      <div className="button-grp">
+        <Button
+          className={loginFlag ? "button-nav primary" : "button-nav default"}
+          onClick={() => {
+            console.log("Login Click");
 
-export default SignupSystemUserForm
+            setLogin(true);
+          }}
+          active
+        >
+          Login
+        </Button>
+        <Button
+          className={!loginFlag ? "button-nav primary" : "button-nav default"}
+          onClick={() => {
+            console.log("Signup Click");
+
+            setLogin(false);
+          }}
+          active
+        >
+          Signup
+        </Button>
+      </div>
+      <h3>System User</h3>
+
+      <div className="input-body">
+        <Input
+          type={"text"}
+          placeholder={"First Name"}
+          onChange={setValueFirstName}
+          name=""
+        />
+        <span className="error-msg" hidden={!firstNameFlag}>
+          This input is required.
+        </span>
+        <br />
+      </div>
+      <div className="input-body">
+        <Input
+          type={"text"}
+          placeholder={"Last Name"}
+          onChange={setValueLastName}
+          name=""
+        />
+        <span className="error-msg" hidden={!lastNameFlag}>
+          This input is required.
+        </span>
+        <br />
+      </div>
+      <div className="input-body">
+        <Input
+          type={"email"}
+          placeholder={"Email ID"}
+          onChange={setValueEmail}
+          name=""
+        />
+        <span className="error-msg" hidden={!emailFlag}>
+          This input is required.
+        </span>
+        <br />
+      </div>
+      <div className="input-body">
+        <Input
+          type={"password"}
+          placeholder={"Password"}
+          onChange={setValuePass}
+          name=""
+        />
+        <span className="error-msg" hidden={!passwordFlag}>
+          This input is required.
+        </span>
+        <br />
+      </div>
+      <div className="input-body">
+        <Input
+          type={"date"}
+          placeholder={"Date of Birth"}
+          onChange={setValueDob}
+          name=""
+        />
+        <span className="error-msg" hidden={!dobFlag}>
+          This input is required.
+        </span>
+      </div>
+
+      <Button onClick={signupReq} appearance="ghost">
+        Signup
+      </Button>
+    </form>
+  );
+};
+
+export default SignupSystemUserForm;
