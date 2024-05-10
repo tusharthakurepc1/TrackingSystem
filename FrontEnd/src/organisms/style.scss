@@ -1,0 +1,23 @@
+form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+table {
+  border: 1px solid black;
+  margin: 0px auto;
+}
+th {
+  padding: 5px 10px 5px 10px;
+}
+
+.orgname-dropdown {
+  background-color: #c4c4c4a9;
+  border: none;
+  margin-bottom: 10px;
+}
