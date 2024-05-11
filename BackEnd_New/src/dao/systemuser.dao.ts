@@ -16,6 +16,24 @@ class SystemUserDao {
     return await SystemUserModel.findOne({email, password})
   }
 
+  public deleteSystemUser = async (email: string) => {
+    return await SystemUserModel.deleteOne({email});
+  }
+
+  public updateSystemUser = async (email: string, reqBody: SystemUser) => {
+    return await SystemUserModel.updateOne(
+      {email},
+      {
+        $set: {
+          firstName: reqBody.firstName,
+          lastName: reqBody.lastName,
+          password: reqBody.password,
+          dob: reqBody.dob
+        }
+      }
+    )
+  }
+
 }
 
 export default SystemUserDao;

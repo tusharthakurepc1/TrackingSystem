@@ -4,9 +4,8 @@ import SECRET_KEY from '../constants/common'
 import { AuthUser } from '../typings/common';
 import { ExtendedRequest } from '../typings/type'
 
-
-
 class Authorization {
+
   public verfiyToken (req: ExtendedRequest, res: Response, next: NextFunction){
     const tokenString = req.body;
     const token = tokenString.split(" ")[1];

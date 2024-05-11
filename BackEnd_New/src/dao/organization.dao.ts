@@ -19,6 +19,28 @@ class OrganizationDao {
     )
   }
 
+  public pullOrganizationUserEmail = async (reqBody: UpdateOrganizationUserEmail) => {
+    return await OrganizationModel.updateOne(
+      {name: reqBody.orgName},
+      {
+        $pull: {
+          userEmail: reqBody.email
+        }
+      }
+    )
+  }
+
+  public makeOrganizationAdmin = async (reqBody: UpdateOrganizationUserEmail) => {
+    return await OrganizationModel.updateOne(
+      {name: reqBody.orgName},
+      {
+        $set: {
+          admin: reqBody.email
+        }
+      }
+    )
+  }
+
   public getOrganization = async (orgName: string) => {
     return await OrganizationModel.findOne({name: orgName})
   }

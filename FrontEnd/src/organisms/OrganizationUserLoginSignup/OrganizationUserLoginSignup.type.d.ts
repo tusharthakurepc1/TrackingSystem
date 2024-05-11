@@ -1,6 +1,6 @@
 interface Props {
-  loginFlag: boolean;
-  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  loginFlag: boolean,
+  setLogin: function
 }
 
 export type { Props };

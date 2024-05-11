@@ -13,10 +13,15 @@ class SystemUserRoute {
     this.initilizeSystemUserRoute();
   }
 
-  private initilizeSystemUserRoute () {
+  private initilizeSystemUserRoute = () => {
     this.router.get(`${this.path}/:email`, this.systemUserController.getSystemUser);
+
     this.router.post(`${this.path}/dashboard`, this.authorizationMiddleware.verfiyToken, this.systemUserController.getSystemUser);
     this.router.post(`${this.path}`, this.systemUserController.addSystemUser);
+
+    this.router.delete(`${this.path}/:email`, this.systemUserController.deleteSystemUser);
+
+    this.router.put(`${this.path}`, this.systemUserController.updateSystemUser);
   }
 
 }

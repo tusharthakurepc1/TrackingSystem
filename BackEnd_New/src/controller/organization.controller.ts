@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import OrganizationServices from '../service/organization.services'
+import { UpdateOrganizationUserEmail } from '../typings/common'
 
 class OrganizationController {
   public orgService = new OrganizationServices()
@@ -66,6 +67,28 @@ class OrganizationController {
       })
     }
   } 
+
+  public makeOrganizationAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    const orgDetail = req.body.org;
+
+    try{
+      await this.orgService.makeOrganizationAdmin(orgDetail);
+
+      return res.status(200).json({
+        data: {
+          msg: "Organization Admin Updated Sucessfully"
+        }, 
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })
+    }
+
+  }
 
 }
 

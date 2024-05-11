@@ -72,6 +72,49 @@ class SystemUserController {
 
   }
 
+  public deleteSystemUser = async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.params;
+
+    try{
+      await this.systemUserServices.deleteSystemUser(email);
+
+      return res.status(200).json({
+        data: {
+          msg: "System User Deleted Sucessfully."
+        },
+        status: 200
+      })
+    }
+    catch(err){
+      res.status(400).json({
+        data: err,
+        status: 400
+      })
+    } 
+  }
+
+  public updateSystemUser = (req: Request, res: Response, next: NextFunction) => {
+    const { email, user } = req.body;
+
+    try{
+      this.systemUserServices.updateSystemUser(email, user);
+
+      return res.status(200).json({
+        data:{
+          msg: "Account Updated Sucessfully"
+        },
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })
+    }
+
+  }
+
 }
 
 export default SystemUserController;

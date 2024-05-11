@@ -8,7 +8,7 @@ class App {
   private routes: any;
 
   constructor(routes: any) {
-    this.port = 3000;
+    this.port = 5500;
     this.routes = routes;
     this.app = express();
 

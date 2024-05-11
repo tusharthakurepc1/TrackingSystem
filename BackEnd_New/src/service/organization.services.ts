@@ -17,6 +17,14 @@ class OrganizationServices {
     return this.organizationDao.pushOrganizationUserEmail(reqBody);
   }
 
+  public removeOrganizationEmail = async (reqBody: UpdateOrganizationUserEmail) => {
+    return this.organizationDao.pullOrganizationUserEmail(reqBody);
+  }
+
+  public makeOrganizationAdmin = async (reqBody: UpdateOrganizationUserEmail) => {
+    return this.organizationDao.makeOrganizationAdmin(reqBody);
+  }
+
 }
 
 export default OrganizationServices;
