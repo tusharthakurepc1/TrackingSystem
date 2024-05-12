@@ -1,6 +1,7 @@
 import SendMailDao from "../dao/sendmail.dao";
 import nodemailer from 'nodemailer'
 import generateOtp from '../util/generateotp.util'
+import minuteDiff from '../util/timediff.util'
 
 class SendMailServices {
   private sendMailDao = new SendMailDao
@@ -36,6 +37,24 @@ class SendMailServices {
     }
     return ack;
   }
+
+  public validateOtp = async (email: string, otp: string) => {
+    const otpData = await this.sendMailDao.getOtp(email); 
+    if(!otpData){
+      return false;
+    }
+    
+    const time = otpData.time; 
+    const diff = minuteDiff(new Date(), new Date(time));
+
+    if(diff <= 15 && otpData.otp === otp){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
 
 }
 

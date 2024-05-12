@@ -41,6 +41,7 @@ export interface otp{
 
 
 export interface UpdateOrganizationUserEmail {
+  _id: string,
   orgName: string,
   email: string
 }

@@ -16,7 +16,7 @@ class OrganizationRoute {
     this.router.post(`${this.path}`, this.orgController.addOrganization);
     
     this.router.put(`${this.path}`, this.orgController.addOrganizationEmail);
-    this.router.put(`${this.path}`, this.orgController.makeOrganizationAdmin)
+    this.router.put(`${this.path}/admin`, this.orgController.makeOrganizationAdmin)
   }
   
 }

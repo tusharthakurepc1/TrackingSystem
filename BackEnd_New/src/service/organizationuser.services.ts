@@ -4,6 +4,14 @@ import { OrganizationUser, UpdateOrganizationUserEmail } from "../typings/common
 class OrganizationUserServices {
   private organizationUserDao = new OrganizationUserDao()
 
+  public getAllOrganizationUser = () => {
+    return this.organizationUserDao.getAllUsers();
+  }
+
+  public getOrganizationUserCred = (email: string, password: string) => {
+    return this.organizationUserDao.getOrganizationUserCred(email, password);
+  }
+
   public addOrganizationUser = (reqBody: OrganizationUser) => {
     return this.organizationUserDao.insertOrganizationUser(reqBody);
   }

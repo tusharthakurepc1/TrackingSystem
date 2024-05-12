@@ -12,6 +12,10 @@ class SystemUserDao {
     return await SystemUserModel.findOne({email});
   }
 
+  public getSystemUserCred = async (email: string, password: string) => {
+    return await SystemUserModel.findOne({email, password});
+  }
+
   public getSystemUserCredential = async (email: string, password: string) => {
     return await SystemUserModel.findOne({email, password})
   }

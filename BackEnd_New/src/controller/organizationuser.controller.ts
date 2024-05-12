@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import jwt from 'jsonwebtoken'
 import OrganizationUserServices from "../service/organizationuser.services"
 import OrganizationServices from "../service/organization.services"
+import SendMailServices from "../service/sendmail.services"
 import { Organization } from '../typings/common'
 import { ExtendedRequest } from "../typings/type"
 import SECRET_KEY from "../constants/common"
@@ -9,12 +10,16 @@ import SECRET_KEY from "../constants/common"
 class OrganizationUserController {
   public organizationUserServices = new OrganizationUserServices()
   public organization = new OrganizationServices();
+  public sendMailServices = new SendMailServices();
 
   public addOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.body.user;
-    const orgDetail = req.body.org;
+    const user = req.body;
+    const orgDetail = {
+      _id: "",
+      orgName: user._orginizationName,
+      email: user.email
+    };
     try{
-      console.log(JSON.stringify(orgDetail));
       
       await this.organizationUserServices.addOrganizationUser(user);
       await this.organizationUserServices.pushOrganizationUserOrg(orgDetail);
@@ -59,12 +64,52 @@ class OrganizationUserController {
     }
   }
 
+  public getOrganizationUserCred = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password, otp } = req.body;
+    
+    
+    try{
+      const result = await this.organizationUserServices.getOrganizationUserCred(email, password)
+      const isValid = await this.sendMailServices.validateOtp(email, otp);
+      // if(!isValid){
+      //   return res.status(400).json({
+      //     data: {
+      //       msg: "Otp Expire"
+      //     },
+      //     status: 400
+      //   })
+      // }
+
+      console.log(result);
+      
+      const token = jwt.sign({email, password}, SECRET_KEY, {expiresIn: "3d"})
+      
+      console.log(result);
+      
+      return res.status(200).json({
+        data: result,
+        accessToken: token,
+        status: 200
+      })
+    }
+    catch(err){
+      console.log(err);
+      
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })
+    }
+  }
+
   public getOrganizationUserAuth = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
     const {email, password} = req.user;
 
     try{
       const result = await this.organizationUserServices.getOrganizationUserCredential(email, password)
-
+      // const orgData = await this.
+      // console.log(result);
+      
       return res.status(200).json({
         data: result,
         status: 200
@@ -81,11 +126,14 @@ class OrganizationUserController {
   }
 
   public deleteOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
-    const orgData = req.body.org;
+    const orgData = req.body;
 
     try{
-      await this.organizationUserServices.deleteOrganizationUser(orgData);
-      await this.organization.removeOrganizationEmail(orgData)
+      const r1 = await this.organizationUserServices.deleteOrganizationUser(orgData);
+      const r2 = await this.organization.removeOrganizationEmail(orgData)
+
+      console.log(r1, r2);
+      
 
       return res.status(200).json({
         data: {

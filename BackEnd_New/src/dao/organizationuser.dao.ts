@@ -4,6 +4,14 @@ import { OrganizationUser, UpdateOrganizationUserEmail } from '../typings/common
 
 class OrganizationUserDao {
 
+  public getAllUsers = async () => {
+    return await OrganizationUserSchema.find({});
+  }
+
+  public getOrganizationUserCred = async (email: string, password: string) => {
+    return await OrganizationUserSchema.findOne({email, password});
+  }
+
   public insertOrganizationUser = async (reqBody: OrganizationUser) => {
     return await OrganizationUserSchema.create(reqBody);
   }
@@ -41,15 +49,15 @@ class OrganizationUserDao {
   }
 
   public deleteOrganizationUser = async (orgData: UpdateOrganizationUserEmail) => {
-    const {email, orgName} = orgData;
-    const data = await OrganizationUserSchema.findOne({email})
+    const { _id, orgName} = orgData;
+    const data = await OrganizationUserSchema.findOne({_id})
 
-    if(data.orgination_list.length <= 0){
-      return await OrganizationUserSchema.deleteOne({email});
+    if(data.orgination_list.length <= 1){
+      return await OrganizationUserSchema.deleteOne({_id});
     }
     else{
       return await OrganizationUserSchema.updateOne(
-        {email},
+        {_id},
         {
           $pull: {
             orgination_list: orgName

@@ -5,12 +5,12 @@ import { AuthUser } from '../typings/common';
 import { ExtendedRequest } from '../typings/type'
 
 class Authorization {
-
-  public verfiyToken (req: ExtendedRequest, res: Response, next: NextFunction){
-    const tokenString = req.body;
+  public verfiyToken = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
+    const tokenString = req.headers['authorization']
     const token = tokenString.split(" ")[1];
-
-    jwt.verify(token, SECRET_KEY, (err: Error, decodedToken: AuthUser)=> {
+    
+    
+    await jwt.verify(token, SECRET_KEY, (err: Error, decodedToken: AuthUser)=> {
       if(err){
         return res.status(400).json({
           data: {
@@ -19,8 +19,9 @@ class Authorization {
           status: 400
         });
       }
-
+      
       req.user = decodedToken
+      
       next();
 
     });

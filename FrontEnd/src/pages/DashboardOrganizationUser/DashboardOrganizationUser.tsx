@@ -6,7 +6,7 @@ import "react-calendar/dist/Calendar.css";
 import WFH_Application from "../../organisms/FormApplication/WfhApplication";
 import LeaveApproval from "../../organisms/LeaveApproval/LeaveApproval";
 import "./DashboardOrganizationUser.style.scss";
-import { Button } from "rsuite";
+import { Button, Message } from "rsuite";
 import { ApplicationStructure, UserStructure } from "./DashboardOrganizationUser.type";
 import OrganizationUserServices from "../../services/OrganizationUser";
 import WFHApplicationServices from "../../services/WfhApplication";
@@ -33,27 +33,26 @@ const DashBoardOrganizationUser = () => {
   const dashboardReq = async (token: string) => {
     const response =
       await OrganizationUserServices.organizationUserDashBoardRequest(token);
-    console.log(response);
 
-    if (!response.user || !response.user.orgination_list) {
+    if (response.status !== 200) {
       return navigate("/");
     }
 
-    setAdminData(response.user);
-    setOrgData(response.user.orgination_list);
-    applicationReq(response.user.orgination_list, response.user.email);
-    setAllApplication(response.allApplications);
+    setAdminData(response.data);
+    setOrgData(response.data.orgination_list);
+    applicationReq(response.data.orgination_list, response.data.email);
   };
 
   const applicationReq = async (orgList: Array<string>, email: string) => {
-    const data = await WFHApplicationServices.wFHApplicationFetch({
+    const response = await WFHApplicationServices.wFHApplicationFetch({
       orgList,
       email,
     });
 
-    console.log("Application Req: ", data.applications);
-    setAdminOrgData(data.data);
-    setWfhApplication(data.applications);
+    // console.log("Application Req: ", response.data.applications);
+    setAdminOrgData(response.data.result);
+    setWfhApplication(response.data.applicationRes);
+    setAllApplication(response.data.allEmailApplications);
   };
 
   const dayClickReq = async (date: Date) => {
@@ -75,13 +74,15 @@ const DashBoardOrganizationUser = () => {
     }
 
     const dateFormatted: string = year + "-" + monthStr + "-" + dayStr;
-    console.log(dateFormatted);
+    // console.log(dateFormatted);
     setAvailedDate(dateFormatted);
     setFormFlag(true);
   };
 
   useEffect(()=> {
     const token: string | undefined = Cookies.get("accessToken");
+    // console.log(token);
+    
     if (!token) {
       navigate("/");
     }
@@ -100,11 +101,9 @@ const DashBoardOrganizationUser = () => {
   return (
     <>
       <CustomNavbar isVisible={true}/>
-      <h1>
-        {" "}
-        Hello {adminData.firstName} {adminData.lastName}{" "}
-      </h1>
-      <p> {adminData.email} </p>
+      <Message>
+        Welcome <strong>{adminData.firstName},</strong> you logged as a System User
+      </Message>
 
       <WFH_Application
         availedDate={availedDate}

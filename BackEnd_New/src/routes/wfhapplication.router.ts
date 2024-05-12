@@ -16,8 +16,8 @@ class WfhApplicationRoute {
 
   private initilizeApplicationRoute = async () => {
     this.router.post(`${this.path}`, this.authorizationMiddleware.verfiyToken, this.wfhApplicationController.insertApplication);
-
-    this.router.put(`${this.path}`, this.wfhApplicationController.updateApplicationStatus)
+    this.router.post(`${this.path}/all`, this.wfhApplicationController.getAllApplication);
+    this.router.put(`${this.path}/leave`, this.wfhApplicationController.updateApplicationStatus)
   }
 
 }

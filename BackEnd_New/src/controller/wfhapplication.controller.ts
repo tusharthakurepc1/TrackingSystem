@@ -43,6 +43,8 @@ class WfhApplicationController {
       _id,
       status
     }
+    console.log(_id, status);
+    
 
     try{
       await this.wfhApplicationService.updateApplicationStatus(reqBody);
@@ -51,6 +53,30 @@ class WfhApplicationController {
         data: {
           msg: "Application Status Updated"
         },
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })
+    }
+  }
+
+  public getAllApplication = async (req: Request, res: Response, next: NextFunction) => {
+    const { orgList, email } = req.body;
+    const orgBody = {
+      orgList,
+      email
+    }
+    
+    try{
+      
+      const response = await this.wfhApplicationService.getAllApplication(orgBody);      
+
+      return res.status(200).json({
+        data: response,
         status: 200
       })
     }

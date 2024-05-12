@@ -14,5 +14,5 @@ const systemUserSchema = new Schema(
   }
 )
 
-const SystemUserModel = model<SystemUser>("systemusers", systemUserSchema);
+const SystemUserModel = model<SystemUser>("systemuser", systemUserSchema);
 export default SystemUserModel;

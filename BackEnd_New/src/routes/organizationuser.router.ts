@@ -16,7 +16,8 @@ class OrganizaionUserRoute {
   private initilizeOrganizationUserRoute () {
     this.router.get(`${this.path}/:email`, this.organizationUserController.getOrganizationUser);
 
-    this.router.post(`${this.path}/dashboard`, this.authorizationMiddleware.verfiyToken, this.organizationUserController.getOrganizationUser);
+    this.router.post(`${this.path}/login`, this.organizationUserController.getOrganizationUserCred);
+    this.router.post(`${this.path}/dashboard`, this.authorizationMiddleware.verfiyToken, this.organizationUserController.getOrganizationUserAuth);
     this.router.post(`${this.path}`, this.organizationUserController.addOrganizationUser);
 
     this.router.post(`${this.path}/delete`, this.organizationUserController.deleteOrganizationUser);

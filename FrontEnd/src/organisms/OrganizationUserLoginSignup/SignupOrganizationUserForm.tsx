@@ -118,7 +118,10 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
     const data =
       await OrganizationUserServices.organizationUserSignupRequest(user);
 
-    console.log(data);
+    if(data.status === 200){
+      setLogin(true);
+      
+    }
   };
 
   return (
@@ -128,7 +131,6 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
           className={loginFlag ? "button-nav primary" : "button-nav default"}
           onClick={() => {
             console.log("Login Click");
-
             setLogin(true);
           }}
           active
@@ -139,7 +141,6 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
           className={!loginFlag ? "button-nav primary" : "button-nav default"}
           onClick={() => {
             console.log("Signup Click");
-
             setLogin(false);
           }}
           active
@@ -208,6 +209,9 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
           type={"date"}
           placeholder={"Date of Joining"}
           onChange={setValueDoj}
+          onFocus={function () {
+            
+          }}
         />
         <span className="error-msg" hidden={!dojFlag}>
           This input is required.
@@ -227,7 +231,7 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
         <br />
       </div>
 
-      <Button onClick={signupReq} appearance="ghost">
+      <Button onClick={signupReq} appearance="primary">
         Signup
       </Button>
     </form>

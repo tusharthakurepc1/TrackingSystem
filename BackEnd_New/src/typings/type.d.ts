@@ -9,3 +9,8 @@ interface ApplicationRequest {
   _id: string
   status: number
 }
+
+interface ApplicationFetchRequest {
+  orgList: Array<string>,
+  email: string
+}

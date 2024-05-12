@@ -55,8 +55,7 @@ const Profile = () => {
   const profileReq = async (token: string) => {
     const responseOrgData =
       await OrganizationUserServices.organizationUserRequest(token);
-      
-    
+  
     const { firstName, lastName, email, password } = responseOrgData.user
       
     setFirstName(firstName)

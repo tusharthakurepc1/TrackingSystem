@@ -69,11 +69,11 @@ class OrganizationController {
   } 
 
   public makeOrganizationAdmin = async (req: Request, res: Response, next: NextFunction) => {
-    const orgDetail = req.body.org;
-
+    const orgDetail = req.body;
+    
     try{
       await this.orgService.makeOrganizationAdmin(orgDetail);
-
+      
       return res.status(200).json({
         data: {
           msg: "Organization Admin Updated Sucessfully"

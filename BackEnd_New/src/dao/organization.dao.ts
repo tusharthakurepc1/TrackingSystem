@@ -8,6 +8,10 @@ class OrganizationDao {
     return await OrganizationModel.create(reqBody)
   }
 
+  public getAllOrganization = async () => {
+    return await OrganizationModel.find({});
+  }
+
   public pushOrganizationUserEmail = async (reqBody: UpdateOrganizationUserEmail) => {
     return await OrganizationModel.updateOne(
       {name: reqBody.orgName},
@@ -20,6 +24,8 @@ class OrganizationDao {
   }
 
   public pullOrganizationUserEmail = async (reqBody: UpdateOrganizationUserEmail) => {
+    console.log(reqBody.email, reqBody.orgName);
+    
     return await OrganizationModel.updateOne(
       {name: reqBody.orgName},
       {

@@ -3,7 +3,7 @@ import axios from "axios";
 import { SystemUser, UserDeleteType, UserAdminType } from "./SystemUser.type";
 
 export const SystemUserDashBoardRequest = async (token: string) => {
-  const URL = "http://localhost:5500/sysuser-dashboard";
+  const URL = "http://localhost:5500/sysuser/dashboard";
 
   try {
     const headers = {
@@ -13,6 +13,7 @@ export const SystemUserDashBoardRequest = async (token: string) => {
     const post_dashboard_api = await axios.post(URL, JSON.stringify({}), {
       headers,
     });
+    
     const response = post_dashboard_api.data;
 
     return response;
@@ -47,7 +48,7 @@ export const SystemUserLoginRequest = async ({
   password,
   otp,
 }: LoginUser) => {
-  const OTP_URL = "http://localhost:5500/sysuser-login";
+  const OTP_URL = "http://localhost:5500/sysuser/login";
   const user = { email, password, otp };
 
   console.log(user);
@@ -56,10 +57,10 @@ export const SystemUserLoginRequest = async ({
     const headers = {
       "Content-Type": "application/json",
     };
-    const resp = await axios.post(OTP_URL, JSON.stringify(user), { headers });
-    if (resp.data.msg) {
-      alert("Login Sucessfully");
-    }
+    const resp = await axios.post(OTP_URL, 
+      JSON.stringify({email, password, otp}),
+     { headers });
+    
     return resp.data;
   } catch (err) {
     console.log(err);
@@ -100,7 +101,7 @@ export const UserDelete = async ({
   email,
   organizationValue,
 }: UserDeleteType) => {
-  const URL = "http://localhost:5500/user-delete";
+  const URL = "http://localhost:5500/user/delete";
 
   try {
     const headers = {
@@ -108,12 +109,11 @@ export const UserDelete = async ({
     };
     const response = await axios.post(
       URL,
-      JSON.stringify({ _id, email, organizationValue }),
+      JSON.stringify({ _id, email, orgName: organizationValue }),
       { headers },
     );
-    if (response.data.msg) {
-      alert("User Deleted Sucessfully");
-    }
+    console.log(response.data);
+    
     return response.data;
   } catch (err) {
     console.log(err);
@@ -126,20 +126,18 @@ export const MakeUserAdminReq = async ({
   email,
   organizationValue,
 }: UserAdminType) => {
-  const URL = "http://localhost:5500/org-admin";
-
+  const URL = "http://localhost:5500/organization/admin";
+  
   try {
     const headers = {
       "Content-type": "application/json",
     };
-    const response = await axios.post(
+    const response = await axios.put(
       URL,
       JSON.stringify({ email: email, orgName: organizationValue }),
       { headers },
     );
-    if (response.data.msg) {
-      alert("Admin Created Sucessfully");
-    }
+    
     return response.data;
   } catch (err) {
     console.log(err);

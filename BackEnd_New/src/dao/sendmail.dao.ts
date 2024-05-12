@@ -24,6 +24,9 @@ class SendMailDao {
     }
   }
 
+  public getOtp = async (email: string) => {
+    return await otpModel.findOne({email})
+  }
 
 }
 

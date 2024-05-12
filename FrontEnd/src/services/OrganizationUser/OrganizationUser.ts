@@ -3,17 +3,18 @@ import { User, LoginUser } from "./OrganizationUser.type";
 
 //Return the User DashBoard Data while navigate to the DashBoard
 export const organizationUserDashBoardRequest = async (token: string) => {
-  const URL = "http://localhost:5500/user-dashboard";
+  const URL = "http://localhost:5500/user/dashboard";
   try {
     const headers = {
       "Content-Type": "application/json",
       authorization: `BEARER ${token}`,
     };
     const api = await axios.post(URL, JSON.stringify({}), { headers });
+    
+
     return api.data;
   } catch (err) {
-    console.log(err);
-    return "DashBoard Error";
+    return err;
   }
 };
 
@@ -28,7 +29,6 @@ export const organizationUserRequest = async (token: string) => {
     const api = await axios.post(URL, JSON.stringify({}), { headers });
     return api.data;
   } catch (err) {
-    console.log(err);
     return "DashBoard Error";
   }
 };
@@ -39,7 +39,7 @@ export const organizationUserLoginRequest = async ({
   password,
   otp,
 }: LoginUser) => {
-  const OTP_URL = "http://localhost:5500/user-login";
+  const OTP_URL = "http://localhost:5500/user/login";
   const user = { email, password, otp };
 
   try {
@@ -54,7 +54,7 @@ export const organizationUserLoginRequest = async ({
     return resp.data;
   } catch (err) {
     console.log(err);
-    alert("Invalid Credentials");
+    
     return "Login Error Throw";
   }
 };
@@ -70,7 +70,7 @@ export const organizationUserSignupRequest = async ({
   dob,
   doj,
 }: User) => {
-  const URL = "http://localhost:5500/user-signup";
+  const URL = "http://localhost:5500/user";
   const user = {
     _orginizationName,
     isAdmin,
@@ -101,34 +101,36 @@ export const organizationUserSignupRequest = async ({
 };
 
 export const acceptedLeaveRequest = async (_id: string) => {
-  const URL = "http://localhost:5500/application-status";
+  const URL = "http://localhost:5500/application-status/leave";
 
   try {
     const headers = {
       "Content-Type": "application/json",
     };
-    const post_dashboard_api = await axios.post(
+    const response = await axios.put(
       URL,
-      JSON.stringify({ _id, statusValue: 1 }),
+      JSON.stringify({ _id, status: 1 }),
       { headers },
     );
-    return post_dashboard_api.data;
+    
+    return response.data;
   } catch (err) {
+    console.log(err);
     return err;
   }
 };
 
 export const rejectedLeaveRequest = async (_id: string) => {
   // setNewStatus(2);
-  const URL = "http://localhost:5500/application-status";
+  const URL = "http://localhost:5500/application-status/leave";
 
   try {
     const headers = {
       "Content-Type": "application/json",
     };
-    const post_dashboard_api = await axios.post(
+    const post_dashboard_api = await axios.put(
       URL,
-      JSON.stringify({ _id, statusValue: 2 }),
+      JSON.stringify({ _id, status: 2 }),
       { headers },
     );
     return post_dashboard_api.data;

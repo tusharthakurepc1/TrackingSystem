@@ -5,13 +5,17 @@ import OrganizationUserServices from "../../services/OrganizationUser";
 
 const LeaveApproval = ({ wfhApplication }:  {wfhApplication: never[]}) => {
   const acceptedLeaveReq = async (_id: string) => {
-    const response = OrganizationUserServices.acceptedLeaveRequest(_id);
-    console.log(response);
+    const response = await OrganizationUserServices.acceptedLeaveRequest(_id);
+    if(response.status === 200){
+      alert("Leave Approved")
+    }
   };
 
   const rejectedLeaveReq = async (_id: string) => {
-    const response = OrganizationUserServices.rejectedLeaveRequest(_id);
-    console.log(response);
+    const response = await OrganizationUserServices.rejectedLeaveRequest(_id);
+    if(response.status === 200){
+      alert("Leave Rejected")
+    }
   };
 
   return (

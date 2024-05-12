@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Props } from "./WfhApplication.type";
+import WFHApplicationServices from "../../services/WfhApplication";
 import "./WfhApplication.style.scss";
 
 const WFH_Application = ({
@@ -30,24 +31,16 @@ const WFH_Application = ({
 
   const applicationReq = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const URL = "http://localhost:5500/application";
-    const token = Cookies.get("accessToken");
+    const token: string | undefined = Cookies.get("accessToken");
     if (!token) {
       navigate("/");
     }
 
-    const headers = {
-      "Content-Type": "application/json",
-      authorization: `BEARER ${token}`,
-    };
-    const response = await axios.post(
-      URL,
-      JSON.stringify({ createdDate: dateVal, orgName: orgVal, reason: reason }),
-      { headers },
-    );
-    const data = response.data;
+    if(typeof token === 'string'){
+      const data = await WFHApplicationServices.wFHApplicationInsert(dateVal, orgVal, reason, token);
+      console.log(data);
+    }
 
-    console.log(data);
     setFormFlag(false);
   };
 
@@ -78,7 +71,7 @@ const WFH_Application = ({
 
           <Button
             onClick={applicationReq}
-            appearance="ghost"
+            appearance="primary"
             active
             style={{ marginBottom: 10, marginTop: 10 }}
           >

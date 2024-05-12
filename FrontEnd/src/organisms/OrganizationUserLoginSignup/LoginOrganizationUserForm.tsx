@@ -63,6 +63,7 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
     });
 
     console.log(data);
+    
 
     if (data.accessToken) {
       Cookie.set("accessToken", data.accessToken);
@@ -140,7 +141,7 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
           Send OTP
         </Button>
 
-        <Button onClick={submitReq} appearance="ghost">
+        <Button onClick={submitReq} appearance="primary">
           Login
         </Button>
       </form>

@@ -87,7 +87,11 @@ const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
 
     //Api call from Services
     const data = await WFHApplicationServices.wFHApplicationSignupRequest(user);
-    console.log(data);
+    
+    if(data.status === 200){
+      alert(data.data.msg)
+    }
+
   };
 
   return (
@@ -178,7 +182,7 @@ const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
         </span>
       </div>
 
-      <Button onClick={signupReq} appearance="ghost">
+      <Button onClick={signupReq} appearance="primary">
         Signup
       </Button>
     </form>

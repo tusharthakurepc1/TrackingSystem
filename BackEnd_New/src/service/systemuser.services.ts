@@ -12,6 +12,10 @@ class SystemUserServices {
     return this.systemUserDao.getSystemUser(email);
   }
 
+  public getSystemUserCred = (email: string, password: string) => {
+    return this.systemUserDao.getSystemUserCred(email, password);
+  }
+
   public getSystemUserCredential = (email: string, password: string) => {
     return this.systemUserDao.getSystemUserCredential(email, password);
   }

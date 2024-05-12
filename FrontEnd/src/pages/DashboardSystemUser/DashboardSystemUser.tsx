@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { Table, Button, SelectPicker } from "rsuite";
-import { UserStructure } from "./DashBoardSystemUser.type";
+import { UserStructure, SystemUserStructure } from "./DashBoardSystemUser.type";
 import SystemUserServices from "../../services/SystemUser";
 import { Message } from 'rsuite';
 import "./DashboardSystemUser.style.scss";
@@ -11,10 +11,13 @@ import CustomNavbar from "../../molecules/Header/Header";
 const { Column, HeaderCell, Cell } = Table;
 
 const DashBoardSystemUser = () => {
-  const [adminData, setAdminData] = useState<UserStructure>({
-    email: "",
+  const [adminData, setAdminData] = useState<SystemUserStructure>({
+    _id: "",
     firstName: "",
     lastName: "",
+    email: "",
+    password: "",
+    dob: "",
   });
   const [userData, setUserData] = useState([]);
   const [makeReq, setMakeReq] = useState(true);
@@ -24,71 +27,67 @@ const DashBoardSystemUser = () => {
   const dashboardReq = async (token: string) => {
     const response = await SystemUserServices.SystemUserDashBoardRequest(token);
 
-    console.log(response.user);
-    console.log(response.user_data);
-
-    if (!response.user || !response.user_data) {
+    console.log(response.data);
+    if (!response.data.user || !response.data.orgData) {
       return <h1> Page not found </h1>;
     }
-    setAdminData(response.user);
-    setUserData(response.user_data);
-    console.log(response.user_data);
+    setAdminData(response.data.user);
+    setUserData(response.data.orgData);
   };
 
-  const helperDeleteUser = (data: User | any) => {
-    setUser(data);
-    deleteUser();
-  };
-  const deleteUser = async () => {
-    if (!user) {
-      console.log("Data undefined", user);
+  
+  const deleteUser = async (data: User | any) => {
+    if (!data) {
+      console.log("Data undefined", data);
       return;
     }
-    let { _id, email } = user;
+    let { _id, email } = data;
 
     if (organizationValue === "Select") {
       return;
     }
 
-    const result = await SystemUserServices.UserDelete({
+    const response = await SystemUserServices.UserDelete({
       _id,
       email,
       organizationValue,
     });
-    console.log(result);
+    
 
-    if (result.user.acknowledged === true) {
-      console.log("Delete Ack: ", result);
+    if(response.data.msg){
+      alert(response.data.msg)
+    }
+    if (response.status === 200) {
       navigate("/temp");
     }
   };
 
-  const helperAdminUser = (data: User | any) => {
-    setUser(data);
-    makeUserAdmin();
-  };
-  const makeUserAdmin = async () => {
-    if (!user) {
+
+  const makeUserAdmin = async (data: User | any) => {
+    if (!data) {
       return;
     }
-
-    let { email } = user;
+    
+    let { email } = data;
     if (organizationValue === "Select") {
       return;
     }
     console.log(email, organizationValue);
-    const data = await SystemUserServices.MakeUserAdminReq({
+    const response = await SystemUserServices.MakeUserAdminReq({
       email,
       organizationValue,
     });
-
-    console.log(data);
+    
+    if(response.data.msg){
+      alert(response.data.msg)
+    }
   };
 
   const navigate = useNavigate();
 
   useEffect(()=> {
     const token: string | undefined = Cookies.get("accessToken");
+    
     if (!token) {
       navigate("/sysuser-login");
     }
@@ -170,7 +169,7 @@ const DashBoardSystemUser = () => {
                 <Button
                   appearance="ghost"
                   onClick={() => {
-                    helperAdminUser(rowData);
+                    makeUserAdmin(rowData);
                   }}
                 >
                   Make Admin
@@ -185,7 +184,7 @@ const DashBoardSystemUser = () => {
                 <Button
                   appearance="ghost"
                   onClick={() => {
-                    helperDeleteUser(rowData);
+                    deleteUser(rowData);
                   }}
                 >
                   Delete

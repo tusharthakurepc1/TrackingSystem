@@ -30,6 +30,18 @@ class WfhApplicationDao {
 
   }
 
+  public getAllApplication = async (orgResult: Array<string>) => {
+    return await WfhApplicationModel.find({
+      orgName: {
+        $in: orgResult
+      }
+    })
+  }
+
+  public getAllEmailApplication = async (email: string) => {
+    return await WfhApplicationModel.find({email});
+  }
+
 }
 
 export default WfhApplicationDao;
