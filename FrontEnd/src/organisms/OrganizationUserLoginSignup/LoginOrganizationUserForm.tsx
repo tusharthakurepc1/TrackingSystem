@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, Button } from "rsuite";
+import { Input, Button, Divider } from "rsuite";
 import "./OrganizationUserLoginSignup.style.scss";
-import Cookie from "js-cookie";
+import Cookies from "js-cookie";
 import { Props } from "./OrganizationUserLoginSignup.type";
 import OrganizationUserServices from "../../services/OrganizationUser";
 import OtpService from "../../services/SendMail";
@@ -43,16 +43,16 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
   const submitReq = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
-    if(emailVal === ''){
-      setEmailFlag(true)
+    if (emailVal === "") {
+      setEmailFlag(true);
       return;
     }
-    if(passwordVal === ''){
-      setPasswordFlag(true)
+    if (passwordVal === "") {
+      setPasswordFlag(true);
       return;
     }
-    if(otpVal === ''){
-      setPasswordFlag(true)
+    if (otpVal === "") {
+      setPasswordFlag(true);
       return;
     }
 
@@ -61,12 +61,15 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
       password: passwordVal,
       otp: otpVal,
     });
-
-    console.log(data);
+    
+    console.log(data.accessToken);
     
 
-    if (data.accessToken) {
-      Cookie.set("accessToken", data.accessToken);
+    if(!data.data){
+      alert("Invalid Credentials");
+    }
+    if (data.data && data.accessToken) {
+      Cookies.set("accessToken", data.accessToken);
       navigate("/user-dashboard");
     }
   };
@@ -79,60 +82,33 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
   return (
     <div className="form">
       <form>
-        <div className="button-grp">
-          <Button
-            className={loginFlag ? "button-nav primary" : "button-nav default"}
-            onClick={() => {
-              console.log("Login Click");
-              setLogin(true);
-            }}
-            active
-          >
-            Login
-          </Button>
-          <Button
-            className={!loginFlag ? "button-nav primary" : "button-nav default"}
-            onClick={() => {
-              console.log("Signup Click");
-              setLogin(false);
-            }}
-            active
-          >
-            Signup
-          </Button>
+        <div className="header-login">
+          <h4>Login Organization User</h4>
         </div>
-        <h3>Organization User</h3>
-
+        <br />
         <div className="input-body">
-          <Input
-            type={"email"}
-            placeholder={"Email ID"}
-            onChange={setValueEmail}
-          />
+          Email
+          <Input type={"email"} onChange={setValueEmail} />
           <span className="error-msg" hidden={!emailFlag}>
             This input is required.
           </span>
           <br />
         </div>
         <div className="input-body">
-          <Input
-            type={"password"}
-            placeholder={"Password"}
-            onChange={setValuePass}
-          />
+          Password
+          <Input type={"password"} onChange={setValuePass} />
           <span className="error-msg" hidden={!passwordFlag}>
             This input is required.
           </span>
           <br />
         </div>
+        Otp
         <div className="input-body">
-          <Input type={"text"} placeholder={"OTP"} onChange={setValueOtp} />
+          <Input type={"text"} onChange={setValueOtp} />
           <span className="error-msg" hidden={!otpFlag}>
             This input is required.
           </span>
-          <br />
         </div>
-
         <Button
           onClick={sendOtpReq}
           appearance="ghost"
@@ -140,10 +116,25 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
         >
           Send OTP
         </Button>
-
         <Button onClick={submitReq} appearance="primary">
           Login
         </Button>
+        <Divider>OR</Divider>
+        <div className="footer-login">
+        <span>
+          Need an account?
+          <Button
+            onClick={() => {
+              console.log("Signup Click");
+              setLogin(false);
+            }}
+            active
+            appearance="link"
+          >
+            <strong>Sign up</strong>
+          </Button>
+        </span>
+        </div>
       </form>
     </div>
   );

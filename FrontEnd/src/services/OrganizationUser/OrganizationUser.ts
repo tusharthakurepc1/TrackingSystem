@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User, LoginUser } from "./OrganizationUser.type";
+import { User, LoginUser, OrganizationUserCompl } from "./OrganizationUser.type";
 
 //Return the User DashBoard Data while navigate to the DashBoard
 export const organizationUserDashBoardRequest = async (token: string) => {
@@ -18,15 +18,36 @@ export const organizationUserDashBoardRequest = async (token: string) => {
   }
 };
 
+export const updateOrganizationUser = async (email: string, user: OrganizationUserCompl) => {
+  console.log(email);
+  console.log(JSON.stringify(user));
+  
+  const URL = "http://localhost:5500/user/update";
+
+  try{
+    const headers = {
+      "Content-Type": "application/json"
+    }
+    const api = await axios.put(URL, JSON.stringify({email, user}), {headers});
+    return api.data;
+    
+  }catch(err){
+    return "Update Error"
+  }
+
+}
+
 
 export const organizationUserRequest = async (token: string) => {
-  const URL = "http://localhost:5500/user-profile";
+  const URL = "http://localhost:5500/user/dashboard";
   try {
     const headers = {
       "Content-Type": "application/json",
       authorization: `BEARER ${token}`,
     };
     const api = await axios.post(URL, JSON.stringify({}), { headers });
+    // console.log(api.data);
+    
     return api.data;
   } catch (err) {
     return "DashBoard Error";

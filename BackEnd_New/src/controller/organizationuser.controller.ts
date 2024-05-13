@@ -107,8 +107,7 @@ class OrganizationUserController {
 
     try{
       const result = await this.organizationUserServices.getOrganizationUserCredential(email, password)
-      // const orgData = await this.
-      // console.log(result);
+      console.log(result);
       
       return res.status(200).json({
         data: result,
@@ -152,9 +151,17 @@ class OrganizationUserController {
 
   public updateOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
     const { email, user } = req.body;
-
+    
     try{
-      await this.organizationUserServices.updateOrganizationUser(email, user);
+      const response = await this.organizationUserServices.updateOrganizationUser(email, user);
+      if(response === 945){
+        return res.status(200).json({
+          data:{
+            msg: "Email Already Used"
+          },
+          status: 200
+        })
+      }
 
       return res.status(200).json({
         data:{

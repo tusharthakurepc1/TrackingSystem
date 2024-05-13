@@ -6,7 +6,7 @@ import { UserStructure, SystemUserStructure } from "./DashBoardSystemUser.type";
 import SystemUserServices from "../../services/SystemUser";
 import { Message } from 'rsuite';
 import "./DashboardSystemUser.style.scss";
-import CustomNavbar from "../../molecules/Header/Header";
+import CustomNavbar from "../../molecules/HeaderSystemUser/HeaderSystemUser";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -22,7 +22,7 @@ const DashBoardSystemUser = () => {
   const [userData, setUserData] = useState([]);
   const [makeReq, setMakeReq] = useState(true);
   const [organizationValue, setOrganizationValue] = useState("");
-  const [user, setUser] = useState<User | any>();
+  // const [user, setUser] = useState<User | any>();
 
   const dashboardReq = async (token: string) => {
     const response = await SystemUserServices.SystemUserDashBoardRequest(token);
@@ -116,9 +116,9 @@ const DashBoardSystemUser = () => {
             <Cell dataKey="firstName" />
           </Column>
 
-          <Column width={100} align="center">
+          <Column width={200} align="center">
             <HeaderCell>Email</HeaderCell>
-            <Cell dataKey="lastName" />
+            <Cell dataKey="email" />
           </Column>
           <Column align="center">
             <HeaderCell>Date of Birth</HeaderCell>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./SystemUserLoginSignup.style.scss";
 
-import { Button, Input } from "rsuite";
+import { Button, Input, Divider } from "rsuite";
 import WFHApplicationServices from "../../services/WfhApplication";
 import { Props } from "./SystemUserLoginSignup.type";
 
@@ -96,60 +96,38 @@ const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
 
   return (
     <form>
-      <div className="button-grp">
-        <Button
-          className={loginFlag ? "button-nav primary" : "button-nav default"}
-          onClick={() => {
-            console.log("Login Click");
+      <div className="header-login">
+        <h4>Signup System User</h4>
+      </div><br />
 
-            setLogin(true);
-          }}
-          active
-        >
-          Login
-        </Button>
-        <Button
-          className={!loginFlag ? "button-nav primary" : "button-nav default"}
-          onClick={() => {
-            console.log("Signup Click");
-
-            setLogin(false);
-          }}
-          active
-        >
-          Signup
-        </Button>
-      </div>
-      <h3>System User</h3>
-
-      <div className="input-body">
-        <Input
-          type={"text"}
-          placeholder={"First Name"}
-          onChange={setValueFirstName}
-          name=""
-        />
-        <span className="error-msg" hidden={!firstNameFlag}>
-          This input is required.
-        </span>
-        <br />
+      <div className="full-name">
+        <div className="firstName">
+          First Name
+          <Input
+            type={"text"}
+            onChange={setValueFirstName}
+          />
+          <span className="error-msg" hidden={!firstNameFlag}>
+            This input is required.
+          </span>
+          <br />
+        </div>
+        <div className="lastName">
+          Last Name
+          <Input
+            type={"text"}
+            onChange={setValueLastName}
+          />
+          <span className="error-msg" hidden={!lastNameFlag}>
+            This input is required.
+          </span>
+          <br />
+        </div>
       </div>
       <div className="input-body">
-        <Input
-          type={"text"}
-          placeholder={"Last Name"}
-          onChange={setValueLastName}
-          name=""
-        />
-        <span className="error-msg" hidden={!lastNameFlag}>
-          This input is required.
-        </span>
-        <br />
-      </div>
-      <div className="input-body">
+        Email
         <Input
           type={"email"}
-          placeholder={"Email ID"}
           onChange={setValueEmail}
           name=""
         />
@@ -159,9 +137,9 @@ const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
         <br />
       </div>
       <div className="input-body">
+        Password
         <Input
           type={"password"}
-          placeholder={"Password"}
           onChange={setValuePass}
           name=""
         />
@@ -171,9 +149,9 @@ const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
         <br />
       </div>
       <div className="input-body">
+        Date of birth
         <Input
           type={"date"}
-          placeholder={"Date of Birth"}
           onChange={setValueDob}
           name=""
         />
@@ -185,6 +163,26 @@ const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
       <Button onClick={signupReq} appearance="primary">
         Signup
       </Button>
+
+      <Divider>OR</Divider>
+        <div className="footer-login">
+        <span>
+          Already a user?
+      <Button
+          
+          onClick={() => {
+            console.log("Login Click");
+
+            setLogin(true);
+          }}
+          active
+          appearance="link"
+        >
+          <strong>Login</strong>
+        </Button>
+
+        </span>
+        </div>
     </form>
   );
 };

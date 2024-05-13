@@ -42,7 +42,6 @@ class SystemUserController {
       const result = await this.systemUserServices.getSystemUser(email)
       const token = jwt.sign({email, password: result.password}, SECRET_KEY, {expiresIn: "3d"})
       
-      console.log(result);
       
       return res.status(200).json({
         data: result,
@@ -64,18 +63,18 @@ class SystemUserController {
     try{
       const result = await this.systemUserServices.getSystemUserCred(email, password)
       const isValid = await this.sendMailServices.validateOtp(email, otp);
-      if(!isValid){
-        return res.status(400).json({
-          data: {
-            msg: "Otp Expire"
-          },
-          status: 400
-        })
-      }
+      // if(!isValid){
+      //   return res.status(400).json({
+      //     data: {
+      //       msg: "Otp Expire"
+      //     },
+      //     status: 400
+      //   })
+      // }
 
       const token = jwt.sign({email, password}, SECRET_KEY, {expiresIn: "3d"})
+      console.log("Login");
       
-      console.log(result);
       
       return res.status(200).json({
         data: result,
@@ -97,12 +96,12 @@ class SystemUserController {
     try{
       const result = await this.systemUserServices.getSystemUserCredential(email, password)
       const orgData = await this.organizationUserService.getAllOrganizationUser();
-      // console.log(result);
+
       
       return res.status(200).json({
         data: {
           user: result,
-          orgData: orgData
+          orgData
         },
         status: 200
       })

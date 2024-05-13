@@ -22,7 +22,7 @@ class OrganizaionUserRoute {
 
     this.router.post(`${this.path}/delete`, this.organizationUserController.deleteOrganizationUser);
 
-    this.router.put(`${this.path}`, this.organizationUserController.updateOrganizationUser);
+    this.router.put(`${this.path}/update`, this.organizationUserController.updateOrganizationUser);
   }
 
 }

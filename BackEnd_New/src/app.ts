@@ -2,13 +2,14 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors'
+import Routes from './routes/routes';
 
 class App {
   public app: express.Application;
   public port: string | number;
-  private routes: any;
+  private routes: [Routes];
 
-  constructor(routes: any) {
+  constructor(routes: [Routes]) {
     this.port = 5500;
     this.routes = routes;
     this.app = express();
@@ -39,8 +40,8 @@ class App {
     this.initializeRoutes(this.routes);
   }
 
-  private initializeRoutes(routes: any) {
-    routes.forEach((route: any) => {
+  private initializeRoutes(routes: [Routes]) {
+    routes.forEach((route: Routes) => {
       this.app.use('/', route.router);
     });
   }

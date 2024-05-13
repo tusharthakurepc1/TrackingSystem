@@ -5,8 +5,8 @@ import { Router } from "express"
 
 class WfhApplicationRoute {
   public path = '/application-status'
-  public router = Router()
   public wfhApplicationController = new WfhApplicationController()
+  public router = Router()
 
   private authorizationMiddleware = new Authorization();
 

@@ -4,8 +4,8 @@ import Authorization from '../middleware/authorization.middleware'
 
 class SystemUserRoute {
   public path = '/sysuser'
-  public router = Router()
   public systemUserController = new SystemUserController()
+  public router = Router()
 
   public authorizationMiddleware = new Authorization();
 
@@ -23,7 +23,7 @@ class SystemUserRoute {
 
     this.router.delete(`${this.path}/:email`, this.systemUserController.deleteSystemUser);
 
-    this.router.put(`${this.path}`, this.systemUserController.updateSystemUser);
+    this.router.put(`${this.path}/update`, this.systemUserController.updateSystemUser);
   }
 
 }

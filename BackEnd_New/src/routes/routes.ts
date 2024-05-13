@@ -1,0 +1,67 @@
+import Router from 'express'
+import OrganizationController from '../controller/organization.controller'
+import OrganizationUserController from '../controller/organizationuser.controller'
+import Authorization from '../middleware/authorization.middleware'
+import SendMailController from '../controller/sendmail.controller';
+import SystemUserController from '../controller/systemuser.controller'
+import WfhApplicationController from "../controller/wfhapplication.controller"
+
+
+class Routes {
+  public orgController = new OrganizationController()  
+  public organizationUserController = new OrganizationUserController()
+  public sendMailController = new SendMailController()
+  public systemUserController = new SystemUserController()
+  public wfhApplicationController = new WfhApplicationController()
+  
+
+  public authorizationMiddleware = new Authorization();
+  public router = Router()
+
+  constructor(){
+    this.initilizeOrganizationRoute('/organisation');
+    this.initilizeOrganizationUserRoute('/user');
+    this.sendMailRoutes('/mail')
+    this.initilizeSystemUserRoute('/sysuser')
+    this.initilizeApplicationRoute('/application-status');
+  }
+
+  private initilizeOrganizationRoute(prefix: string){
+    this.router.get(`${prefix}:orgName`, this.orgController.getOrganization);
+    this.router.post(`${prefix}`, this.orgController.addOrganization);
+    this.router.put(`${prefix}`, this.orgController.addOrganizationEmail);
+    this.router.put(`${prefix}/admin`, this.orgController.makeOrganizationAdmin)
+  }
+
+  private initilizeOrganizationUserRoute (prefix: string) {
+    this.router.get(`${prefix}/:email`, this.organizationUserController.getOrganizationUser);
+    this.router.post(`${prefix}/login`, this.organizationUserController.getOrganizationUserCred);
+    this.router.post(`${prefix}/dashboard`, this.authorizationMiddleware.verfiyToken, this.organizationUserController.getOrganizationUserAuth);
+    this.router.post(`${prefix}`, this.organizationUserController.addOrganizationUser);
+    this.router.post(`${prefix}/delete`, this.organizationUserController.deleteOrganizationUser);
+    this.router.put(`${prefix}/update`, this.organizationUserController.updateOrganizationUser);
+  }
+
+  private sendMailRoutes(prefix: string) {
+    this.router.get(`${prefix}/:email`, this.sendMailController.sendOtp);
+  } 
+
+  private initilizeSystemUserRoute = (prefix: string) => {
+    this.router.get(`${prefix}/:email`, this.systemUserController.getSystemUser);
+    this.router.post(`${prefix}/login`, this.systemUserController.getSystemUserCred);
+    this.router.post(`${prefix}/dashboard`, this.authorizationMiddleware.verfiyToken, this.systemUserController.getSystemUserAuth);
+    this.router.post(`${prefix}/signup`, this.systemUserController.addSystemUser);
+    this.router.delete(`${prefix}/:email`, this.systemUserController.deleteSystemUser);
+    this.router.put(`${prefix}/update`, this.systemUserController.updateSystemUser);
+  }
+
+
+  private initilizeApplicationRoute = async (prefix: string) => {
+    this.router.post(`${prefix}`, this.authorizationMiddleware.verfiyToken, this.wfhApplicationController.insertApplication);
+    this.router.post(`${prefix}/all`, this.wfhApplicationController.getAllApplication);
+    this.router.put(`${prefix}/leave`, this.wfhApplicationController.updateApplicationStatus)
+  }
+  
+}
+
+export default Routes

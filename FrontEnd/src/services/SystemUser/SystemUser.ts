@@ -10,18 +10,36 @@ export const SystemUserDashBoardRequest = async (token: string) => {
       "Content-Type": "application/json",
       authorization: `BEARER ${token}`,
     };
-    const post_dashboard_api = await axios.post(URL, JSON.stringify({}), {
-      headers,
+    const response = await axios.post(URL, JSON.stringify({}), {
+      headers
     });
     
-    const response = post_dashboard_api.data;
 
-    return response;
+    return response.data;
   } catch (err) {
     console.log(err);
     return "DashBoard Error";
   }
 };
+
+export const updateSystemUser = async (email: string, user: SystemUser) => {
+  console.log(email);
+  console.log(JSON.stringify(user));
+  
+  const URL = "http://localhost:5500/user/update";
+
+  try{
+    const headers = {
+      "Content-Type": "application/json"
+    }
+    const api = await axios.put(URL, JSON.stringify({email, user}), {headers});
+    return api.data;
+    
+  }catch(err){
+    return "Update Error"
+  }
+
+}
 
 export const SystemUserRequest = async (token: string) => {
   const URL = "http://localhost:5500/sysuser-profile";

@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SystemUserLoginSignup.style.scss";
 import Cookies from "js-cookie";
-import { Input, Button } from "rsuite";
+import { Input, Button, Divider } from "rsuite";
 import { Props } from "./SystemUserLoginSignup.type";
 import SystemUserServices from "../../services/SystemUser";
 import OtpService from "../../services/SendMail";
-import './SystemUserLoginSignup.style.scss'
+import "./SystemUserLoginSignup.style.scss";
 
-const LoginSystemUserForm = ({ loginFlag, setLogin }: Props) => {
+const LoginSystemUserForm = ({ setLogin }: Props) => {
   const navigate = useNavigate();
 
   const [emailVal, setEmailVal] = useState("");
@@ -30,7 +30,7 @@ const LoginSystemUserForm = ({ loginFlag, setLogin }: Props) => {
   };
   const setValuePass = (value: string) => {
     console.log(passwordFlag);
-    
+
     setPasswordVal(value);
     if (value === "") {
       setPasswordFlag(true);
@@ -50,7 +50,7 @@ const LoginSystemUserForm = ({ loginFlag, setLogin }: Props) => {
   const returnToken = async (
     username: string,
     password: string,
-    otp: string,
+    otp: string
   ) => {
     const api = await SystemUserServices.SystemUserLoginRequest({
       email: username,
@@ -61,17 +61,17 @@ const LoginSystemUserForm = ({ loginFlag, setLogin }: Props) => {
   };
 
   const submitReq = async () => {
-    if(emailVal === ''){
-      setEmailFlag(true)
+    if (emailVal === "") {
+      setEmailFlag(true);
       return;
     }
-    if(passwordVal === ''){
-      setPasswordFlag(true)
+    if (passwordVal === "") {
+      setPasswordFlag(true);
       return;
     }
 
-    if(otpVal === ''){
-      setOtpFlag(true)
+    if (otpVal === "") {
+      setOtpFlag(true);
       return;
     }
 
@@ -84,8 +84,12 @@ const LoginSystemUserForm = ({ loginFlag, setLogin }: Props) => {
 
     try {
       const data = await SystemUserServices.SystemUserLoginRequest(user);
+      
+      if (!data.data) {
+        alert("Invalid Credentials");
+      }
 
-      if (data.accessToken) {
+      if (data.data && data.accessToken) {
         Cookies.set("accessToken", data.accessToken);
         console.log("Login Notify Call");
 
@@ -108,36 +112,15 @@ const LoginSystemUserForm = ({ loginFlag, setLogin }: Props) => {
   return (
     <div className="form">
       <form>
-        <div className="button-grp">
-          <Button
-            className={loginFlag ? "button-nav primary" : "button-nav default"}
-            onClick={() => {
-              console.log("Login Click");
-
-              setLogin(true);
-            }}
-            active
-          >
-            Login
-          </Button>
-          <Button
-            className={!loginFlag ? "button-nav primary" : "button-nav default"}
-            onClick={() => {
-              console.log("Signup Click");
-
-              setLogin(false);
-            }}
-            active
-          >
-            Signup 
-          </Button>
+        <div className="header-login">
+          <h4>Login System User</h4>
         </div>
-        <h3>System User</h3>
+        <br></br>
 
         <div className="input-body">
+          Email
           <Input
             type={"email"}
-            placeholder={"Email ID"}
             onChange={setValueEmail}
           />
           <span className="error-msg" hidden={!emailFlag}>
@@ -147,9 +130,9 @@ const LoginSystemUserForm = ({ loginFlag, setLogin }: Props) => {
         </div>
 
         <div className="input-body">
+          Password
           <Input
             type={"password"}
-            placeholder={"Password"}
             onChange={setValuePass}
           />
           <span className="error-msg" hidden={!passwordFlag}>
@@ -159,7 +142,8 @@ const LoginSystemUserForm = ({ loginFlag, setLogin }: Props) => {
         </div>
 
         <div className="input-body">
-          <Input type={"text"} placeholder={"OTP"} onChange={setValueOtp} />
+          Otp
+          <Input type={"text"} onChange={setValueOtp} />
           <span className="error-msg" hidden={!otpFlag}>
             This input is required.
           </span>
@@ -178,6 +162,24 @@ const LoginSystemUserForm = ({ loginFlag, setLogin }: Props) => {
         <Button onClick={submitReq} appearance="primary" active>
           Login
         </Button>
+
+        <Divider>OR</Divider>
+        <div className="footer-login">
+          <span>
+            Need an account?
+            <Button
+              onClick={() => {
+                console.log("Signup Click");
+
+                setLogin(false);
+              }}
+              active
+              appearance="link"
+            >
+              <strong>Signup</strong>
+            </Button>
+          </span>
+        </div>
       </form>
     </div>
   );

@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Input, Button } from "rsuite";
+import { Input, Button, Divider } from "rsuite";
 import "./OrganizationUserLoginSignup.style.scss";
 import { useNavigate } from "react-router-dom";
 import OrganizationUserServices from "../../services/OrganizationUser";
 import { Props } from "./OrganizationUserLoginSignup.type";
 
-const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
+
+const SignupOrganizationUserForm = ({ setLogin }: Props) => {
   const navigate = useNavigate();
 
   const [firstNameVal, setFirstNameVal] = useState("");
@@ -126,55 +127,38 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
 
   return (
     <form>
-      <div className="button-grp">
-        <Button
-          className={loginFlag ? "button-nav primary" : "button-nav default"}
-          onClick={() => {
-            console.log("Login Click");
-            setLogin(true);
-          }}
-          active
-        >
-          Login
-        </Button>
-        <Button
-          className={!loginFlag ? "button-nav primary" : "button-nav default"}
-          onClick={() => {
-            console.log("Signup Click");
-            setLogin(false);
-          }}
-          active
-        >
-          Signup
-        </Button>
+      <div className="header-login">
+        <h4>Signup Organization User</h4>
       </div>
-      <h3>Organization User</h3>
-      <div className="input-body">
-        <Input
-          type={"text"}
-          placeholder={"First Name"}
-          onChange={setValueFirstName}
-        />
-        <span className="error-msg" hidden={!firstNameFlag}>
-          This input is required.
-        </span>
-        <br />
+      <br />
+      <div className="full-name">
+        <div className="firstName">
+          First Name
+          <Input
+            type={"text"}
+            onChange={setValueFirstName}
+          />
+          <span className="error-msg" hidden={!firstNameFlag}>
+            This input is required.
+          </span>
+          <br />
+        </div>
+        <div className="lastName">
+          Last Name
+          <Input
+            type={"text"}
+            onChange={setValueLastName}
+          />
+          <span className="error-msg" hidden={!lastNameFlag}>
+            This input is required.
+          </span>
+          <br />
+        </div>
       </div>
-      <div className="input-body">
-        <Input
-          type={"text"}
-          placeholder={"Last Name"}
-          onChange={setValueLastName}
-        />
-        <span className="error-msg" hidden={!lastNameFlag}>
-          This input is required.
-        </span>
-        <br />
-      </div>
-      <div className="input-body">
+      <div className="input-login">
+        Email
         <Input
           type={"email"}
-          placeholder={"Email ID"}
           onChange={setValueEmail}
         />
         <span className="error-msg" hidden={!emailFlag}>
@@ -183,9 +167,9 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
         <br />
       </div>
       <div className="input-body">
+        Password
         <Input
           type={"password"}
-          placeholder={"Password"}
           onChange={setValuePass}
         />
         <span className="error-msg" hidden={!passwordFlag}>
@@ -194,9 +178,9 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
         <br />
       </div>
       <div className="input-body">
+        Date of birth
         <Input
           type={"date"}
-          placeholder={"Date of Birth"}
           onChange={setValueDob}
         />
         <span className="error-msg" hidden={!dobFlag}>
@@ -205,9 +189,9 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
         <br />
       </div>
       <div className="input-body">
+        Date of Joining
         <Input
           type={"date"}
-          placeholder={"Date of Joining"}
           onChange={setValueDoj}
           onFocus={function () {
             
@@ -220,9 +204,9 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
       </div>
 
       <div className="input-body">
+        Organization
         <Input
           type={"text"}
-          placeholder={"Organization Name"}
           onChange={setValueOrg}
         />
         <span className="error-msg" hidden={!orgFlag}>
@@ -234,6 +218,26 @@ const SignupOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
       <Button onClick={signupReq} appearance="primary">
         Signup
       </Button>
+
+      <Divider>OR</Divider>
+        <div className="footer-login">
+        <span>
+          Already a user?
+          <Button
+          
+          onClick={() => {
+            console.log("Login Click");
+            setLogin(true);
+          }}
+          active
+          appearance="link"
+        >
+          Login
+        </Button>
+        </span>
+        </div>
+
+      
     </form>
   );
 };

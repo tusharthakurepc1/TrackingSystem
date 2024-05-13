@@ -4,14 +4,14 @@ import { FaUserLarge } from "react-icons/fa6";
 import HomeIcon from "@rsuite/icons/legacy/Home";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import "./Header.style.scss";
+import "./HeaderSystemUser.style.scss";
 
 const CustomNavbar = ({ isVisible }: CustomNavbarProps) => {
 
   const navigate = useNavigate();
 
   const profileClick = () => {
-    navigate("/profile")
+    navigate("/sysprofile")
   };
 
   const logoutClick = () => {

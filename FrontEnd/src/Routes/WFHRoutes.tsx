@@ -9,7 +9,8 @@ import DashBoardSystemUser from "../pages/DashboardSystemUser/DashboardSystemUse
 import DumpRoute from "../organisms/DumpRoute";
 import OrganizationUser from "../pages/OrganizationUser/OrganizationUser";
 import SystemUser from "../pages/SystemUser/SystemUser";
-import Profile from '../pages/Profile/Profile'
+import OrganizationUserProfile from '../pages/OrganizationUserProfile/OrganizationUserProfile'
+import SystemUserProfile from '../pages/SystemUserProfile/SysetemUserProfile'
 import { useState, useContext, createContext } from "react";
 
 
@@ -41,7 +42,8 @@ const WFHRoutes = () => {
 
 
           {/* User Profile */}
-          <Route path="/profile" element={<Profile />}/>
+          <Route path="/profile" element={<OrganizationUserProfile />}/>
+          <Route path="/sysprofile" element={<SystemUserProfile />} />
 
           {/* Dump */}
           <Route path="/temp" element={<DumpRoute />} />

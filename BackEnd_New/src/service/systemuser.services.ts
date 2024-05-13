@@ -25,6 +25,10 @@ class SystemUserServices {
   }
 
   public updateSystemUser = (email: string, reqBody: SystemUser) => {
+    const user = this.systemUserDao.getSystemUser(reqBody.email)
+    if(user && email !== reqBody.email){
+      return 945;
+    }
     return this.systemUserDao.updateSystemUser(email, reqBody);
   }
 

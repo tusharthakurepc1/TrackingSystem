@@ -2,18 +2,19 @@ import { useState, useEffect } from "react";
 import CustomNavbar from "../../molecules/Header/Header";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import OrganizationUserServices from "../../services/OrganizationUser";
+import SystemUserServices from "../../services/SystemUser";
 import { Input, Button } from 'rsuite'
-import './Profile.style.scss'
+import './SystemUserProfile.style.scss'
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
-
 
 const Profile = () => {
   const [firstNameN, setFirstName] = useState("")
   const [lastNameN, setLastName] = useState("")
   const [emailN, setEmail] = useState("")
   const [passwordN, setPassword] = useState("")
+  const [dobN, setDob] = useState("")
+
   const [prevObj, setPrevObj] = useState({
     firstName: "",
     lastName: "",
@@ -53,25 +54,47 @@ const Profile = () => {
   },[])
 
   const profileReq = async (token: string) => {
+    
     const responseOrgData =
-      await OrganizationUserServices.organizationUserRequest(token);
+      await SystemUserServices.SystemUserDashBoardRequest(token);
   
-    const { firstName, lastName, email, password } = responseOrgData.user
+    
+    
+    
+    const { firstName, lastName, email, password, dob } = responseOrgData.data.user
       
     setFirstName(firstName)
     setLastName(lastName)
     setEmail(email)
     setPassword(password)
+    setDob(dob)
     
     setPrevObj({firstName, lastName, email, password})
 
   }
 
-  const updateProfile = () => {
+  const updateProfile = async () => {
     // console.log(JSON.stringify(prevObj));
     if(firstNameN !== prevObj.firstName || lastNameN !== lastNameN || emailN !== prevObj.email){
         //Make Call
         console.log(prevObj);
+
+        const updateUser = {
+          isAdmin: false,
+          firstName: firstNameN,
+          lastName: lastNameN,
+          email: emailN,
+          password: passwordN,
+          dob: dobN,
+        }
+  
+        const response = await SystemUserServices.updateSystemUser(prevObj.email, updateUser)
+        if(response.status === 200){
+          alert(response.data.msg)
+          Cookies.remove('accessToken')
+          navigate('/')
+        }
+
 
     }
 
@@ -96,7 +119,7 @@ const Profile = () => {
           <div className="profile-item password-grp">
             {
               !passwordVisibleFlag? <>
-                <Input type="password" size="lg" value={passwordN} style={{width: 350}} onChange={setPasswordValue}/>            
+                <Input type="password" size="lg" readOnly={true} value={passwordN} style={{width: 350}} onChange={setPasswordValue}/>            
                 <Button startIcon={<FaEye />} size="lg" onClick={()=> {setPasswordVisibleFlag(true)}}/>
               </>
               :

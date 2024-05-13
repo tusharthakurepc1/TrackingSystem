@@ -33,6 +33,10 @@ class OrganizationUserServices {
   }
 
   public updateOrganizationUser = (email: string, reqBody: OrganizationUser) => {
+    const user = this.organizationUserDao.getOrganizationUser(reqBody.email)
+    if(user && email !== reqBody.email){
+      return 945;
+    }
     return this.organizationUserDao.updateOrganizationUser(email, reqBody);
   }
 

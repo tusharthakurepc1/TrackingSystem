@@ -3,8 +3,8 @@ import SendMailController from '../controller/sendmail.controller';
 
 class SendMailRoute {
   public path = '/mail';
-  public router = Router()
   public sendMailController = new SendMailController()
+  public router = Router()
 
 
   constructor() {
