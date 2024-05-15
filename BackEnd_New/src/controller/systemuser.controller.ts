@@ -57,6 +57,7 @@ class SystemUserController {
     }
   }
 
+
   public getSystemUserCred = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password, otp } = req.body;
     
@@ -114,8 +115,34 @@ class SystemUserController {
         status: 400
       })
     }
+  }
+
+  public getUserWithOffset = async (req: Request, res: Response, next: NextFunction) => {
+    const {page, pageSize} = req.query;
+
+    console.log(page, pageSize);
+    
+    try{
+      const result = await this.organizationUserService.getOrganizationUsersOffset(page.toString(), pageSize.toString());
+      const resultSize = await this.organizationUserService.getAllOrganizationUserCount();
+
+      console.log(result);
+      
+      return res.status(200).json({
+        data: result,
+        totalData: resultSize,
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })
+    }
 
   }
+
 
   public deleteSystemUser = async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.params;

@@ -8,6 +8,14 @@ class OrganizationUserServices {
     return this.organizationUserDao.getAllUsers();
   }
 
+  public getAllOrganizationUserCount = () => {
+    return this.organizationUserDao.getAllUsersCount();
+  }
+
+  public getOrganizationUsersOffset = (page: string, pageSize: string) => {
+    return this.organizationUserDao.getOrganizationUsersOffset(page, pageSize)
+  }
+
   public getOrganizationUserCred = (email: string, password: string) => {
     return this.organizationUserDao.getOrganizationUserCred(email, password);
   }
@@ -17,7 +25,11 @@ class OrganizationUserServices {
   }
 
   public pushOrganizationUserOrg = (orgDetail: UpdateOrganizationUserEmail) => {
-    return this.organizationUserDao.pushOrganizationUserOrg(orgDetail);
+    const user = this.organizationUserDao.getOrganizationUser(orgDetail.email)
+    if(!user){
+      return this.organizationUserDao.pushOrganizationUserOrg(orgDetail);
+    }
+    
   }
 
   public getOrganizationUser = (email: string) => {

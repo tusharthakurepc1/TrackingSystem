@@ -9,3 +9,6 @@ const app = new App([
 ]);
 
 app.listen();
+const socketIO = app.getSocket()
+
+export default socketIO;

@@ -3,7 +3,8 @@
   display: flex;
 }
 .profile{
-  margin: 100px auto;
+  margin: 50px auto 100px auto;
+
 }
 .profile-item{
   margin-bottom: 30px;
@@ -15,4 +16,10 @@
 
 .password-grp{
   display: flex;
+}
+
+.header-profile{
+  margin-top: 50px;
+  display: flex;
+  justify-content: center ;
 }

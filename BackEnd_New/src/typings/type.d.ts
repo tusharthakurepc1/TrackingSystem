@@ -6,11 +6,19 @@ interface ExtendedRequest extends Request {
 }
 
 interface ApplicationRequest {
-  _id: string
+  _id: string,
+  email: string,
   status: number
 }
 
 interface ApplicationFetchRequest {
   orgList: Array<string>,
   email: string
+}
+
+interface ApplicationFetchRequestOffset {
+  orgList: Array<string>,
+  email: string,
+  page: number,
+  pageSize: number
 }

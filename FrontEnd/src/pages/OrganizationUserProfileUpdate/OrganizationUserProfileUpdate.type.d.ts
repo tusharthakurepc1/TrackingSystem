@@ -11,11 +11,7 @@ interface SystemUserStructure {
   email: string,
   password: string,
   dob: string,
+
 }
 
-interface UserWithOrg {
-  email: string,
-  orgName: string
-}
-
-export type { UserStructure, SystemUserStructure, UserWithOrg };
+export type { UserStructure, SystemUserStructure };

@@ -18,6 +18,35 @@ export const organizationUserDashBoardRequest = async (token: string) => {
   }
 };
 
+export const organizationUserApplicationFetch = async (orgList: string[], email: string, page: number, limit: number) => {
+  const URL = "http://localhost:5500/application-status/fetch";
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const api = await axios.post(URL, JSON.stringify({orgList, email, page, pageSize: limit}), { headers });
+    
+
+    return api.data;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const organizationUserApplications = async (orgList: string[], email: string, page: number, limit: number) => {
+  const URL = "http://localhost:5500/application-status/applications";
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const api = await axios.post(URL, JSON.stringify({orgList, email, page, pageSize: limit}), { headers });
+  
+    return api.data;
+  } catch (err) {
+    return err;
+  }
+};
+
 export const updateOrganizationUser = async (email: string, user: OrganizationUserCompl) => {
   console.log(email);
   console.log(JSON.stringify(user));
@@ -121,7 +150,7 @@ export const organizationUserSignupRequest = async ({
   }
 };
 
-export const acceptedLeaveRequest = async (_id: string) => {
+export const acceptedLeaveRequest = async (_id: string, email: string) => {
   const URL = "http://localhost:5500/application-status/leave";
 
   try {
@@ -130,7 +159,7 @@ export const acceptedLeaveRequest = async (_id: string) => {
     };
     const response = await axios.put(
       URL,
-      JSON.stringify({ _id, status: 1 }),
+      JSON.stringify({ _id, email, status: 1 }),
       { headers },
     );
     
@@ -141,7 +170,7 @@ export const acceptedLeaveRequest = async (_id: string) => {
   }
 };
 
-export const rejectedLeaveRequest = async (_id: string) => {
+export const rejectedLeaveRequest = async (_id: string, email: string) => {
   // setNewStatus(2);
   const URL = "http://localhost:5500/application-status/leave";
 
@@ -151,7 +180,7 @@ export const rejectedLeaveRequest = async (_id: string) => {
     };
     const post_dashboard_api = await axios.put(
       URL,
-      JSON.stringify({ _id, status: 2 }),
+      JSON.stringify({ _id, email, status: 2 }),
       { headers },
     );
     return post_dashboard_api.data;

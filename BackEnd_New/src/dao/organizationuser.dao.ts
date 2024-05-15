@@ -1,3 +1,4 @@
+import { parse } from "dotenv";
 import OrganizationUserSchema from "../models/organizationuser.model";
 import { OrganizationUser, UpdateOrganizationUserEmail } from '../typings/common'
 
@@ -6,6 +7,19 @@ class OrganizationUserDao {
 
   public getAllUsers = async () => {
     return await OrganizationUserSchema.find({});
+  }
+
+  public getAllUsersCount = async () => {
+    return (await OrganizationUserSchema.find({})).length;
+  }
+
+  public getOrganizationUsersOffset = async (page: string, pageSize: string) => {
+    const currentPage = parseInt(page) || 1;
+    const currentPageSize = parseInt(pageSize) || 10;
+    const startPage = (currentPage - 1) * currentPageSize;
+
+
+    return OrganizationUserSchema.find({}).skip(startPage).limit(currentPageSize);
   }
 
   public getOrganizationUserCred = async (email: string, password: string) => {
@@ -18,6 +32,7 @@ class OrganizationUserDao {
 
   public pushOrganizationUserOrg = async (orgDetail: UpdateOrganizationUserEmail) => {
     const {email, orgName} = orgDetail;
+
     return await OrganizationUserSchema.updateOne(
       {email},
       {

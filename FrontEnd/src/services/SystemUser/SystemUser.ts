@@ -2,6 +2,24 @@ import axios from "axios";
 // import LoginUser from "../../typings/LoginUser";
 import { SystemUser, UserDeleteType, UserAdminType } from "./SystemUser.type";
 
+export const SystemUserWithOffset = async (page: number, pageSize: number) => {
+  const URL = `http://localhost:5500/sysuser?page=${page}&pageSize=${pageSize}`
+
+  try{
+    const headers = {
+      'Content-type': "application/json"
+    }
+    const api = await axios.get(URL, {headers});
+    
+    
+    return api.data;
+  }
+  catch(err){
+    return "Can't get Users";
+  }
+
+}
+
 export const SystemUserDashBoardRequest = async (token: string) => {
   const URL = "http://localhost:5500/sysuser/dashboard";
 

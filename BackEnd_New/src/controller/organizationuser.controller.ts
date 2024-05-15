@@ -19,12 +19,12 @@ class OrganizationUserController {
       orgName: user._orginizationName,
       email: user.email
     };
-    try{
       
-      await this.organizationUserServices.addOrganizationUser(user);
-      await this.organizationUserServices.pushOrganizationUserOrg(orgDetail);
-      await this.organization.addOrganizationEmail(orgDetail)
+    const p2 = this.organizationUserServices.pushOrganizationUserOrg(orgDetail);
+    const p1 = this.organizationUserServices.addOrganizationUser(user);
+    const p3 = this.organization.addOrganizationEmail(orgDetail)
 
+    Promise.all([p1, p2, p3]).then(()=> {
       console.log("OrganizationUser Sucessfully Added");
       return res.status(200).json({
         data: {
@@ -32,14 +32,12 @@ class OrganizationUserController {
         },
         status: 200
       })
-      
-    }
-    catch(err){
+    }).catch((err)=>{
       return res.status(400).json({
         data: err,
         status: 400
-      })
-    }
+      })    
+    })
   }
 
   public getOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {

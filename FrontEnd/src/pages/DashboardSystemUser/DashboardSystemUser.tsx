@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { Table, Button, SelectPicker } from "rsuite";
-import { UserStructure, SystemUserStructure } from "./DashBoardSystemUser.type";
+import { Table, Button, SelectPicker, Pagination } from "rsuite";
+import { SystemUserStructure, UserWithOrg } from "./DashBoardSystemUser.type";
 import SystemUserServices from "../../services/SystemUser";
 import { Message } from 'rsuite';
 import "./DashboardSystemUser.style.scss";
 import CustomNavbar from "../../molecules/HeaderSystemUser/HeaderSystemUser";
+import socket from '../../socket'
+import OrganizationUserProfileUpdate from "../OrganizationUserProfileUpdate/OrganizationUserProfileUpdate";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -19,22 +21,93 @@ const DashBoardSystemUser = () => {
     password: "",
     dob: "",
   });
+  const [updateData, setUpdateData] = useState<SystemUserStructure>({
+    _id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    dob: "",
+  });
+
+  const [formFlag, setFormFlag] = useState(false);
+  const [totalData, setTotalData] = useState(10);
   const [userData, setUserData] = useState([]);
   const [makeReq, setMakeReq] = useState(true);
   const [organizationValue, setOrganizationValue] = useState("");
-  // const [user, setUser] = useState<User | any>();
+  const [flagUpdate, setFlagUpdate] = useState(false);
+
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(5)
+
+  const [userOrgList, setUserOrgList] = useState<[UserWithOrg]>([{email: "demo123@gmail.com", orgName: ""}]);
+
+  useEffect(()=> {
+    socket.on('hello', ()=> {
+    console.log("Connection Hear");      
+  })
+
+  // const setValueOrganization = (value: string) => {
+  //   console.log(userOrgList.find(
+  //     (el)=> {
+  //       return el.email === 'manasvi108@gmail.com'
+  //     }
+  //   ));
+  // }
+    
+
+  const getUserData = async () => {
+    const result = await SystemUserServices.SystemUserWithOffset(page, limit);
+      // console.log("API response: ",result);
+      setTotalData(result.totalData)
+      setUserData(result.data)
+
+      const tempData = result.data.map((el: any)=> ({email: el.email, orgName: ""}));
+      setUserOrgList(tempData)
+      console.log(tempData);
+      
+
+      // console.log(userOrgList.find(
+      //   (el)=> {
+      //     return el.email === 'manasvi108@gmail.com'
+      //   }
+      // ));
+
+      
+      
+    }
+    getUserData();
+
+  }, [page, limit, flagUpdate])
 
   const dashboardReq = async (token: string) => {
     const response = await SystemUserServices.SystemUserDashBoardRequest(token);
 
-    console.log(response.data);
+
     if (!response.data.user || !response.data.orgData) {
       return <h1> Page not found </h1>;
     }
     setAdminData(response.data.user);
-    setUserData(response.data.orgData);
   };
 
+
+  const makeUserUpdate = async (data: User | any) => {
+    if(!data){
+      return;
+    }
+    let {firstName, lastName, email, password, dob} = data;
+
+    setUpdateData({
+      _id: "",
+      firstName,
+      lastName,
+      email,
+      password,
+      dob
+    })
+    setFormFlag(true)
+
+  }
   
   const deleteUser = async (data: User | any) => {
     if (!data) {
@@ -43,7 +116,7 @@ const DashBoardSystemUser = () => {
     }
     let { _id, email } = data;
 
-    if (organizationValue === "Select") {
+    if (organizationValue === "Select" || !data.orgination_list.includes(organizationValue)) {
       return;
     }
 
@@ -56,12 +129,9 @@ const DashBoardSystemUser = () => {
 
     if(response.data.msg){
       alert(response.data.msg)
-    }
-    if (response.status === 200) {
-      navigate("/temp");
+      setFlagUpdate(!flagUpdate)
     }
   };
-
 
   const makeUserAdmin = async (data: User | any) => {
     if (!data) {
@@ -69,7 +139,7 @@ const DashBoardSystemUser = () => {
     }
     
     let { email } = data;
-    if (organizationValue === "Select") {
+    if (organizationValue === "Select" || !data.orgination_list.includes(organizationValue)) {
       return;
     }
     console.log(email, organizationValue);
@@ -80,6 +150,7 @@ const DashBoardSystemUser = () => {
     
     if(response.data.msg){
       alert(response.data.msg)
+      setFlagUpdate(!flagUpdate);
     }
   };
 
@@ -107,28 +178,39 @@ const DashBoardSystemUser = () => {
         Welcome <strong>{adminData.firstName},</strong> you logged as a System User
       </Message>
 
+{/* {userOrgList.length} */}
+      <OrganizationUserProfileUpdate 
+        firstName={updateData.firstName}
+        lastName={updateData.lastName}
+        email={updateData.email}
+        password={updateData.password}
+        dob={updateData.dob}
+        formFlag={formFlag}
+        setFormFlag={setFormFlag}
+      />
+
       <div className="table-user">
         <Table data={userData}
-          height={300}
+          autoHeight={true}
         > 
-          <Column width={100} align="center">
+          <Column align="center" flexGrow={1}>
             <HeaderCell>Name</HeaderCell>
             <Cell dataKey="firstName" />
           </Column>
 
-          <Column width={200} align="center">
+          <Column align="center" flexGrow={1}>
             <HeaderCell>Email</HeaderCell>
             <Cell dataKey="email" />
           </Column>
-          <Column align="center">
+          <Column align="center" flexGrow={1}>
             <HeaderCell>Date of Birth</HeaderCell>
             <Cell dataKey="dob" />
           </Column>
-          <Column align="center">
+          <Column align="center" flexGrow={1}>
             <HeaderCell>Date of Joining</HeaderCell>
             <Cell dataKey="doj" />
           </Column>
-          <Column align="center">
+          <Column align="center" flexGrow={1}>
             <HeaderCell>Organization</HeaderCell>
             <Cell style={{ padding: "6px" }}>
               {(rowData) => (
@@ -147,22 +229,22 @@ const DashBoardSystemUser = () => {
               )}
             </Cell>
           </Column>
-          <Column align="center">
+          <Column align="center" flexGrow={1}>
             <HeaderCell> </HeaderCell>
             <Cell style={{ padding: "6px" }}>
-              {(rowData) => (
-                <Button
-                  appearance="ghost"
-                  onClick={() => {
-                    console.log(`${rowData}`);
-                  }}
-                >
-                  Update
-                </Button>
+            {(rowData) => ( 
+              <Button
+                appearance="ghost"
+                onClick={() => {
+                  makeUserUpdate(rowData)   
+                }}
+              >
+                Update
+              </Button>
               )}
             </Cell>
           </Column>
-          <Column align="center">
+          <Column align="center" flexGrow={1}>
             <HeaderCell> </HeaderCell>
             <Cell style={{ padding: "6px" }}>
               {(rowData) => (
@@ -177,7 +259,7 @@ const DashBoardSystemUser = () => {
               )}
             </Cell>
           </Column>
-          <Column align="center">
+          <Column align="center" flexGrow={1}>
             <HeaderCell> </HeaderCell>
             <Cell style={{ padding: "6px" }}>
               {(rowData) => (
@@ -193,7 +275,27 @@ const DashBoardSystemUser = () => {
             </Cell>
           </Column>
         </Table>
-      </div>
+
+        <br />
+                
+        <Pagination
+          prev
+          next
+          first
+          last
+          ellipsis
+          boundaryLinks
+          maxButtons={5}
+          size="xs"
+          layout={['total', '-', 'limit', '|', 'pager']}
+          total={totalData}
+          limitOptions={[10, 30, 50]}
+          limit={limit}
+          activePage={page}
+          onChangePage={setPage}
+          onChangeLimit={setLimit}
+        />
+      </div>  
     </>
   );
 };

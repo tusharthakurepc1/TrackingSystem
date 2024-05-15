@@ -94,11 +94,7 @@ const Profile = () => {
           Cookies.remove('accessToken')
           navigate('/')
         }
-
-
     }
-
-
   }
   
   
@@ -106,10 +102,12 @@ const Profile = () => {
   return(
     <>
       <CustomNavbar isVisible={true}/>
+        <div className="header-profile">
+          <h2>Profile </h2>
+        </div>
       <div className="profile-body">
         <div className="profile">
-
-          
+        
 
           <div className="name-grp profile-item" >
             <Input type="text" size="lg" value={firstNameN} style={{width: 200}} onChange={setFirstNameValue}/>

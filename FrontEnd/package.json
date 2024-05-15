@@ -21,7 +21,8 @@
     "react-router-dom": "^6.23.0",
     "react-toastify": "^10.0.5",
     "rsuite": "^5.60.1",
-    "sass": "^1.76.0"
+    "sass": "^1.76.0",
+    "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

@@ -19,7 +19,7 @@ class Routes {
   public router = Router()
 
   constructor(){
-    this.initilizeOrganizationRoute('/organisation');
+    this.initilizeOrganizationRoute('/organization');
     this.initilizeOrganizationUserRoute('/user');
     this.sendMailRoutes('/mail')
     this.initilizeSystemUserRoute('/sysuser')
@@ -50,6 +50,7 @@ class Routes {
     this.router.get(`${prefix}/:email`, this.systemUserController.getSystemUser);
     this.router.post(`${prefix}/login`, this.systemUserController.getSystemUserCred);
     this.router.post(`${prefix}/dashboard`, this.authorizationMiddleware.verfiyToken, this.systemUserController.getSystemUserAuth);
+    this.router.get(`${prefix}`, this.systemUserController.getUserWithOffset);
     this.router.post(`${prefix}/signup`, this.systemUserController.addSystemUser);
     this.router.delete(`${prefix}/:email`, this.systemUserController.deleteSystemUser);
     this.router.put(`${prefix}/update`, this.systemUserController.updateSystemUser);
@@ -59,6 +60,8 @@ class Routes {
   private initilizeApplicationRoute = async (prefix: string) => {
     this.router.post(`${prefix}`, this.authorizationMiddleware.verfiyToken, this.wfhApplicationController.insertApplication);
     this.router.post(`${prefix}/all`, this.wfhApplicationController.getAllApplication);
+    this.router.post(`${prefix}/fetch`, this.wfhApplicationController.getAllApplicationFetch);
+    this.router.post(`${prefix}/applications`, this.wfhApplicationController.getAllApplicationUser);
     this.router.put(`${prefix}/leave`, this.wfhApplicationController.updateApplicationStatus)
   }
   

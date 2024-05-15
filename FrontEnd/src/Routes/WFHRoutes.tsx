@@ -1,9 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "../pages/Home/Home";
-// import SignupOrganizationUserForm from '../organisms/OrganizationUser/SignupOrganizationUserForm';
-// import LoginOrganizationUserForm from '../organisms/OrganizationUser/LoginOrganizationUserForm';
-// import SignupSystemUserForm from './organisms/SignupSystemUserForm';
-// import LoginSystemUserForm from '../organisms/SystemUser/LoginSystemUserForm';
 import DashBoardOrganizationUser from "../pages/DashboardOrganizationUser/DashboardOrganizationUser";
 import DashBoardSystemUser from "../pages/DashboardSystemUser/DashboardSystemUser";
 import DumpRoute from "../organisms/DumpRoute";
@@ -11,7 +7,6 @@ import OrganizationUser from "../pages/OrganizationUser/OrganizationUser";
 import SystemUser from "../pages/SystemUser/SystemUser";
 import OrganizationUserProfile from '../pages/OrganizationUserProfile/OrganizationUserProfile'
 import SystemUserProfile from '../pages/SystemUserProfile/SysetemUserProfile'
-import { useState, useContext, createContext } from "react";
 
 
 const WFHRoutes = () => {
@@ -39,8 +34,7 @@ const WFHRoutes = () => {
           {/* System User */}
           <Route path="/sysuser-login" element={<SystemUser />} />
           <Route path="/sysuser-dashboard" element={<DashBoardSystemUser />} />
-
-
+          
           {/* User Profile */}
           <Route path="/profile" element={<OrganizationUserProfile />}/>
           <Route path="/sysprofile" element={<SystemUserProfile />} />

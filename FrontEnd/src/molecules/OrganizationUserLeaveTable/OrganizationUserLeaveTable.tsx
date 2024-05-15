@@ -1,68 +1,46 @@
+import { useEffect, useState } from "react";
 import { Table, Button, ButtonGroup, Pagination } from "rsuite";
 const { Column, HeaderCell, Cell } = Table;
-import "./LeaveApproval.style.scss";
 import OrganizationUserServices from "../../services/OrganizationUser";
-import { useState, useEffect } from "react";
 
 interface Props {
-  updatedFlag: boolean;
+  updatedFlag: boolean
   email: string;
   orgData: string[];
 }
 
-const LeaveApproval = ({ updatedFlag, email, orgData }: Props) => {
+const OrganizationUserLeaveTable = ({updatedFlag, email, orgData }: Props) => {
   const [wfhApplication, setWfhApplication] = useState([]);
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
+  const [limit, setLimit] = useState(5)
   const [totalData, setTotalData] = useState(10);
-
-  const [updateLeaveComp, setupdateLeaveComp] = useState(false);
 
   useEffect(() => {
     const applicationReq = async () => {
       const response =
-        await OrganizationUserServices.organizationUserApplicationFetch(
+        await OrganizationUserServices.organizationUserApplications(
           orgData,
           email,
           page,
           limit
         );
+        
+      console.log("HELLO: ",response.data);
+      
       setTotalData(response.data.totalApplication)
       setWfhApplication(response.data.applicationRes);
     };
-
     applicationReq();
-  }, [updateLeaveComp, updatedFlag]);
-
-  const acceptedLeaveReq = async (_id: string) => {
-    const response = await OrganizationUserServices.acceptedLeaveRequest(_id, email);
-    if (response.status === 200) {
-      alert("Leave Approved");
-      setupdateLeaveComp(!updateLeaveComp)
-    }
-  };
-
-  const rejectedLeaveReq = async (_id: string) => {
-    const response = await OrganizationUserServices.rejectedLeaveRequest(_id, email);
-    if (response.status === 200) {
-      alert("Leave Rejected");
-      setupdateLeaveComp(!updateLeaveComp)
-    }
-  };
+  }, [updatedFlag]);
 
   return (
     <>
-      <h1> Leave Requests </h1>
+      <h1> Work From Home Applications </h1>
       <div className="table-user">
         <Table data={wfhApplication} autoHeight={true}>
           <Column flexGrow={1} align="center">
             <HeaderCell>Name</HeaderCell>
             <Cell dataKey="orgName" />
-          </Column>
-
-          <Column flexGrow={1} align="center">
-            <HeaderCell>Email</HeaderCell>
-            <Cell dataKey="email" />
           </Column>
           <Column flexGrow={1} align="center">
             <HeaderCell>Date</HeaderCell>
@@ -76,45 +54,27 @@ const LeaveApproval = ({ updatedFlag, email, orgData }: Props) => {
             <HeaderCell>Reason</HeaderCell>
             <Cell dataKey="reason" />
           </Column>
-
-          <Column align="center" flexGrow={1}>
+          <Column flexGrow={1} align="center">
             <HeaderCell>Status</HeaderCell>
-            <Cell style={{ padding: "6px" }}>
-              {(rowData) =>
+            <Cell dataKey="status">
+            {(rowData) =>
                 rowData.status === 3 ? (
-                  <ButtonGroup>
-                    <Button
-                      onClick={() => {
-                        acceptedLeaveReq(rowData._id);
-                      }}
-                      appearance="ghost"
-                      active
-                      style={{ padding: "3px 5px" }}
-                    >
-                      Accept
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        rejectedLeaveReq(rowData._id);
-                      }}
-                      appearance="ghost"
-                      active
-                      style={{ padding: "3px 5px" }}
-                    >
-                      Reject
-                    </Button>
-                  </ButtonGroup>
+                  <>Pending</>
                 ) : (
                   <>
                     {rowData.status === 1 ? (
-                      <>Leave Approved</>
+                      <>Approved</>
                     ) : (
-                      <>Leave Rejected </>
+                      <>Rejected </>
                     )}
                   </>
                 )
               }
             </Cell>
+          </Column>
+          <Column flexGrow={1} align="center">
+            <HeaderCell>Approved By</HeaderCell>
+            <Cell dataKey="approvedBy" />
           </Column>
         </Table>
 
@@ -137,8 +97,9 @@ const LeaveApproval = ({ updatedFlag, email, orgData }: Props) => {
         />
       </div>
 
-    </>
-  );
-};
 
-export default LeaveApproval;
+    </>
+  )
+}
+
+export default OrganizationUserLeaveTable;

@@ -30,6 +30,7 @@ export interface wfhApplication{
   orgName: string,
   status: number,
   reason: string,
+  approvedBy: String,
   approvedDate: Date
 }
 

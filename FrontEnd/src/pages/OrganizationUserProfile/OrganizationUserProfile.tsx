@@ -101,6 +101,9 @@ const OrganizationUserProfile = () => {
   return(
     <>
       <CustomNavbar isVisible={true}/>
+      <div className="header-profile">
+          <h2>Profile </h2>
+        </div>
       <div className="profile-body">
         <div className="profile">
 

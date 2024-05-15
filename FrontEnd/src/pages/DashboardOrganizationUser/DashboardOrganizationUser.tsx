@@ -8,16 +8,18 @@ import LeaveApproval from "../../organisms/LeaveApproval/LeaveApproval";
 import "./DashboardOrganizationUser.style.scss";
 import { Button, Message } from "rsuite";
 import { ApplicationStructure, UserStructure } from "./DashboardOrganizationUser.type";
+import OrganizationUserLeaveTable from '../../molecules/OrganizationUserLeaveTable/OrganizationUserLeaveTable'
 import OrganizationUserServices from "../../services/OrganizationUser";
 import WFHApplicationServices from "../../services/WfhApplication";
 import CustomNavbar from "../../molecules/Header/Header";
 
 const DashBoardOrganizationUser = () => {
-  const [currDate, setCurrDate] = useState(new Date());
+  const [currDate, setCurrDate] = useState<Date>(new Date());
   const [availedDate, setAvailedDate] = useState("");
   const [formFlag, setFormFlag] = useState(false);
   const [leaveFlag, setLeafFlag] = useState(false);
 
+  const [updatedFlag, setUpdatedFlag] = useState(false);    
   const navigate = useNavigate();
   const [adminData, setAdminData] = useState<UserStructure>({
     email: "",
@@ -28,8 +30,13 @@ const DashBoardOrganizationUser = () => {
   const [adminOrgData, setAdminOrgData] = useState([]);
   const [makeReq, setMakeReq] = useState(true);
   const [allApplication, setAllApplication] = useState([]);
-  const [wfhApplication, setWfhApplication] = useState([]);
+  // const [wfhApplication, setWfhApplication] = useState([]);
 
+
+  const calendarUpdate = () => {
+    console.log("Calendar Update");
+    
+  }
   const dashboardReq = async (token: string) => {
     const response =
       await OrganizationUserServices.organizationUserDashBoardRequest(token);
@@ -52,9 +59,9 @@ const DashBoardOrganizationUser = () => {
       email,
     });
 
-    // console.log("Application Req: ", response.data.applications);
+    console.log("Application Req: ", response.data);
     setAdminOrgData(response.data.result);
-    setWfhApplication(response.data.applicationRes);
+    // setWfhApplication(response.data.applicationRes);
     setAllApplication(response.data.allEmailApplications);
   };
 
@@ -77,7 +84,6 @@ const DashBoardOrganizationUser = () => {
     }
 
     const dateFormatted: string = year + "-" + monthStr + "-" + dayStr;
-    // console.log(dateFormatted);
     setAvailedDate(dateFormatted);
     setFormFlag(true);
   };
@@ -105,10 +111,12 @@ const DashBoardOrganizationUser = () => {
     <>
       <CustomNavbar isVisible={true}/>
       <Message>
-        Welcome <strong>{adminData.firstName},</strong> you logged as a System User
+        Welcome <strong>{adminData.firstName},</strong> you logged as a Organization User
       </Message>
-
+      
       <WFH_Application
+        updatedFlag={updatedFlag}
+        setUpdatedFlag={setUpdatedFlag}
         availedDate={availedDate}
         formFlag={formFlag}
         setFormFlag={setFormFlag}
@@ -118,6 +126,7 @@ const DashBoardOrganizationUser = () => {
       <div className="calendar-body">
         <Calendar
           value={currDate}
+          onChange={calendarUpdate}
           tileClassName={({ date }: DateProp) => {
             let day = date.getDate();
             let dayStr: string;
@@ -170,7 +179,29 @@ const DashBoardOrganizationUser = () => {
         />
       </div>
       {adminOrgData.length <= 0 ? (
-        <></>
+        <>
+          <Button
+            onClick={() => {
+              setLeafFlag(true);
+            }}
+            value={"Approve Leave"}
+            appearance="ghost"
+            active
+            style={{ margin: 10 }}
+          >
+            {" "}
+            All Applications
+          </Button>
+          {leaveFlag ? (
+            <OrganizationUserLeaveTable
+              updatedFlag={updatedFlag}
+              email={adminData.email}
+              orgData={orgData}
+            />
+          ) : (
+            <></>
+          )}
+        </>
       ) : (
         <>
           <Button
@@ -187,10 +218,12 @@ const DashBoardOrganizationUser = () => {
           </Button>
           {leaveFlag ? (
             <LeaveApproval
-              wfhApplication={wfhApplication}
+              updatedFlag={updatedFlag}
+              email={adminData.email}
+              orgData={orgData}
             />
           ) : (
-            <> </>
+            <></>
           )}
         </>
       )}

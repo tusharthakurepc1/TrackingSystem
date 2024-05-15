@@ -8,6 +8,7 @@ const WfhApplicationSchema = new Schema(
     orgName: {type: String, require: true},
     status: {type: Number, require: true},
     reason: {type: String, require: true},
+    approvedBy: {type: String, require: true},
     approvedDate: {type: Date, require: true}
   },
   {

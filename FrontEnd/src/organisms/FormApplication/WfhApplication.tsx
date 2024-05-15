@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { Button, Input, SelectPicker } from "rsuite";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { Props } from "./WfhApplication.type";
 import WFHApplicationServices from "../../services/WfhApplication";
 import "./WfhApplication.style.scss";
 
 const WFH_Application = ({
+  updatedFlag,
+  setUpdatedFlag,
   availedDate,
   formFlag,
   setFormFlag,
@@ -18,13 +19,16 @@ const WFH_Application = ({
   const [dateVal, setDateVal] = useState(availedDate);
   const [reason, setReason] = useState("");
 
+
   useEffect(() => {
     setDateVal(availedDate);
+    
   }, [availedDate]);
 
   const setValueOrg = (value: string) => {
     setOrgVal(value);
   };
+  
   const setValueReason = (value: string) => {
     setReason(value);
   };
@@ -37,30 +41,39 @@ const WFH_Application = ({
     }
 
     if(typeof token === 'string'){
+      if(dateVal === '' || orgVal === '' || reason === '' || token === ''){
+        alert("Fill the Details")
+        return
+      }
       const data = await WFHApplicationServices.wFHApplicationInsert(dateVal, orgVal, reason, token);
+      setUpdatedFlag(!updatedFlag)
       console.log(data);
     }
 
     setFormFlag(false);
   };
-
+  
   if (formFlag) {
     return (
       <div className="background-float-form">
+
         <form className="float-form">
           <h3>Work From Home Application</h3>
-
           <SelectPicker
             style={{ marginBottom: 10, marginTop: 10 }}
-            label="Select"
             onChange={(value: string | undefined | void | null) => {
               if (typeof value === "string") {
                 setValueOrg(value);
               }
               console.log(value);
             }}
-            data={orgData.map((el) => ({ label: el, value: el }))}
+            data={orgData.map((el: string) => ({ 
+              label: el, 
+              value: el 
+            }))}
           ></SelectPicker>
+
+          
 
           <Input
             type={"text"}

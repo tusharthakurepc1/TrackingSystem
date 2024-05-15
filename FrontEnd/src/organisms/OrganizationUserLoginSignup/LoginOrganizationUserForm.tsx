@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { Props } from "./OrganizationUserLoginSignup.type";
 import OrganizationUserServices from "../../services/OrganizationUser";
 import OtpService from "../../services/SendMail";
+import { validateEmail, validateOtp } from "../../helpers/InputValidations";
 import "./OrganizationUserLoginSignup.style.scss";
 
 const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
@@ -21,10 +22,8 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
   const [otpFlag, setOtpFlag] = useState(false);
 
   const setValueEmail = (value: string) => {
-    if (value === "") setEmailFlag(true);
-    else setEmailFlag(false);
-
     setEmailVal(value);
+    validateEmail(value, setEmailFlag);
   };
   const setValuePass = (value: string) => {
     if (value === "") setPasswordFlag(true);
@@ -33,10 +32,13 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
     setPasswordVal(value);
   };
   const setValueOtp = (value: string) => {
-    if (value === "") setOtpFlag(true);
-    else setOtpFlag(false);
-
-    setOtpVal(value);
+    
+    if (value === "") {
+      setOtpFlag(true);
+    } else {
+      setOtpFlag(false);
+    }
+    validateOtp(value, setOtpVal)
   };
 
   //Submit request to server
@@ -104,7 +106,7 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
         </div>
         Otp
         <div className="input-body">
-          <Input type={"text"} onChange={setValueOtp} />
+          <Input type={"number"} value={otpVal} onChange={setValueOtp} />
           <span className="error-msg" hidden={!otpFlag}>
             This input is required.
           </span>

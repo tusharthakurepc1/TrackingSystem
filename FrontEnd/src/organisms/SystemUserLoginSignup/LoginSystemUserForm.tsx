@@ -6,6 +6,7 @@ import { Input, Button, Divider } from "rsuite";
 import { Props } from "./SystemUserLoginSignup.type";
 import SystemUserServices from "../../services/SystemUser";
 import OtpService from "../../services/SendMail";
+import {validateEmail} from '../../helpers/InputValidations'
 import "./SystemUserLoginSignup.style.scss";
 
 const LoginSystemUserForm = ({ setLogin }: Props) => {
@@ -22,12 +23,10 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
 
   const setValueEmail = (value: string) => {
     setEmailVal(value);
-    if (value === "") {
-      setEmailFlag(true);
-    } else {
-      setEmailFlag(false);
-    }
+
+    validateEmail(value, setEmailFlag)    //validation of an email field
   };
+
   const setValuePass = (value: string) => {
     console.log(passwordFlag);
 
@@ -38,8 +37,13 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
       setPasswordFlag(false);
     }
   };
+  
   const setValueOtp = (value: string) => {
-    setOtpVal(value);
+    const inputValue = value;
+    const numericValue = inputValue.replace(/\D/g, '');
+    const truncatedValue = numericValue.slice(0, 6);
+    setOtpVal(truncatedValue);
+
     if (value === "") {
       setOtpFlag(true);
     } else {
@@ -80,7 +84,6 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
       password: passwordVal,
       otp: otpVal,
     };
-    // console.log(JSON.stringify(user));
 
     try {
       const data = await SystemUserServices.SystemUserLoginRequest(user);
@@ -143,7 +146,7 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
 
         <div className="input-body">
           Otp
-          <Input type={"text"} onChange={setValueOtp} />
+          <Input type={"number"} value={otpVal} onChange={setValueOtp} />
           <span className="error-msg" hidden={!otpFlag}>
             This input is required.
           </span>
