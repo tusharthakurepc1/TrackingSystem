@@ -32,6 +32,7 @@ class OrganizationUserDao {
 
   public pushOrganizationUserOrg = async (orgDetail: UpdateOrganizationUserEmail) => {
     const {email, orgName} = orgDetail;
+    const user = OrganizationUserSchema.find({})
 
     return await OrganizationUserSchema.updateOne(
       {email},
@@ -89,7 +90,7 @@ class OrganizationUserDao {
         $set: {
           firstName: reqBody.firstName,
           lastName: reqBody.lastName,
-          password: reqBody.password,
+          email: reqBody.email,
           dob: reqBody.dob,
           doj: reqBody.doj
         }

@@ -4,6 +4,8 @@ import "./OrganizationUserLoginSignup.style.scss";
 import { useNavigate } from "react-router-dom";
 import OrganizationUserServices from "../../services/OrganizationUser";
 import { Props } from "./OrganizationUserLoginSignup.type";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 
 const SignupOrganizationUserForm = ({ setLogin }: Props) => {
@@ -120,8 +122,13 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
       await OrganizationUserServices.organizationUserSignupRequest(user);
 
     if(data.status === 200){
-      setLogin(true);
-      
+      toast.success(data.msg)
+      setTimeout(() => {
+        setLogin(true);
+      }, 1000);
+    }
+    else{
+      toast.error("Account Creation Failed")
     }
   };
 
@@ -237,7 +244,7 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
         </span>
         </div>
 
-      
+        <ToastContainer />
     </form>
   );
 };

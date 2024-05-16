@@ -9,12 +9,15 @@ export const sendOtpReq = async ({ emailVal }: OtpPayload) => {
       "Content-Type": "application/json",
     };
     const resp = await axios.get(OTP_URL,{ headers });
-    
-    console.log("Otp Sent Sucessfylly", resp);
-    alert("Please Check You Mail ");
+    return resp;
+
   } catch (err) {
     console.log(err);
-    alert("Invalid Email! Can't send OTP");
-    return "Can't send OTP.";
+    return {
+      data: {
+        msg: "Can't send Otp"
+      }, 
+      status: "400"
+    }
   }
 };

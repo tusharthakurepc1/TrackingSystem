@@ -4,6 +4,7 @@ interface SystemUser {
   email: string;
   password: string;
   dob: string;
+  doj: string
 }
 
 interface UserDeleteType {

@@ -16,21 +16,17 @@ const Home = () => {
             onClick={() => navigate("/user-login")}
             appearance="primary"
             active
-            style={{ marginRight: 100, width: 150 }}
+            className="button"
           >
             Organization User
           </Button>
-
-          <Divider vertical style={{ height: 300, marginTop: 20 }} />
-
-          <strong style={{ marginLeft: 100 }}>
-            Want to Login Signup as a{" "}
-          </strong>
+          <Divider vertical className="divider" />
+          <strong>Want to Login Signup as a </strong>
           <Button
             onClick={() => navigate("/sysuser-login")}
             appearance="primary"
             active
-            style={{ width: 150 }}
+            className="button"
           >
             System User
           </Button>

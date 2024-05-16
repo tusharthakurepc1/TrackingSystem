@@ -1,11 +1,12 @@
 import { useState } from "react";
 import "./SystemUserLoginSignup.style.scss";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Button, Input, Divider } from "rsuite";
 import WFHApplicationServices from "../../services/WfhApplication";
 import { Props } from "./SystemUserLoginSignup.type";
 
-const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
+const SignupSystemUserForm = ({ setLogin }: Props) => {
   const [firstNameVal, setFirstNameVal] = useState("");
   const [firstNameFlag, setFirstNameFlag] = useState(false);
 
@@ -89,7 +90,13 @@ const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
     const data = await WFHApplicationServices.wFHApplicationSignupRequest(user);
     
     if(data.status === 200){
-      alert(data.data.msg)
+      toast.success("Account Created Sucessfully")
+      setTimeout(() => {
+        setLogin(true);
+      }, 1000);
+    }
+    else{
+      toast.error("Account Creation Failed")
     }
 
   };
@@ -183,6 +190,7 @@ const SignupSystemUserForm = ({ loginFlag, setLogin }: Props) => {
 
         </span>
         </div>
+        <ToastContainer />
     </form>
   );
 };

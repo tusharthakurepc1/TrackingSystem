@@ -7,6 +7,8 @@ import { Props } from "./OrganizationUserLoginSignup.type";
 import OrganizationUserServices from "../../services/OrganizationUser";
 import OtpService from "../../services/SendMail";
 import { validateEmail, validateOtp } from "../../helpers/InputValidations";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./OrganizationUserLoginSignup.style.scss";
 
 const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
@@ -64,21 +66,40 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
       otp: otpVal,
     });
     
-    console.log(data.accessToken);
     
+    if (data.data && data.accessToken) {
+      toast.success("Login Sucessfull")
+      setTimeout(() => {
+        Cookies.set("accessToken", data.accessToken);
+        navigate("/user-dashboard");
+      }, 1000);
+    }
 
     if(!data.data){
-      alert("Invalid Credentials");
-    }
-    if (data.data && data.accessToken) {
-      Cookies.set("accessToken", data.accessToken);
-      navigate("/user-dashboard");
+      toast.error("Invalid Credentials")
     }
   };
 
   //Otp request to server
   const sendOtpReq = async () => {
-    await OtpService.sendOtpReq({ emailVal });
+    if (emailVal === "") {
+      setEmailFlag(true);
+      return;
+    }
+    if (passwordVal === "") {
+      setPasswordFlag(true);
+      return;
+    }
+
+    const result = await OtpService.sendOtpReq({ emailVal });
+    console.log(result);
+    if(result && result.status === 200){
+      toast.success("Check your mail")
+    }
+    else{
+      toast.error("Invalid Email!!!")
+    }
+    
   };
 
   return (
@@ -138,6 +159,7 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
         </span>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };

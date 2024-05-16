@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import SystemUserServices from "../../services/SystemUser";
 import { Input, Button } from "rsuite";
 import "./OrganizationUserProfileUpdate.style.scss";
@@ -12,6 +12,7 @@ interface Props {
   email: string;
   password: string;
   dob: string;
+  organizationList: [string];
   formFlag: boolean;
   setFormFlag: Function;
 }
@@ -22,6 +23,7 @@ const OrganizationUserProfileUpdate = ({
   email,
   password,
   dob,
+  organizationList,
   formFlag,
   setFormFlag,
 }: Props) => {
@@ -39,8 +41,10 @@ const OrganizationUserProfileUpdate = ({
     setEmail(email)
     setPassword(password)
     setDob(dob)
+    console.log(organizationList);
     
-  }, [firstName, lastName, email, password, dob])
+    
+  }, [firstName, lastName, email, password, dob, organizationList])
 
   const [passwordVisibleFlag, setPasswordVisibleFlag] = useState(false);
 
@@ -57,7 +61,6 @@ const OrganizationUserProfileUpdate = ({
     setPassword(value);
   };
 
-  const navigate = useNavigate();
 
   const updateProfile = async () => {
     console.log(lastNameN);
@@ -77,6 +80,7 @@ const OrganizationUserProfileUpdate = ({
         email: emailN,
         password: passwordN,
         dob: dobN,
+        doj: ""
       };
 
       const response = await SystemUserServices.updateSystemUser(
@@ -114,6 +118,7 @@ const OrganizationUserProfileUpdate = ({
                 onChange={setLastNameValue}
               />
             </div>
+            
             <Input
               type="text"
               size="lg"

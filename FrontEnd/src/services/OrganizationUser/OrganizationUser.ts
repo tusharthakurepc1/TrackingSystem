@@ -139,14 +139,10 @@ export const organizationUserSignupRequest = async ({
     };
     const response = await axios.post(URL, JSON.stringify(user), { headers });
 
-    if (response.data.msg) {
-      alert("Account Created Sucessfully");
-    }
+    
     return response.data;
   } catch (err) {
-    console.log(err);
-    alert("Account Created Failed");
-    return "Signup Error Throw";
+    return err;
   }
 };
 

@@ -7,6 +7,8 @@ import { Props } from "./SystemUserLoginSignup.type";
 import SystemUserServices from "../../services/SystemUser";
 import OtpService from "../../services/SendMail";
 import {validateEmail} from '../../helpers/InputValidations'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./SystemUserLoginSignup.style.scss";
 
 const LoginSystemUserForm = ({ setLogin }: Props) => {
@@ -23,8 +25,7 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
 
   const setValueEmail = (value: string) => {
     setEmailVal(value);
-
-    validateEmail(value, setEmailFlag)    //validation of an email field
+    validateEmail(value, setEmailFlag)
   };
 
   const setValuePass = (value: string) => {
@@ -85,30 +86,40 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
       otp: otpVal,
     };
 
-    try {
-      const data = await SystemUserServices.SystemUserLoginRequest(user);
-      
-      if (!data.data) {
-        alert("Invalid Credentials");
-      }
-
-      if (data.data && data.accessToken) {
+    const data = await SystemUserServices.SystemUserLoginRequest(user);
+    
+    if (data.data && data.accessToken) {
+      toast.success("Login Sucessfull")
+      setTimeout(() => {
         Cookies.set("accessToken", data.accessToken);
-        console.log("Login Notify Call");
-
         navigate("/sysuser-dashboard");
-      }
-    } catch (err) {
-      console.log("Can't login", err);
+      }, 1000);
     }
+
+    if(!data.data){
+      toast.error("Invalid Credentials")
+    }
+
+    
   };
 
   const sendOtpReq = async () => {
-    try {
-      const resp = await OtpService.sendOtpReq({ emailVal });
-      console.log("Otp Sent Sucessfylly", resp);
-    } catch (err) {
-      console.log("Can't send OTP.", err);
+    if (emailVal === "") {
+      setEmailFlag(true);
+      return;
+    }
+    if (passwordVal === "") {
+      setPasswordFlag(true);
+      return;
+    }
+
+    const result = await OtpService.sendOtpReq({ emailVal });
+    console.log(result);
+    if(result && result.status === 200){
+      toast.success("Check your mail")
+    }
+    else{
+      toast.error("Invalid Email!!!")
     }
   };
 
@@ -184,6 +195,7 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
           </span>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };

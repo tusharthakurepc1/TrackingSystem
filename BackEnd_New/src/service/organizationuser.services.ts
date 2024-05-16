@@ -25,11 +25,7 @@ class OrganizationUserServices {
   }
 
   public pushOrganizationUserOrg = (orgDetail: UpdateOrganizationUserEmail) => {
-    const user = this.organizationUserDao.getOrganizationUser(orgDetail.email)
-    if(!user){
-      return this.organizationUserDao.pushOrganizationUserOrg(orgDetail);
-    }
-    
+    return this.organizationUserDao.pushOrganizationUserOrg(orgDetail);
   }
 
   public getOrganizationUser = (email: string) => {
@@ -44,12 +40,14 @@ class OrganizationUserServices {
     return this.organizationUserDao.deleteOrganizationUser(orgData);
   }
 
-  public updateOrganizationUser = (email: string, reqBody: OrganizationUser) => {
-    const user = this.organizationUserDao.getOrganizationUser(reqBody.email)
-    if(user && email !== reqBody.email){
+  public updateOrganizationUser = async (email: string, reqBody: OrganizationUser) => {
+    const user = await this.organizationUserDao.getOrganizationUser(reqBody.email)
+    
+    if(user){
       return 945;
     }
-    return this.organizationUserDao.updateOrganizationUser(email, reqBody);
+    
+    return await this.organizationUserDao.updateOrganizationUser(email, reqBody);
   }
 
 }
