@@ -72,13 +72,9 @@ const CalendarLeave = ({ email, orgList, updatedFlag, setUpdatedFlag }: Props) =
         matchedDate.getMonth() === date.getMonth()
       ) {
         return (
-          <ul>
-            <li>
-              <b>
-                {allApplication[i]['orgName']}
-              </b>
-            </li>
-          </ul>
+          <b>
+            {allApplication[i]['orgName']}
+          </b>
         );
       }
     }
@@ -112,6 +108,7 @@ const CalendarLeave = ({ email, orgList, updatedFlag, setUpdatedFlag }: Props) =
       const data = await WFHApplicationServices.wFHApplicationInsert(dateVal, orgVal, reason, token);
       console.log(data);
       setUpdatedFlag(!updatedFlag)
+      setReason("")
       closeApplication();
     }
     

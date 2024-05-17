@@ -1,3 +1,2 @@
-import * as OrganizationUser from "./OrganizationUser";
-
+import  OrganizationUser from "./OrganizationUser";
 export default OrganizationUser;

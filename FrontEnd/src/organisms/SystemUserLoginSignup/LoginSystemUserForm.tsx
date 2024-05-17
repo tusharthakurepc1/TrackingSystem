@@ -1,24 +1,37 @@
+//module
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./SystemUserLoginSignup.style.scss";
 import Cookies from "js-cookie";
 import { Input, Button, Divider } from "rsuite";
-import { Props } from "./SystemUserLoginSignup.type";
+import { ToastContainer, toast } from 'react-toastify';
+
+//Services
 import SystemUserServices from "../../services/SystemUser";
 import OtpService from "../../services/SendMail";
+
+//Helper
 import {validateEmail} from '../../helpers/InputValidations'
-import { ToastContainer, toast } from 'react-toastify';
+
+//types
+import { Props } from "./SystemUserLoginSignup.type";
+
+//css
+import "./SystemUserLoginSignup.style.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import "./SystemUserLoginSignup.style.scss";
 
 const LoginSystemUserForm = ({ setLogin }: Props) => {
   const navigate = useNavigate();
 
+  //states
+  const [hasClickedOtpBtn, setHasClickedOtnBtn] = useState(false);
+
   const [emailVal, setEmailVal] = useState("");
   const [emailFlag, setEmailFlag] = useState(false);
 
   const [otpVal, setOtpVal] = useState("");
   const [otpFlag, setOtpFlag] = useState(false);
+
 
   const setValueEmail = (value: string) => {
     setEmailVal(value);
@@ -92,7 +105,9 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
       return;
     }
 
+    setHasClickedOtnBtn(true)
     const result = await OtpService.sendOtpReq({ emailVal });
+    setHasClickedOtnBtn(false)
     console.log(result);
     if(result && result.status === 200){
       toast.success("Check your mail")
@@ -134,8 +149,8 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
         <Button
           onClick={sendOtpReq}
           appearance="ghost"
-          active
-          style={{ marginBottom: 10 }}
+          disabled={hasClickedOtpBtn}
+          className="otpButtonWrapper"
         >
           Send OTP
         </Button>

@@ -4,15 +4,16 @@ const { Column, HeaderCell, Cell } = Table;
 import OrganizationUserServices from "../../services/OrganizationUser";
 
 interface Props {
-  updatedFlag: boolean
+  updatedFlag: boolean;
+  setUpdateFlag: Function;
   email: string;
   orgData: string[];
 }
 
-const OrganizationUserLeaveTable = ({updatedFlag, email, orgData }: Props) => {
+const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgData }: Props) => {
   const [wfhApplication, setWfhApplication] = useState([]);
   const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(5)
+  const [limit, setLimit] = useState(10)
   const [totalData, setTotalData] = useState(10);
 
   useEffect(() => {
@@ -24,14 +25,12 @@ const OrganizationUserLeaveTable = ({updatedFlag, email, orgData }: Props) => {
           page,
           limit
         );
-        
-      console.log("HELLO: ",response.data);
       
       setTotalData(response.data.totalApplication)
       setWfhApplication(response.data.applicationRes);
     };
     applicationReq();
-  }, [updatedFlag]);
+  }, [updatedFlag, totalData, page]);
 
   return (
     <>
@@ -90,7 +89,7 @@ const OrganizationUserLeaveTable = ({updatedFlag, email, orgData }: Props) => {
           size="xs"
           layout={['total', '-', 'limit', '|', 'pager']}
           total={totalData}
-          limitOptions={[5, 10, 30, 50]}
+          limitOptions={[10, 30, 50]}
           limit={limit}
           activePage={page}
           onChangePage={setPage}

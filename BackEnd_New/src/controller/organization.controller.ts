@@ -110,10 +110,10 @@ class OrganizationController {
 
   public makeOrganizationAdmin = async (req: Request, res: Response, next: NextFunction) => {
     const orgDetail = req.body;
-    const {_id, orgName, email} = orgDetail;
+    const {orgName, email} = orgDetail;
 
     if(
-      [_id, orgName, email].some((el)=>{
+      [orgName, email].some((el)=>{
         return !el || el === ''
       })
     ){

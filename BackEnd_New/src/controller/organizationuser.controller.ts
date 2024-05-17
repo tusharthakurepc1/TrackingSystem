@@ -186,10 +186,10 @@ class OrganizationUserController {
 
   public deleteOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
     const orgData = req.body;
-    const {_id, orgName, email} = orgData;
+    const {_id, orgName, email} = req.body;
     
     if(
-      [_id, orgName, email].some((el)=> {
+      [orgName, email].some((el)=> {
         return !el || el === ''
       })
     ){

@@ -73,7 +73,7 @@ export const updateSystemUserData = async (email: string, user: SystemUser) => {
     return api.data;
     
   }catch(err){
-    return "Update Error"
+    return err;
   }
 
 }

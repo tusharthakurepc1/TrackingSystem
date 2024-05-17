@@ -1,18 +1,33 @@
+//module 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input, Button, Divider } from "rsuite";
-import "./OrganizationUserLoginSignup.style.scss";
 import Cookies from "js-cookie";
-import { Props } from "./OrganizationUserLoginSignup.type";
-import OrganizationUserServices from "../../services/OrganizationUser";
-import OtpService from "../../services/SendMail";
-import { validateEmail, validateOtp } from "../../helpers/InputValidations";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+//service
+import OrganizationUserServices from "../../services/OrganizationUser";
+import OtpService from "../../services/SendMail";
+
+//Helper
+import { validateEmail, validateOtp } from "../../helpers/InputValidations";
+
+//css
 import "./OrganizationUserLoginSignup.style.scss";
 
-const LoginOrganizationUserForm = ({ setLogin }: Props) => {
+//types
+import { LoginOrganisationProps } from "./OrganizationUserLoginSignup.type";
+
+
+const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
   const navigate = useNavigate();
+
+  //state
+  const [
+    hasClickedOtpBtn,
+    setHasClickedOtnBtn
+  ] = useState(false);
 
   const [emailVal, setEmailVal] = useState("");
   const [emailFlag, setEmailFlag] = useState(false);
@@ -74,8 +89,9 @@ const LoginOrganizationUserForm = ({ setLogin }: Props) => {
       setEmailFlag(true);
       return;
     }
-
+    setHasClickedOtnBtn(true);
     const result = await OtpService.sendOtpReq({ emailVal });
+    setHasClickedOtnBtn(false);
     console.log(result);
     if(result && result.status === 200){
       toast.success("Check your mail")
@@ -83,7 +99,6 @@ const LoginOrganizationUserForm = ({ setLogin }: Props) => {
     else{
       toast.error("Invalid Email!!!")
     }
-    
   };
 
   return (
@@ -111,7 +126,8 @@ const LoginOrganizationUserForm = ({ setLogin }: Props) => {
         <Button
           onClick={sendOtpReq}
           appearance="ghost"
-          style={{ marginBottom: 10 }}
+          disabled={hasClickedOtpBtn}
+          className="otpButtonWrapper"
         >
           Send OTP
         </Button>

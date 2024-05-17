@@ -30,12 +30,14 @@ const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgData }: Props) =>
           page,
           limit
         );
+      console.log("Application ans: ",response.data);
+      
       setTotalData(response.data.totalApplication)
       setWfhApplication(response.data.applicationRes);
     };
 
     applicationReq();
-  }, [updateLeaveComp, updatedFlag]);
+  }, [totalData, updateLeaveComp, updatedFlag]);
 
   const acceptedLeaveReq = async (_id: string) => {
     const response = await OrganizationUserServices.acceptedLeaveRequest(_id, email);

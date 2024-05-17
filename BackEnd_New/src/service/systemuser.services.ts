@@ -25,12 +25,13 @@ class SystemUserServices {
     return this.systemUserDao.deleteSystemUser(email);
   }
 
-  public updateSystemUser = (email: string, reqBody: SystemUser) => {
-    const user = this.systemUserDao.getSystemUser(reqBody.email)
+  public updateSystemUser = async (email: string, reqBody: SystemUser) => {
+    const user = await this.systemUserDao.getSystemUser(reqBody.email)
     if(user && email !== reqBody.email){
       return 945;
     }
-    return this.systemUserDao.updateSystemUser(email, reqBody);
+    
+    return await this.systemUserDao.updateSystemUser(email, reqBody);
   }
 
 }

@@ -73,11 +73,12 @@ class WfhApplicationServices {
     const { orgList, email, page, pageSize } = reqBody;
     
     let applicationRes = await this.wfhApplicationDao.getAllApplicationUser(email, page, pageSize);
+    let totalApplicationRes = await this.wfhApplicationDao.getAllEmailApplication(email);
     console.log(applicationRes);
     
     return {
       applicationRes,
-      totalApplication: applicationRes.length
+      totalApplication: totalApplicationRes.length
     }
   }
 

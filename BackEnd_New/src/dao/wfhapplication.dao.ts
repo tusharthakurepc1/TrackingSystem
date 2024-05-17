@@ -55,11 +55,15 @@ class WfhApplicationDao {
   }
 
   public getAllApplicationUser = async (email: string, page: number, pageSize: number) => {
-    const currentPage = (page) || 1;
-    const currentPageSize = (pageSize) || 10;
+    const currentPage: number = (page) || 1;
+    const currentPageSize: number = (pageSize) || 10;
     const startPage = (currentPage - 1) * currentPageSize;
     
-    return await WfhApplicationModel.find({email}).skip(startPage).limit(currentPageSize);
+    const data = await WfhApplicationModel.find({email}).skip(startPage).limit(currentPageSize);
+    // console.log("Data Applications: ", data);
+    
+
+    return data;
   }
 
   public getAllEmailApplication = async (email: string) => {

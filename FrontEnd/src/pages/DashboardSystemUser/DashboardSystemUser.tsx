@@ -50,7 +50,7 @@ const DashBoardSystemUser = () => {
   const [makeReq, setMakeReq] = useState(true);
   const [organizationValue, setOrganizationValue] = useState("");
   const [orgValFlag, setOrgValFlag] = useState(false)
-  const [flagUpdate, setFlagUpdate] = useState(false);
+  const flagUpdate = false;
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -339,7 +339,7 @@ const DashBoardSystemUser = () => {
         <Modal.Body>
           {organizationValue}
           <div className="profile-item">
-            <RadioGroup name="radio-group" value={organizationValue} onChange={setOrgValue}>
+            <RadioGroup name="radio-group" value={organizationValue} onChange={()=>setOrgValue}>
               {
                 updateData.organization_list.map((org: string) => <Radio key={org} value={org}>{org}</Radio>)
               }

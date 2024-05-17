@@ -13,10 +13,10 @@ import CustomNavbar from "../../molecules/Header/Header";
 import CalendarLeave from "../../organisms/CalendarLeave";
 
 const DashBoardOrganizationUser = () => {
-  const [leaveFlag, setLeafFlag] = useState(false);
-
+  // const [leaveFlag, setLeafFlag] = useState(false);
   const [updatedFlag, setUpdatedFlag] = useState(false);
 
+  const [optionsTab, setOptionsTab] = useState(1);
   
 
   const navigate = useNavigate();
@@ -28,7 +28,6 @@ const DashBoardOrganizationUser = () => {
   const [orgData, setOrgData] = useState([]);
   const [adminOrgData, setAdminOrgData] = useState([]);
   const [makeReq, setMakeReq] = useState(true);
-  const [allApplication, setAllApplication] = useState([]);
 
   const dashboardReq = async (token: string) => {
     const response =
@@ -54,7 +53,7 @@ const DashBoardOrganizationUser = () => {
 
     console.log("Application Req: ", response.data.allEmailApplications);
     setAdminOrgData(response.data.result);
-    setAllApplication(response.data.allEmailApplications);
+    // setAllApplication(response.data.allEmailApplications);
   };
 
   
@@ -80,60 +79,42 @@ const DashBoardOrganizationUser = () => {
         Organization User
       </Message>
       
-      
-      <div className="calendar-body">
-        <CalendarLeave  email={adminData.email} orgList={orgData} updatedFlag={updatedFlag} setUpdatedFlag={setUpdatedFlag}/>
-      </div>
-      {adminOrgData.length <= 0 ? (
+      {/* adminOrgData.length > 0  :: admin  */}
+      {
+        adminOrgData.length > 0 ? 
         <>
-          <Button
-            onClick={() => {
-              setLeafFlag(true);
-            }}
-            value={"Approve Leave"}
-            appearance="ghost"
-            active
-            style={{ margin: 10 }}
-          >
-            {" "}
-            All Applications
-          </Button>
-          {leaveFlag ? (
-            <OrganizationUserLeaveTable
-              updatedFlag={updatedFlag}
-              email={adminData.email}
-              orgData={orgData}
-            />
-          ) : (
-            <></>
-          )}
-        </>
-      ) : (
+          <LeaveApproval
+            updatedFlag={updatedFlag}
+            setUpdateFlag={setUpdatedFlag}
+            email={adminData.email}
+            orgData={orgData}
+          />
+        </> : 
         <>
-          <Button
-            onClick={() => {
-              setLeafFlag(true);
-            }}
-            value={"Approve Leave"}
-            appearance="ghost"
-            active
-            style={{ margin: 10 }}
-          >
-            {" "}
-            Approve Leave
-          </Button>
-          {leaveFlag ? (
-            <LeaveApproval
-              updatedFlag={updatedFlag}
-              setUpdateFlag={setUpdatedFlag}
-              email={adminData.email}
-              orgData={orgData}
-            />
-          ) : (
-            <></>
-          )}
+          <div className="navigationButtonGroup">
+            <Button onClick={()=> setOptionsTab(1)} appearance="primary" className="navigationButton">Calendar</Button> 
+            <Button onClick={()=> setOptionsTab(2)} appearance="primary" className="navigationButton">Applications</Button>
+          </div>
+
+          {
+            optionsTab === 1 ? 
+            <> 
+              <div className="calendar-body">
+                <CalendarLeave  email={adminData.email} orgList={orgData} updatedFlag={updatedFlag} setUpdatedFlag={setUpdatedFlag}/>
+              </div>
+            </> : 
+            <>
+              <OrganizationUserLeaveTable
+                updatedFlag={updatedFlag}
+                setUpdateFlag={setUpdatedFlag}
+                email={adminData.email}
+                orgData={orgData}
+              />
+            </>
+          }
+          
         </>
-      )}
+      }  
     </>
   );
 };

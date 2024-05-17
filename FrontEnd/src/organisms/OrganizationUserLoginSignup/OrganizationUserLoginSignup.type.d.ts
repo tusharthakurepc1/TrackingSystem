@@ -1,6 +1,5 @@
-interface Props {
-  loginFlag: boolean,
-  setLogin: function
+type LoginOrganisationProps = {
+  setLogin:  (value: boolean) => void;
 }
 
-export type { Props };
+export type { LoginOrganisationProps };

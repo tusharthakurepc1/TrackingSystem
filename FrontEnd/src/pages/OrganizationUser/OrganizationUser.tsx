@@ -13,7 +13,7 @@ const OrganizationUser = () => {
     <div className="organization-user-form">
       <CustomNavbar isVisible={false}/>
       {loginFlag ? (
-        <LoginOrganizationUserForm loginFlag={loginFlag} setLogin={setLogin} />
+        <LoginOrganizationUserForm setLogin={setLogin} />
       ) : (
         <SignupOrganizationUserForm loginFlag={loginFlag} setLogin={setLogin} />
       )}

@@ -9,7 +9,7 @@ class SystemUserDao {
   }
 
   public getSystemUser = async (email: string) => {
-    return await SystemUserModel.findOne({email, isActive: true});
+    return await SystemUserModel.findOne({email});
   }
 
   public deleteSystemUser = async (email: string) => {
@@ -23,6 +23,7 @@ class SystemUserDao {
         $set: {
           firstName: reqBody.firstName,
           lastName: reqBody.lastName,
+          email: reqBody.email,
           dob: reqBody.dob
         }
       }

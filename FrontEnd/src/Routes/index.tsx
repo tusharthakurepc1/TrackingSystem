@@ -1,21 +1,17 @@
+//modules
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "../pages/Home/Home";
-import DashBoardOrganizationUser from "../pages/DashboardOrganizationUser/DashboardOrganizationUser";
-import DashBoardSystemUser from "../pages/DashboardSystemUser/DashboardSystemUser";
-import DumpRoute from "../organisms/DumpRoute";
-import OrganizationUser from "../pages/OrganizationUser/OrganizationUser";
+
+//pages
+import Home from "../pages/Home";
+import DashBoardOrganizationUser from "../pages/DashboardOrganizationUser";
+import DashBoardSystemUser from "../pages/DashboardSystemUser";
+import OrganizationUser from "../pages/OrganizationUser";
 import SystemUser from "../pages/SystemUser/SystemUser";
-import OrganizationUserProfile from '../pages/OrganizationUserProfile/OrganizationUserProfile'
-import SystemUserProfile from '../pages/SystemUserProfile/SysetemUserProfile'
+import OrganizationUserProfile from '../pages/OrganizationUserProfile'
+import SystemUserProfile from '../pages/SystemUserProfile'
 
 
-const WFHRoutes = () => {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // const setLogin = (value: boolean) => {
-  //   setIsLoggedIn(value)
-  // }
-
+const RoutesComponent = () => {
   return (
     <div>
       <BrowserRouter>
@@ -38,13 +34,10 @@ const WFHRoutes = () => {
           {/* User Profile */}
           <Route path="/profile" element={<OrganizationUserProfile />}/>
           <Route path="/sysprofile" element={<SystemUserProfile />} />
-
-          {/* Dump */}
-          <Route path="/temp" element={<DumpRoute />} />
         </Routes>
       </BrowserRouter>
     </div>
   );
 };
 
-export default WFHRoutes;
+export default RoutesComponent;

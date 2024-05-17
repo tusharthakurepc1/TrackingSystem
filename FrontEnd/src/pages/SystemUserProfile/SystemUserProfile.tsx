@@ -5,9 +5,11 @@ import Cookies from "js-cookie";
 import SystemUserServices from "../../services/SystemUser";
 import { Input, Button } from 'rsuite'
 import './SystemUserProfile.style.scss'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { validateEmail, validateName } from "../../helpers/InputValidations";
 
-const Profile = () => {
+const SystemUserProfile = () => {
   const [firstNameN, setFirstName] = useState("");
   const [firstNameFlag, setFirstNameFlag] = useState(true);
 
@@ -110,11 +112,21 @@ const Profile = () => {
         }
   
         const response = await SystemUserServices.updateSystemUserData(prevObj.email, updateUser)
+        console.log(response);
+        
         if(response.status === 200){
-          alert(response.data.msg)
-          Cookies.remove('accessToken')
-          Cookies.remove('user')
-          navigate('/')
+          const msg = response.data.msg;
+          toast.success(msg);
+        //   Cookies.remove('accessToken')
+        //   Cookies.remove('user')
+        //   navigate('/')
+        }
+        else if(response.status === 205){
+          const msg = response.data.msg;
+          toast.error(msg);
+        }
+        else{
+          toast.error("Something went wrong")
         }
     }
   }
@@ -191,9 +203,10 @@ const Profile = () => {
           <Button appearance="primary" onClick={updateProfile} size="lg" style={{width: 400}}>Update</Button>
         </div>
       </div>
+      <ToastContainer />
     </>
   )
 }
 
 
-export default Profile;
+export default SystemUserProfile;

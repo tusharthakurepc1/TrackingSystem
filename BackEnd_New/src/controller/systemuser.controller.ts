@@ -167,11 +167,19 @@ class SystemUserController {
     } 
   }
 
-  public updateSystemUser = (req: Request, res: Response, next: NextFunction) => {
+  public updateSystemUser = async (req: Request, res: Response, next: NextFunction) => {
     const { email, user } = req.body;
 
     try{
-      this.systemUserServices.updateSystemUser(email, user);
+      const result = await this.systemUserServices.updateSystemUser(email, user);
+      if(result === 945){
+        return res.status(200).json({
+          data:{
+            msg: "Email Already Used"
+          },
+          status: 205
+        })  
+      }
 
       return res.status(200).json({
         data:{
