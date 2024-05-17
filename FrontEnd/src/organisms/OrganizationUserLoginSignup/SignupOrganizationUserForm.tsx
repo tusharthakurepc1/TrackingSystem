@@ -83,7 +83,7 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
 
     const user = {
       _orginizationName: orgVal,
-      isAdmin: false,
+      isActive: false,
       firstName: firstNameVal,
       lastName: lastNameVal,
       email: emailVal,

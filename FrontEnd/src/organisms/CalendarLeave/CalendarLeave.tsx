@@ -168,7 +168,7 @@ const CalendarLeave = ({ email, orgList, updatedFlag, setUpdatedFlag }: Props) =
 
         </Modal.Body>
         <Modal.Footer>
-          <Button
+          <Button 
               onClick={applicationReq}
               appearance="primary"
               active

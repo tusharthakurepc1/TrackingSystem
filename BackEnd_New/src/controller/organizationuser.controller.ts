@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 import OrganizationUserServices from "../service/organizationuser.services"
 import OrganizationServices from "../service/organization.services"
 import SendMailServices from "../service/sendmail.services"
-import { Organization } from '../typings/common'
 import { ExtendedRequest } from "../typings/type"
 import SECRET_KEY from "../constants/common"
 
@@ -14,6 +13,20 @@ class OrganizationUserController {
 
   public addOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
     const user = req.body;
+    const { firstName, lastName, email, dob, doj, _orginizationName } = user;
+
+    if(
+      [firstName, lastName, email, dob, doj, _orginizationName].some((el)=> {
+        return !el || el === ''
+      })
+    ){
+      return res.json(400).json({
+        data: {
+          msg: "Fill all the details"
+        }, 
+        status: 400
+      })
+    }
 
     const orgDetail = {
       _id: "",
@@ -61,7 +74,15 @@ class OrganizationUserController {
 
   public getOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
     const { email } = req.params;
-    console.log(email);
+    
+    if(!email || email === ''){
+      return res.json(400).json({
+        data: {
+          msg: "Fill all the details"
+        }, 
+        status: 400
+      })
+    }
     
     try{
       const result = await this.organizationUserServices.getOrganizationUser(email)
@@ -85,6 +106,18 @@ class OrganizationUserController {
   public getOrganizationUserCred = async (req: Request, res: Response, next: NextFunction) => {
     const { email, otp } = req.body;
     
+    if(
+      [email, otp].some((el)=>{
+        return !el || el === ''
+      })
+    ){
+      return res.json(400).json({
+        data: {
+          msg: "Fill all the details"
+        }, 
+        status: 400
+      })
+    }
     
     try{
       const result = await this.organizationUserServices.getOrganizationUserCred(email)
@@ -123,6 +156,15 @@ class OrganizationUserController {
   public getOrganizationUserAuth = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
     const {email} = req.user;
 
+    if(!email || email === ''){
+      return res.json(400).json({
+        data: {
+          msg: "Fill all the details"
+        }, 
+        status: 400
+      })
+    }
+
     try{
       const result = await this.organizationUserServices.getOrganizationUserCredential(email)
       console.log(result);
@@ -144,8 +186,20 @@ class OrganizationUserController {
 
   public deleteOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
     const orgData = req.body;
-
-    console.log(orgData);
+    const {_id, orgName, email} = orgData;
+    
+    if(
+      [_id, orgName, email].some((el)=> {
+        return !el || el === ''
+      })
+    ){
+      return res.json(400).json({
+        data: {
+          msg: "Fill all the details"
+        }, 
+        status: 400
+      })
+    }
     
     try{
       const r1 = await this.organizationUserServices.deleteOrganizationUser(orgData);
@@ -167,10 +221,12 @@ class OrganizationUserController {
   }
 
   public updateOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, user } = req.body;
+    const { oldEmail, user } = req.body;
+    const {firstName, lastName, email, dob, doj} = user;
     
+
     try{
-      const response = await this.organizationUserServices.updateOrganizationUser(email, user);
+      const response = await this.organizationUserServices.updateOrganizationUser(oldEmail, user);
       if(response === 945){
         return res.status(200).json({
           data:{

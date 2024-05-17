@@ -4,40 +4,40 @@ import { OrganizationUser, UpdateOrganizationUserEmail } from "../typings/common
 class OrganizationUserServices {
   private organizationUserDao = new OrganizationUserDao()
 
-  public getAllOrganizationUser = () => {
-    return this.organizationUserDao.getAllUsers();
+  public getAllOrganizationUser = async () => {
+    return await this.organizationUserDao.getAllUsers();
   }
 
-  public getAllOrganizationUserCount = () => {
-    return this.organizationUserDao.getAllUsersCount();
+  public getAllOrganizationUserCount = async() => {
+    return await this.organizationUserDao.getAllUsersCount();
   }
 
-  public getOrganizationUsersOffset = (page: string, pageSize: string) => {
-    return this.organizationUserDao.getOrganizationUsersOffset(page, pageSize)
+  public getOrganizationUsersOffset = async (page: string, pageSize: string) => {
+    return await this.organizationUserDao.getOrganizationUsersOffset(page, pageSize)
   }
 
-  public getOrganizationUserCred = (email: string) => {
-    return this.organizationUserDao.getOrganizationUser(email);
+  public getOrganizationUserCred = async (email: string) => {
+    return await this.organizationUserDao.getOrganizationUser(email);
   }
 
-  public addOrganizationUser = (reqBody: OrganizationUser) => {
-    return this.organizationUserDao.insertOrganizationUser(reqBody);
+  public addOrganizationUser = async (reqBody: OrganizationUser) => {
+    return await this.organizationUserDao.insertOrganizationUser(reqBody);
   }
 
-  public pushOrganizationUserOrg = (orgDetail: UpdateOrganizationUserEmail) => {
-    return this.organizationUserDao.pushOrganizationUserOrg(orgDetail);
+  public pushOrganizationUserOrg = async (orgDetail: UpdateOrganizationUserEmail) => {
+    return await this.organizationUserDao.pushOrganizationUserOrg(orgDetail);
   }
 
-  public getOrganizationUser = (email: string) => {
-    return this.organizationUserDao.getOrganizationUser(email);
+  public getOrganizationUser = async (email: string) => {
+    return await this.organizationUserDao.getOrganizationUser(email);
   }
 
-  public getOrganizationUserCredential = (email: string) => {
-    return this.organizationUserDao.getOrganizationUser(email);
+  public getOrganizationUserCredential = async (email: string) => {
+    return await this.organizationUserDao.getOrganizationUser(email);
   }
 
-  public deleteOrganizationUser = (orgData: UpdateOrganizationUserEmail) => {
-    return this.organizationUserDao.deleteOrganizationUser(orgData);
+  public deleteOrganizationUser = async (orgData: UpdateOrganizationUserEmail) => {
+    return await this.organizationUserDao.deleteOrganizationUser(orgData);
   }
 
   public updateOrganizationUser = async (email: string, reqBody: OrganizationUser) => {

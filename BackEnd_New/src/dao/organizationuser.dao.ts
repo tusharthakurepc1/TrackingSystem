@@ -19,14 +19,14 @@ class OrganizationUserDao {
     const startPage = (currentPage - 1) * currentPageSize;
 
 
-    return OrganizationUserSchema.find({isActive: true}).skip(startPage).limit(currentPageSize);
+    return await OrganizationUserSchema.find({isActive: true}).skip(startPage).limit(currentPageSize);
   }
 
   public insertOrganizationUser = async (reqBody: OrganizationUser) => {
-    const user = OrganizationUserSchema.find({email: reqBody.email, isActive: true});
+    const user = await OrganizationUserSchema.find({email: reqBody.email, isActive: true});
     console.log(user);
     
-    if(user){
+    if(user.length > 0){
       return await OrganizationUserSchema.updateOne(
         {email: reqBody.email}, 
         {
@@ -41,7 +41,7 @@ class OrganizationUserDao {
 
   public pushOrganizationUserOrg = async (orgDetail: UpdateOrganizationUserEmail) => {
     const {email, orgName} = orgDetail;
-    const user = OrganizationUserSchema.find({})
+    const user = await OrganizationUserSchema.find({})
 
     return await OrganizationUserSchema.updateOne(
       {email},

@@ -8,6 +8,16 @@ class OrganizationController {
   //Organization Controller Code below
   public getOrganization = async (req: Request, res: Response, next: NextFunction) => {
     const {orgName} = req.params
+
+    if(!orgName || orgName === '' ){
+      return res.json(400).json({
+        data: {
+          msg: "Fill all the details"
+        }, 
+        status: 400
+      })
+    }
+
     try{
       const result = await this.orgService.getOrganization(orgName)
       console.log(result);
@@ -27,6 +37,20 @@ class OrganizationController {
 
   public addOrganization = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body;
+    const { name, max_wfh, userEmail } = body;
+    
+    if(
+      [name, max_wfh, userEmail].some((el)=> {
+        return !el
+      })
+    ){
+      return res.json(400).json({
+        data: {
+          msg: "Fill all the details"
+        }, 
+        status: 400
+      })
+    }
     
     try{
       await this.orgService.addOrganization(body)
@@ -49,6 +73,21 @@ class OrganizationController {
 
   public addOrganizationEmail = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body;
+    const { _id, orgName, email } = body;
+
+    if(
+      [_id, orgName, email].some((el)=> {
+        return !el || el === ''
+      })
+    ){
+      return res.json(400).json({
+        data: {
+          msg: "Fill all the details"
+        }, 
+        status: 400
+      })
+    }
+
 
     try{
       await this.orgService.addOrganizationEmail(body)
@@ -71,7 +110,21 @@ class OrganizationController {
 
   public makeOrganizationAdmin = async (req: Request, res: Response, next: NextFunction) => {
     const orgDetail = req.body;
-    
+    const {_id, orgName, email} = orgDetail;
+
+    if(
+      [_id, orgName, email].some((el)=>{
+        return !el || el === ''
+      })
+    ){
+      return res.json(400).json({
+        data: {
+          msg: "Fill all the details"
+        }, 
+        status: 400
+      })
+    }
+
     try{
       await this.orgService.makeOrganizationAdmin(orgDetail);
       

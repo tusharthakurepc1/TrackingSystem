@@ -6,24 +6,24 @@ class OrganizationServices {
 
   //Operations on Organizations
   public getOrganization = async (orgName: string) => {
-    return this.organizationDao.getOrganization(orgName);
+    return await this.organizationDao.getOrganization(orgName);
   }
 
   public addOrganization = async (reqBody: Organization) => {
     reqBody.isActive = true;
-    return this.organizationDao.insertOrganization(reqBody);
+    return await this.organizationDao.insertOrganization(reqBody);
   }
 
   public addOrganizationEmail = async (reqBody: UpdateOrganizationUserEmail) => {
-    return this.organizationDao.pushOrganizationUserEmail(reqBody);
+    return await this.organizationDao.pushOrganizationUserEmail(reqBody);
   }
 
   public removeOrganizationEmail = async (reqBody: UpdateOrganizationUserEmail) => {
-    return this.organizationDao.pullOrganizationUserEmail(reqBody);
+    return await this.organizationDao.pullOrganizationUserEmail(reqBody);
   }
 
   public makeOrganizationAdmin = async (reqBody: UpdateOrganizationUserEmail) => {
-    return this.organizationDao.makeOrganizationAdmin(reqBody);
+    return await this.organizationDao.makeOrganizationAdmin(reqBody);
   }
 
 }
