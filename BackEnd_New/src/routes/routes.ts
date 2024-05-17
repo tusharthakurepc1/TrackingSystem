@@ -58,6 +58,7 @@ class Routes {
 
 
   private initilizeApplicationRoute = async (prefix: string) => {
+    this.router.get(`${prefix}/:email`, this.wfhApplicationController.getUserApplications);
     this.router.post(`${prefix}`, this.authorizationMiddleware.verfiyToken, this.wfhApplicationController.insertApplication);
     this.router.post(`${prefix}/all`, this.wfhApplicationController.getAllApplication);
     this.router.post(`${prefix}/fetch`, this.wfhApplicationController.getAllApplicationFetch);

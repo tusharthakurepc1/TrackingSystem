@@ -27,6 +27,7 @@ class OrganizationController {
 
   public addOrganization = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body;
+    
     try{
       await this.orgService.addOrganization(body)
       console.log("Organization Added Sucessfully");

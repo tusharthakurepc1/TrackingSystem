@@ -48,7 +48,7 @@ class OrganizationDao {
   }
 
   public getOrganization = async (orgName: string) => {
-    return await OrganizationModel.findOne({name: orgName})
+    return await OrganizationModel.findOne({name: orgName, isActive: true})
   }
 
 }

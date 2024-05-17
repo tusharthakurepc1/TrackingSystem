@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import WfhApplicationServices from "../service/wfhapplication.services";
 import { ExtendedRequest, ApplicationRequest } from '../typings/type';
 import { wfhApplication } from '../typings/common';
-import socketIO from '../index';
 
 
 class WfhApplicationController {
@@ -68,6 +67,28 @@ class WfhApplicationController {
         status: 400
       })
     }
+  }
+
+  public getUserApplications = async(req: Request, res: Response, next: NextFunction) => {
+    const {email} = req.params
+
+    try{
+      const applications = await this.wfhApplicationService.getUserEmailApplication(email);
+
+      return res.status(200).json({
+        data: applications,
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(400).json({
+        data: {
+          msg: "Cannot get application"
+        }, 
+        status: 400
+      })
+    }
+
   }
 
   public getAllApplication = async (req: Request, res: Response, next: NextFunction) => {

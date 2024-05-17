@@ -32,9 +32,7 @@ class SendMailServices {
       html: `Your OTP is <b>${otp}</b> this is valid for only 15 min`, 
     });
 
-    if(ack){
-      await this.sendMailDao.insertOtp(email, otp);
-    }
+    await this.sendMailDao.insertOtp(email, otp);
     return ack;
   }
 

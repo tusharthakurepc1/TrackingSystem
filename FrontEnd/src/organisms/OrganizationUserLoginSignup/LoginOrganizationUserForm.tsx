@@ -11,14 +11,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./OrganizationUserLoginSignup.style.scss";
 
-const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
+const LoginOrganizationUserForm = ({ setLogin }: Props) => {
   const navigate = useNavigate();
 
   const [emailVal, setEmailVal] = useState("");
   const [emailFlag, setEmailFlag] = useState(false);
-
-  const [passwordVal, setPasswordVal] = useState("");
-  const [passwordFlag, setPasswordFlag] = useState(false);
 
   const [otpVal, setOtpVal] = useState("");
   const [otpFlag, setOtpFlag] = useState(false);
@@ -26,12 +23,6 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
   const setValueEmail = (value: string) => {
     setEmailVal(value);
     validateEmail(value, setEmailFlag);
-  };
-  const setValuePass = (value: string) => {
-    if (value === "") setPasswordFlag(true);
-    else setPasswordFlag(false);
-
-    setPasswordVal(value);
   };
   const setValueOtp = (value: string) => {
     
@@ -51,18 +42,14 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
       setEmailFlag(true);
       return;
     }
-    if (passwordVal === "") {
-      setPasswordFlag(true);
-      return;
-    }
     if (otpVal === "") {
-      setPasswordFlag(true);
+      setOtpFlag(true);
       return;
     }
 
     const data = await OrganizationUserServices.organizationUserLoginRequest({
       email: emailVal,
-      password: passwordVal,
+      password: "",
       otp: otpVal,
     });
     
@@ -71,6 +58,7 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
       toast.success("Login Sucessfull")
       setTimeout(() => {
         Cookies.set("accessToken", data.accessToken);
+        Cookies.set('user', "ORG");
         navigate("/user-dashboard");
       }, 1000);
     }
@@ -84,10 +72,6 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
   const sendOtpReq = async () => {
     if (emailVal === "") {
       setEmailFlag(true);
-      return;
-    }
-    if (passwordVal === "") {
-      setPasswordFlag(true);
       return;
     }
 
@@ -113,14 +97,6 @@ const LoginOrganizationUserForm = ({ loginFlag, setLogin }: Props) => {
           Email
           <Input type={"email"} onChange={setValueEmail} />
           <span className="error-msg" hidden={!emailFlag}>
-            This input is required.
-          </span>
-          <br />
-        </div>
-        <div className="input-body">
-          Password
-          <Input type={"password"} onChange={setValuePass} />
-          <span className="error-msg" hidden={!passwordFlag}>
             This input is required.
           </span>
           <br />

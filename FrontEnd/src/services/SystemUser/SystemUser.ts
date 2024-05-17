@@ -59,6 +59,25 @@ export const updateSystemUser = async (email: string, user: SystemUser) => {
 
 }
 
+export const updateSystemUserData = async (email: string, user: SystemUser) => {
+  console.log(email);
+  console.log(JSON.stringify(user));
+  
+  const URL = "http://localhost:5500/sysuser/update";
+
+  try{
+    const headers = {
+      "Content-Type": "application/json"
+    }
+    const api = await axios.put(URL, JSON.stringify({email, user}), {headers});
+    return api.data;
+    
+  }catch(err){
+    return "Update Error"
+  }
+
+}
+
 export const SystemUserRequest = async (token: string) => {
   const URL = "http://localhost:5500/sysuser-profile";
 
@@ -148,13 +167,12 @@ export const UserDelete = async ({
       JSON.stringify({ _id, email, orgName: organizationValue }),
       { headers },
     );
-    console.log(response.data);
+    // console.log(response.data);
     
     return response.data;
   } catch (err) {
-    console.log(err);
-    alert("User Deleted Failed");
-    return "User Delete Abort";
+    // console.log(err);
+    return err;
   }
 };
 

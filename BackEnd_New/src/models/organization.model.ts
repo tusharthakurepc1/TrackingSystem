@@ -3,6 +3,7 @@ import { Organization } from 'typings/common';
 
 const organizationSchema: Schema = new Schema(
   {
+    isActive: {type: Boolean, required: true}, 
     name: { type: String, require: true, unique: true },
     max_wfh: {type: Number, require: true},
     userEmail: {type: Array<String>, require: true},

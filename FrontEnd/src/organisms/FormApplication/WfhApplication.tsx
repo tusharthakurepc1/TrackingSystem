@@ -19,10 +19,9 @@ const WFH_Application = ({
   const [dateVal, setDateVal] = useState(availedDate);
   const [reason, setReason] = useState("");
 
-
+  
   useEffect(() => {
     setDateVal(availedDate);
-    
   }, [availedDate]);
 
   const setValueOrg = (value: string) => {

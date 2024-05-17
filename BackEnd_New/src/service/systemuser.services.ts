@@ -5,6 +5,7 @@ class SystemUserServices {
   private systemUserDao = new OrganizationUserDao()
 
   public addSystemUser = (reqBody: SystemUser) => {
+    reqBody.isActive = true;
     return this.systemUserDao.insertSystemUser(reqBody);
   }
 
@@ -12,12 +13,12 @@ class SystemUserServices {
     return this.systemUserDao.getSystemUser(email);
   }
 
-  public getSystemUserCred = (email: string, password: string) => {
-    return this.systemUserDao.getSystemUserCred(email, password);
+  public getSystemUserCred = (email: string) => {
+    return this.systemUserDao.getSystemUser(email);
   }
 
-  public getSystemUserCredential = (email: string, password: string) => {
-    return this.systemUserDao.getSystemUserCredential(email, password);
+  public getSystemUserCredential = (email: string) => {
+    return this.systemUserDao.getSystemUser(email);
   }
 
   public deleteSystemUser = (email: string) => {

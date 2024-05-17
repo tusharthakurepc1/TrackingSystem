@@ -17,26 +17,12 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
   const [emailVal, setEmailVal] = useState("");
   const [emailFlag, setEmailFlag] = useState(false);
 
-  const [passwordVal, setPasswordVal] = useState("");
-  const [passwordFlag, setPasswordFlag] = useState(false);
-
   const [otpVal, setOtpVal] = useState("");
   const [otpFlag, setOtpFlag] = useState(false);
 
   const setValueEmail = (value: string) => {
     setEmailVal(value);
     validateEmail(value, setEmailFlag)
-  };
-
-  const setValuePass = (value: string) => {
-    console.log(passwordFlag);
-
-    setPasswordVal(value);
-    if (value === "") {
-      setPasswordFlag(true);
-    } else {
-      setPasswordFlag(false);
-    }
   };
   
   const setValueOtp = (value: string) => {
@@ -70,10 +56,6 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
       setEmailFlag(true);
       return;
     }
-    if (passwordVal === "") {
-      setPasswordFlag(true);
-      return;
-    }
 
     if (otpVal === "") {
       setOtpFlag(true);
@@ -82,7 +64,7 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
 
     const user = {
       email: emailVal,
-      password: passwordVal,
+      password: "",
       otp: otpVal,
     };
 
@@ -92,6 +74,7 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
       toast.success("Login Sucessfull")
       setTimeout(() => {
         Cookies.set("accessToken", data.accessToken);
+        Cookies.set("user", data.user);
         navigate("/sysuser-dashboard");
       }, 1000);
     }
@@ -106,10 +89,6 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
   const sendOtpReq = async () => {
     if (emailVal === "") {
       setEmailFlag(true);
-      return;
-    }
-    if (passwordVal === "") {
-      setPasswordFlag(true);
       return;
     }
 
@@ -138,18 +117,6 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
             onChange={setValueEmail}
           />
           <span className="error-msg" hidden={!emailFlag}>
-            This input is required.
-          </span>
-          <br />
-        </div>
-
-        <div className="input-body">
-          Password
-          <Input
-            type={"password"}
-            onChange={setValuePass}
-          />
-          <span className="error-msg" hidden={!passwordFlag}>
             This input is required.
           </span>
           <br />

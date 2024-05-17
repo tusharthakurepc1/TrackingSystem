@@ -10,6 +10,7 @@ class OrganizationServices {
   }
 
   public addOrganization = async (reqBody: Organization) => {
+    reqBody.isActive = true;
     return this.organizationDao.insertOrganization(reqBody);
   }
 

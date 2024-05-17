@@ -16,6 +16,7 @@ const CustomNavbar = ({ isVisible }: CustomNavbarProps) => {
 
   const logoutClick = () => {
     Cookies.remove('accessToken');
+    Cookies.remove('user')
     navigate("/")
   };
 

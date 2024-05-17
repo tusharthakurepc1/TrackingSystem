@@ -40,7 +40,7 @@ class SystemUserController {
     
     try{
       const result = await this.systemUserServices.getSystemUser(email)
-      const token = jwt.sign({email, password: result.password}, SECRET_KEY, {expiresIn: "3d"})
+      const token = jwt.sign({email}, SECRET_KEY, {expiresIn: "3d"})
       
       
       return res.status(200).json({
@@ -59,10 +59,10 @@ class SystemUserController {
 
 
   public getSystemUserCred = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password, otp } = req.body;
+    const { email, otp } = req.body;
     
     try{
-      const result = await this.systemUserServices.getSystemUserCred(email, password)
+      const result = await this.systemUserServices.getSystemUserCred(email)
       const isValid = await this.sendMailServices.validateOtp(email, otp);
       // if(!isValid){
       //   return res.status(400).json({
@@ -73,13 +73,14 @@ class SystemUserController {
       //   })
       // }
 
-      const token = jwt.sign({email, password}, SECRET_KEY, {expiresIn: "3d"})
+      const token = jwt.sign({email}, SECRET_KEY, {expiresIn: "3d"})
       console.log("Login");
       
       
       return res.status(200).json({
         data: result,
         accessToken: token,
+        user: "SYS",
         status: 200
       })
     }
@@ -92,10 +93,10 @@ class SystemUserController {
   }
 
   public getSystemUserAuth = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
-    const {email, password} = req.user;
+    const {email} = req.user;
     
     try{
-      const result = await this.systemUserServices.getSystemUserCredential(email, password)
+      const result = await this.systemUserServices.getSystemUserCredential(email)
       const orgData = await this.organizationUserService.getAllOrganizationUser();
 
       

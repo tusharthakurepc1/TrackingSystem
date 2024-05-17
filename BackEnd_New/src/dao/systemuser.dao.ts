@@ -9,15 +9,7 @@ class SystemUserDao {
   }
 
   public getSystemUser = async (email: string) => {
-    return await SystemUserModel.findOne({email});
-  }
-
-  public getSystemUserCred = async (email: string, password: string) => {
-    return await SystemUserModel.findOne({email, password});
-  }
-
-  public getSystemUserCredential = async (email: string, password: string) => {
-    return await SystemUserModel.findOne({email, password})
+    return await SystemUserModel.findOne({email, isActive: true});
   }
 
   public deleteSystemUser = async (email: string) => {
@@ -31,7 +23,6 @@ class SystemUserDao {
         $set: {
           firstName: reqBody.firstName,
           lastName: reqBody.lastName,
-          password: reqBody.password,
           dob: reqBody.dob
         }
       }

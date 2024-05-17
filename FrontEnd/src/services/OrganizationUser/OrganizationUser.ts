@@ -10,8 +10,7 @@ export const organizationUserDashBoardRequest = async (token: string) => {
       authorization: `BEARER ${token}`,
     };
     const api = await axios.post(URL, JSON.stringify({}), { headers });
-    
-
+  
     return api.data;
   } catch (err) {
     return err;
@@ -90,7 +89,7 @@ export const organizationUserLoginRequest = async ({
   otp,
 }: LoginUser) => {
   const OTP_URL = "http://localhost:5500/user/login";
-  const user = { email, password, otp };
+  const user = { email, otp };
 
   try {
     const headers = {
@@ -112,7 +111,7 @@ export const organizationUserLoginRequest = async ({
 //Insert data into the db with corrospond User Type
 export const organizationUserSignupRequest = async ({
   _orginizationName,
-  isAdmin,
+  isActive,
   firstName,
   lastName,
   email,
@@ -123,11 +122,10 @@ export const organizationUserSignupRequest = async ({
   const URL = "http://localhost:5500/user";
   const user = {
     _orginizationName,
-    isAdmin,
+    isActive: true,
     firstName,
     lastName,
     email,
-    password,
     dob,
     doj,
   };

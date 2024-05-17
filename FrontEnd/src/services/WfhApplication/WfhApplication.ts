@@ -69,6 +69,26 @@ export const wFHApplicationFetch = async ({ orgList, email }: OrgList_Type) => {
   }
 };
 
+export const getWfhApplications = async (email: string) => {
+  const URL = `http://localhost:5500/application-status/${email}`;
+
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const application = await axios.get(
+      URL,
+      { headers },
+    );
+    
+    return application.data;
+  } catch (err) {
+    console.log(err);
+    return "Application Fetch Error";
+  }
+
+}
+
 export const acceptedLeaveReq = async ({ _id }: Leave) => {
   const URL = "http://localhost:5500/application-status";
 

@@ -1,6 +1,6 @@
 interface User {
   _orginizationName: string;
-  isAdmin: boolean;
+  isActive: boolean;
   firstName: string;
   lastName: string;
   email: string;
@@ -16,7 +16,7 @@ interface LoginUser {
 }
 
 export interface OrganizationUserCompl {
-  isAdmin: boolean,
+  isActive: boolean,
   firstName: string,
   lastName: string,
   email: string,

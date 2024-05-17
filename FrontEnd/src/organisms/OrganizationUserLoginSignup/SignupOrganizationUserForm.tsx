@@ -1,30 +1,26 @@
 import { useState } from "react";
 import { Input, Button, Divider } from "rsuite";
 import "./OrganizationUserLoginSignup.style.scss";
-import { useNavigate } from "react-router-dom";
 import OrganizationUserServices from "../../services/OrganizationUser";
 import { Props } from "./OrganizationUserLoginSignup.type";
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { validateEmail, validateName, validateOtp } from "../../helpers/InputValidations";
 
 
 const SignupOrganizationUserForm = ({ setLogin }: Props) => {
-  const navigate = useNavigate();
 
   const [firstNameVal, setFirstNameVal] = useState("");
-  const [firstNameFlag, setFirstNameFlag] = useState(false);
+  const [firstNameFlag, setFirstNameFlag] = useState(true);
 
   const [orgVal, setOrgVal] = useState("");
-  const [orgFlag, setOrgFlag] = useState(false);
+  const [orgFlag, setOrgFlag] = useState(true);
 
   const [lastNameVal, setLastNameVal] = useState("");
-  const [lastNameFlag, setLastNameFlag] = useState(false);
+  const [lastNameFlag, setLastNameFlag] = useState(true);
 
   const [emailVal, setEmailVal] = useState("");
   const [emailFlag, setEmailFlag] = useState(false);
-
-  const [passwordVal, setPasswordVal] = useState("");
-  const [passwordFlag, setPasswordFlag] = useState(false);
 
   const [dobVal, setDobVal] = useState("");
   const [dobFlag, setDobFlag] = useState(false);
@@ -33,43 +29,27 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
   const [dojFlag, setDojFlag] = useState(false);
 
   const setValueFirstName = (value: string) => {
-    if (value === "") setFirstNameFlag(true);
-    else setFirstNameFlag(false);
+    validateName(value, setFirstNameFlag)
     setFirstNameVal(value);
   };
   const setValueLastName = (value: string) => {
-    if (value === "") setLastNameFlag(true);
-    else setLastNameFlag(false);
+    validateName(value, setLastNameFlag)
     setLastNameVal(value);
   };
   const setValueOrg = (value: string) => {
-    if (value === "") setOrgFlag(true);
-    else setOrgFlag(false);
-
+    validateName(value, setOrgFlag)
     setOrgVal(value);
   };
   const setValueEmail = (value: string) => {
-    if (value === "") setEmailFlag(true);
-    else setEmailFlag(false);
-
+    validateEmail(value, setEmailFlag)
     setEmailVal(value);
   };
-  const setValuePass = (value: string) => {
-    if (value === "") setPasswordFlag(true);
-    else setPasswordFlag(false);
-
-    setPasswordVal(value);
-  };
   const setValueDob = (value: string) => {
-    if (value === "") setDobFlag(true);
-    else setDobFlag(false);
-
+    validateName(value, setDobFlag)
     setDobVal(value);
   };
   const setValueDoj = (value: string) => {
-    if (value === "") setDojFlag(true);
-    else setDobFlag(false);
-
+    validateName(value, setDojFlag)
     setDojVal(value);
   };
 
@@ -86,10 +66,6 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
     if(emailVal === ''){
       setEmailFlag(true)
       return
-    }
-    if(passwordVal === ''){
-      setPasswordFlag(true)
-      return;
     }
     if(dobVal === ''){
       setDobFlag(true)
@@ -111,7 +87,7 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
       firstName: firstNameVal,
       lastName: lastNameVal,
       email: emailVal,
-      password: passwordVal,
+      password: "",
       dob: dobVal,
       doj: dojVal,
     };
@@ -145,7 +121,7 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
             type={"text"}
             onChange={setValueFirstName}
           />
-          <span className="error-msg" hidden={!firstNameFlag}>
+          <span className="error-msg" hidden={firstNameFlag}>
             This input is required.
           </span>
           <br />
@@ -156,7 +132,7 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
             type={"text"}
             onChange={setValueLastName}
           />
-          <span className="error-msg" hidden={!lastNameFlag}>
+          <span className="error-msg" hidden={lastNameFlag}>
             This input is required.
           </span>
           <br />
@@ -169,18 +145,7 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
           onChange={setValueEmail}
         />
         <span className="error-msg" hidden={!emailFlag}>
-          This input is required.
-        </span>
-        <br />
-      </div>
-      <div className="input-body">
-        Password
-        <Input
-          type={"password"}
-          onChange={setValuePass}
-        />
-        <span className="error-msg" hidden={!passwordFlag}>
-          This input is required.
+          Invalid Email
         </span>
         <br />
       </div>
@@ -216,7 +181,7 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
           type={"text"}
           onChange={setValueOrg}
         />
-        <span className="error-msg" hidden={!orgFlag}>
+        <span className="error-msg" hidden={orgFlag}>
           This input is required.
         </span>
         <br />

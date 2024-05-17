@@ -6,11 +6,11 @@ import { OrganizationUser, UpdateOrganizationUserEmail } from '../typings/common
 class OrganizationUserDao {
 
   public getAllUsers = async () => {
-    return await OrganizationUserSchema.find({});
+    return await OrganizationUserSchema.find({isActive: true});
   }
 
   public getAllUsersCount = async () => {
-    return (await OrganizationUserSchema.find({})).length;
+    return (await OrganizationUserSchema.find({isActive: true})).length;
   }
 
   public getOrganizationUsersOffset = async (page: string, pageSize: string) => {
@@ -19,14 +19,23 @@ class OrganizationUserDao {
     const startPage = (currentPage - 1) * currentPageSize;
 
 
-    return OrganizationUserSchema.find({}).skip(startPage).limit(currentPageSize);
-  }
-
-  public getOrganizationUserCred = async (email: string, password: string) => {
-    return await OrganizationUserSchema.findOne({email, password});
+    return OrganizationUserSchema.find({isActive: true}).skip(startPage).limit(currentPageSize);
   }
 
   public insertOrganizationUser = async (reqBody: OrganizationUser) => {
+    const user = OrganizationUserSchema.find({email: reqBody.email, isActive: true});
+    console.log(user);
+    
+    if(user){
+      return await OrganizationUserSchema.updateOne(
+        {email: reqBody.email}, 
+        {
+          $push: {
+            orgination_list: reqBody.orgination_list[0]
+          }
+        }
+      )
+    }
     return await OrganizationUserSchema.create(reqBody);
   }
 
@@ -57,23 +66,19 @@ class OrganizationUserDao {
   }
 
   public getOrganizationUser = async (email: string) => {
-    return await OrganizationUserSchema.findOne({email});
-  }
-
-  public getOrganizationUserCredential = async (email: string, password: string) => {
-    return await OrganizationUserSchema.findOne({email, password})
+    return await OrganizationUserSchema.findOne({email, isActive: true});
   }
 
   public deleteOrganizationUser = async (orgData: UpdateOrganizationUserEmail) => {
-    const { _id, orgName} = orgData;
-    const data = await OrganizationUserSchema.findOne({_id})
+    const { email, orgName} = orgData;
+    const data = await OrganizationUserSchema.findOne({email})
 
     if(data.orgination_list.length <= 1){
-      return await OrganizationUserSchema.deleteOne({_id});
+      return await OrganizationUserSchema.deleteOne({email});
     }
     else{
       return await OrganizationUserSchema.updateOne(
-        {_id},
+        {email},
         {
           $pull: {
             orgination_list: orgName

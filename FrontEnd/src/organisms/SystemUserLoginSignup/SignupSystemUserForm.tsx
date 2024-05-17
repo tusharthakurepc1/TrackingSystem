@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button, Input, Divider } from "rsuite";
 import WFHApplicationServices from "../../services/WfhApplication";
 import { Props } from "./SystemUserLoginSignup.type";
+import {validateEmail} from '../../helpers/InputValidations'
 
 const SignupSystemUserForm = ({ setLogin }: Props) => {
   const [firstNameVal, setFirstNameVal] = useState("");
@@ -15,9 +16,6 @@ const SignupSystemUserForm = ({ setLogin }: Props) => {
 
   const [emailVal, setEmailVal] = useState("");
   const [emailFlag, setEmailFlag] = useState(false);
-
-  const [passwordVal, setPasswordVal] = useState("");
-  const [passwordFlag, setPasswordFlag] = useState(false);
 
   const [dobVal, setDobVal] = useState("");
   const [dobFlag, setDobFlag] = useState(false);
@@ -35,16 +33,8 @@ const SignupSystemUserForm = ({ setLogin }: Props) => {
     setLastNameVal(value);
   };
   const setValueEmail = (value: string) => {
-    if (value === "") setEmailFlag(true);
-    else setEmailFlag(false);
-
+    validateEmail(value, setEmailFlag)
     setEmailVal(value);
-  };
-  const setValuePass = (value: string) => {
-    if (value === "") setPasswordFlag(true);
-    else setPasswordFlag(false);
-
-    setPasswordVal(value);
   };
   const setValueDob = (value: string) => {
     if (value === "") setDobFlag(true);
@@ -68,10 +58,6 @@ const SignupSystemUserForm = ({ setLogin }: Props) => {
       setEmailFlag(true)
       return
     }
-    if(passwordVal === ''){
-      setPasswordFlag(true)
-      return;
-    }
     if(dobVal === ''){
       setDobFlag(true)
       return;
@@ -82,7 +68,7 @@ const SignupSystemUserForm = ({ setLogin }: Props) => {
       firstName: firstNameVal,
       lastName: lastNameVal,
       email: emailVal,
-      password: passwordVal,
+      password: "",
       dob: dobVal,
     };
 
@@ -143,18 +129,7 @@ const SignupSystemUserForm = ({ setLogin }: Props) => {
         </span>
         <br />
       </div>
-      <div className="input-body">
-        Password
-        <Input
-          type={"password"}
-          onChange={setValuePass}
-          name=""
-        />
-        <span className="error-msg" hidden={!passwordFlag}>
-          This input is required.
-        </span>
-        <br />
-      </div>
+      
       <div className="input-body">
         Date of birth
         <Input

@@ -16,8 +16,8 @@ class OrganizationUserServices {
     return this.organizationUserDao.getOrganizationUsersOffset(page, pageSize)
   }
 
-  public getOrganizationUserCred = (email: string, password: string) => {
-    return this.organizationUserDao.getOrganizationUserCred(email, password);
+  public getOrganizationUserCred = (email: string) => {
+    return this.organizationUserDao.getOrganizationUser(email);
   }
 
   public addOrganizationUser = (reqBody: OrganizationUser) => {
@@ -32,8 +32,8 @@ class OrganizationUserServices {
     return this.organizationUserDao.getOrganizationUser(email);
   }
 
-  public getOrganizationUserCredential = (email: string, password: string) => {
-    return this.organizationUserDao.getOrganizationUserCredential(email, password);
+  public getOrganizationUserCredential = (email: string) => {
+    return this.organizationUserDao.getOrganizationUser(email);
   }
 
   public deleteOrganizationUser = (orgData: UpdateOrganizationUserEmail) => {
@@ -43,7 +43,7 @@ class OrganizationUserServices {
   public updateOrganizationUser = async (email: string, reqBody: OrganizationUser) => {
     const user = await this.organizationUserDao.getOrganizationUser(reqBody.email)
     
-    if(user){
+    if(user && email !== reqBody.email){
       return 945;
     }
     

@@ -77,6 +77,7 @@ const OrganizationUserLeaveTable = ({updatedFlag, email, orgData }: Props) => {
             <Cell dataKey="approvedBy" />
           </Column>
         </Table>
+      <br />
 
       <Pagination
           prev
@@ -89,7 +90,7 @@ const OrganizationUserLeaveTable = ({updatedFlag, email, orgData }: Props) => {
           size="xs"
           layout={['total', '-', 'limit', '|', 'pager']}
           total={totalData}
-          limitOptions={[10, 30, 50]}
+          limitOptions={[5, 10, 30, 50]}
           limit={limit}
           activePage={page}
           onChangePage={setPage}

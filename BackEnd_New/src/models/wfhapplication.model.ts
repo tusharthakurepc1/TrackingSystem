@@ -11,9 +11,6 @@ const WfhApplicationSchema = new Schema(
     approvedBy: {type: String, require: true},
     approvedDate: {type: Date, require: true}
   },
-  {
-    timestamps: true
-  }
 )
 
 

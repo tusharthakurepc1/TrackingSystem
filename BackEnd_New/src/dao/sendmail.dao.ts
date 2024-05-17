@@ -3,9 +3,12 @@ import otpModel from '../models/otp.model'
 class SendMailDao {
   
   public insertOtp = async (email: string, otp: string) => {
-    const user = otpModel.find({email})
-    if(user){
-      await otpModel.updateOne(
+    const user = await otpModel.find({email})
+    
+    console.log("USER OTP ", otp);
+    
+    if(user.length > 0){
+      return await otpModel.updateOne(
         {email},
         {
           $set: {
@@ -16,7 +19,7 @@ class SendMailDao {
       )
     }
     else{
-      await otpModel.create({
+      return await otpModel.create({
         email, 
         otp,
         time: Date.now()

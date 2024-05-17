@@ -1,4 +1,5 @@
 export interface Organization {
+  isActive: boolean, 
   name: string,
   max_wfh: number,
   userEmail: Array<string>,
@@ -6,19 +7,18 @@ export interface Organization {
 }
 
 export interface SystemUser {
+  isActive: boolean,
   firstName: string,
   lastName: string,
   email: string,
-  password: string,
   dob: string
 }
 
 export interface OrganizationUser {
-  isAdmin: boolean,
+  isActive: boolean,
   firstName: string,
   lastName: string,
   email: string,
-  password: string,
   dob: string,
   doj: string,
   orgination_list: Array<string>
@@ -49,6 +49,5 @@ export interface UpdateOrganizationUserEmail {
 
 
 export interface AuthUser {
-  email: string,
-  password: string
+  email: string
 }

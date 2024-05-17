@@ -5,12 +5,8 @@ import {
   Table,
   Button,
   Pagination,
-  ButtonGroup,
-  Whisper,
-  Popover,
-  Dropdown,
-  IconButton,
-  SelectPicker
+  Radio, 
+  RadioGroup
 } from "rsuite";
 import {
   OrganizationUserStructure,
@@ -22,7 +18,6 @@ import "./DashboardSystemUser.style.scss";
 import CustomNavbar from "../../molecules/HeaderSystemUser/HeaderSystemUser";
 import socket from "../../socket";
 const { Column, HeaderCell, Cell } = Table;
-import ArrowDownIcon from "@rsuite/icons/ArrowDown";
 import { Modal, Input } from "rsuite";
 import { validateEmail, validateName } from "../../helpers/InputValidations";
 import { ToastContainer, toast } from 'react-toastify';
@@ -58,7 +53,7 @@ const DashBoardSystemUser = () => {
   const [flagUpdate, setFlagUpdate] = useState(false);
 
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
 
   // const [userOrgList, setUserOrgList] = useState<[UserWithOrg]>([
   //   { email: "demo123@gmail.com", orgName: "" },
@@ -119,7 +114,7 @@ const DashBoardSystemUser = () => {
       doj,
       organization_list: orgination_list,
     });
-    setOpen(true);
+    
   };
 
   const deleteUser = async (data: User | any) => {
@@ -134,9 +129,11 @@ const DashBoardSystemUser = () => {
 
     let { _id, email } = data;
 
+    console.log(data.organization_list);
+    
     if (
       organizationValue === "Select" ||
-      !data.orgination_list.includes(organizationValue)
+      !data.organization_list.includes(organizationValue)
     ) {
       return;
     }
@@ -147,6 +144,8 @@ const DashBoardSystemUser = () => {
       organizationValue,
     });
 
+    console.log(response);
+    
     if(response.status === 200){
       toast.success(`${data.firstName} deleted sucessfully from ${organizationValue}`)
     }
@@ -157,8 +156,6 @@ const DashBoardSystemUser = () => {
   };
 
   const makeUserAdmin = async (data: User | any) => {
-
-
     if(organizationValue === '' || organizationValue === 'Select'){
       setOrgValFlag(true)
       return;
@@ -210,11 +207,16 @@ const DashBoardSystemUser = () => {
     }
   }, []);
 
-  const [open, setOpen] = useState(false);
-  const [overflow, setOverflow] = useState(true);
-  const handleClose = () => {
+  const [openEdit, setOpenEdit] = useState(false);
+  const handleEditClose = () => {
     setOrganizationValue("")
-    setOpen(false);
+    setOpenEdit(false);
+  }
+
+  const [openOrg, setOpenOrg] = useState(false);
+  const handleOrgClose = () => {
+    setOrganizationValue("")
+    setOpenOrg(false);
   }
 
   const [firstNameN, setFirstName] = useState("");
@@ -264,7 +266,7 @@ const DashBoardSystemUser = () => {
   };
   const setDojValue = (value: string) => {
     setDoj(value);
-    validateEmail(value, setDojFlag);
+    validateName(value, setDojFlag);
   };
 
   const updateProfile = async (email: string) => {
@@ -288,7 +290,7 @@ const DashBoardSystemUser = () => {
       setDojFlag(true);
       return;
     }
-
+    
     if (
       firstNameN !== updateData.firstName ||
       lastNameN !== updateData.lastName ||
@@ -329,9 +331,51 @@ const DashBoardSystemUser = () => {
         User
       </Message>
 
-      {/* Modals */}
+      {/* Model for Organization List */}
+      <Modal overflow={true} open={openOrg} onClose={handleOrgClose}>
+        <Modal.Header>
+          <Modal.Title>Edit Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {organizationValue}
+          <div className="profile-item">
+            <RadioGroup name="radio-group" value={organizationValue} onChange={setOrgValue}>
+              {
+                updateData.organization_list.map((org: string) => <Radio key={org} value={org}>{org}</Radio>)
+              }
+            </RadioGroup>
+            <span className="error-msg" hidden={!orgValFlag}>
+              This input is required.
+            </span>
+          </div>
+          <Button
+            style={{marginLeft: 20}}
+            appearance="primary"
+            onClick={()=> {makeUserAdmin(updateData)}}
+          > 
+            Make Admin
+          </Button>
 
-      <Modal overflow={overflow} open={open} onClose={handleClose}>
+          <Button
+            style={{marginLeft: 20}}
+            appearance="primary"
+            color="red"
+            onClick={()=> {deleteUser(updateData)}}
+          >
+            Delete
+          </Button>
+          
+          
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleOrgClose} appearance="primary">
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Modals for Edit*/}
+      <Modal overflow={true} open={openEdit} onClose={handleEditClose}>
         <Modal.Header>
           <Modal.Title>Edit Details</Modal.Title>
         </Modal.Header>
@@ -404,46 +448,13 @@ const DashBoardSystemUser = () => {
             </span>
           </div>
 
-          <div className="profile-item">
-            <SelectPicker
-              style={{width: 224}}
-              value={organizationValue}
-              onChange={(value: string | undefined | void | null) => {
-                if (typeof value === "string") {
-                  setOrgValue(value);
-                }
-              }}
-              data={updateData.organization_list.map((org: string) => ({
-                label: org,
-                value: org,
-              }))}
-            ></SelectPicker>
-            <span className="error-msg" hidden={!orgValFlag}>
-              This input is required.
-            </span>
-          </div>
-          <Button
-            style={{marginLeft: 20}}
-            appearance="primary"
-            onClick={()=> {makeUserAdmin(updateData)}}
-          >
-            Make Admin
-          </Button>
-
-          <Button
-            style={{marginLeft: 20}}
-            appearance="primary"
-            color="red"
-            onClick={()=> {deleteUser(updateData)}}
-          >
-            Delete
-          </Button>
+                
         </Modal.Body>
         <Modal.Footer>
           <Button appearance="primary" onClick={()=> {updateProfile(updateData.email)}}>
             Update
           </Button>
-          <Button onClick={handleClose} appearance="primary">
+          <Button onClick={handleEditClose} appearance="primary">
             Close
           </Button>
         </Modal.Footer>
@@ -473,34 +484,16 @@ const DashBoardSystemUser = () => {
             <HeaderCell>Organization</HeaderCell>
             <Cell style={{ padding: "6px" }}>
               {(rowData) => (
-                <ButtonGroup>
-                  <Whisper
-                    placement="bottomEnd"
-                    trigger="click"
-                    speaker={({ left, top, className }, ref) => {
-                      return (
-                        <Popover
-                          ref={ref}
-                          className={className}
-                          style={{ left, top }}
-                          full
-                        >
-                          <Dropdown.Menu>
-                            {rowData.orgination_list.map(
-                              (item: string, index: string) => (
-                                <Dropdown.Item key={index} eventKey={index}>
-                                  {item}
-                                </Dropdown.Item>
-                              )
-                            )}
-                          </Dropdown.Menu>
-                        </Popover>
-                      );
-                    }}
-                  >
-                    <IconButton appearance="primary" icon={<ArrowDownIcon />} />
-                  </Whisper>
-                </ButtonGroup>
+                <Button
+                appearance="primary"
+                onClick={() => {
+                  setOpenOrg(true)
+                  makeUserUpdate(rowData);
+                }}
+              >
+                Show
+              </Button>
+                
               )}
             </Cell>
           </Column>
@@ -512,6 +505,7 @@ const DashBoardSystemUser = () => {
                   appearance="primary"
                   onClick={() => {
                     makeUserUpdate(rowData);
+                    setOpenEdit(true);
                   }}
                 >
                   Edit

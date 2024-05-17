@@ -3,17 +3,20 @@ const { Column, HeaderCell, Cell } = Table;
 import "./LeaveApproval.style.scss";
 import OrganizationUserServices from "../../services/OrganizationUser";
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   updatedFlag: boolean;
+  setUpdateFlag: Function;
   email: string;
   orgData: string[];
 }
 
-const LeaveApproval = ({ updatedFlag, email, orgData }: Props) => {
+const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgData }: Props) => {
   const [wfhApplication, setWfhApplication] = useState([]);
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [totalData, setTotalData] = useState(10);
 
   const [updateLeaveComp, setupdateLeaveComp] = useState(false);
@@ -37,17 +40,25 @@ const LeaveApproval = ({ updatedFlag, email, orgData }: Props) => {
   const acceptedLeaveReq = async (_id: string) => {
     const response = await OrganizationUserServices.acceptedLeaveRequest(_id, email);
     if (response.status === 200) {
-      alert("Leave Approved");
+      toast.success("Leave Approved")
       setupdateLeaveComp(!updateLeaveComp)
     }
+    else{
+      toast.error("Something wrong with Leave accepted!");
+    }
+    setUpdateFlag(!updatedFlag)
   };
 
   const rejectedLeaveReq = async (_id: string) => {
     const response = await OrganizationUserServices.rejectedLeaveRequest(_id, email);
     if (response.status === 200) {
-      alert("Leave Rejected");
+      toast.success("Leave Rejected");
       setupdateLeaveComp(!updateLeaveComp)
     }
+    else{
+      toast.error("Something wrong with Leave rejected!");
+    }
+    setUpdateFlag(!updatedFlag)
   };
 
   return (
@@ -118,7 +129,9 @@ const LeaveApproval = ({ updatedFlag, email, orgData }: Props) => {
           </Column>
         </Table>
 
-      <Pagination
+        <br />
+
+        <Pagination
           prev
           next
           first
@@ -127,7 +140,7 @@ const LeaveApproval = ({ updatedFlag, email, orgData }: Props) => {
           boundaryLinks
           maxButtons={5}
           size="xs"
-          layout={['total', '-', 'limit', '|', 'pager']}
+          layout={["total", "-", "limit", "|", "pager"]}
           total={totalData}
           limitOptions={[10, 30, 50]}
           limit={limit}
@@ -136,7 +149,7 @@ const LeaveApproval = ({ updatedFlag, email, orgData }: Props) => {
           onChangeLimit={setLimit}
         />
       </div>
-
+      <ToastContainer />
     </>
   );
 };

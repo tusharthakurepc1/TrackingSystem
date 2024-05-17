@@ -10,7 +10,7 @@ class SendMailController {
     
     try{
       const ack = await this.sendMailServices.sendOtp(email);
-      
+
       if(ack){
         return res.status(200).json({
           data: {
@@ -33,8 +33,6 @@ class SendMailController {
         status: 200
       })
     }
-
-
   }
 
 }

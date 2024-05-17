@@ -81,6 +81,10 @@ class WfhApplicationServices {
     }
   }
 
+  public getUserEmailApplication = async (email: string) => {
+    return this.wfhApplicationDao.getAllEmailApplication(email);
+  }
+
 }
 
 export default WfhApplicationServices;
