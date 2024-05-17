@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import OrganizationUserServices from "../service/organizationuser.services"
 import OrganizationServices from "../service/organization.services"
 import SendMailServices from "../service/sendmail.services"
-import { ExtendedRequest } from "../typings/type"
+import { ExtendedRequestForOrg } from "../typings/type"
 import SECRET_KEY from "../constants/common"
 
 class OrganizationUserController {
@@ -104,10 +104,12 @@ class OrganizationUserController {
   }
 
   public getOrganizationUserCred = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, otp } = req.body;
+    const { email, orgName, otp } = req.body;
+    
+    console.log(email, orgName, otp);
     
     if(
-      [email, otp].some((el)=>{
+      [email, orgName, otp].some((el)=>{
         return !el || el === ''
       })
     ){
@@ -122,6 +124,16 @@ class OrganizationUserController {
     try{
       const result = await this.organizationUserServices.getOrganizationUserCred(email)
       const isValid = await this.sendMailServices.validateOtp(email, otp);
+
+      if(!result || !result.orgination_list.includes(orgName)){
+        return res.status(400).json({
+          data: {
+            msg: "User not part of this Organization"
+          },
+          status: 200
+        })
+      }
+
       // if(!isValid){
       //   return res.status(400).json({
       //     data: {
@@ -133,7 +145,7 @@ class OrganizationUserController {
 
       console.log(result);
       
-      const token = jwt.sign({email}, SECRET_KEY, {expiresIn: "3d"})
+      const token = jwt.sign({email, orgName}, SECRET_KEY, {expiresIn: "3d"})
       
       console.log(result);
       
@@ -153,24 +165,27 @@ class OrganizationUserController {
     }
   }
 
-  public getOrganizationUserAuth = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
-    const {email} = req.user;
+  public getOrganizationUserAuth = async (req: ExtendedRequestForOrg, res: Response, next: NextFunction) => {
+    const {email, orgName} = req.user;
 
-    if(!email || email === ''){
-      return res.json(400).json({
-        data: {
-          msg: "Fill all the details"
-        }, 
-        status: 400
-      })
-    }
+    // if(!email || email === ''){
+    //   return res.json(400).json({
+    //     data: {
+    //       msg: "Fill all the details"
+    //     }, 
+    //     status: 400
+    //   })
+    // }
+
+    console.log(email, orgName);
+    
 
     try{
       const result = await this.organizationUserServices.getOrganizationUserCredential(email)
-      console.log(result);
       
       return res.status(200).json({
         data: result,
+        orgName,
         status: 200
       })
 

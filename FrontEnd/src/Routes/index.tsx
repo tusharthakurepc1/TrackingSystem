@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 //pages
 import Home from "../pages/Home";
-import DashBoardOrganizationUser from "../pages/DashboardOrganizationUser";
+// import DashBoardOrganizationUser from "../pages/DashboardOrganizationUser";
+import DashBoardOrganizationUserNew from "../pages/DashboardOrganizationUserNew"
 import DashBoardSystemUser from "../pages/DashboardSystemUser";
 import OrganizationUser from "../pages/OrganizationUser";
 import SystemUser from "../pages/SystemUser/SystemUser";
@@ -24,7 +25,7 @@ const RoutesComponent = () => {
           <Route path="/user-login" element={<OrganizationUser />} />
           <Route
             path="/user-dashboard"
-            element={<DashBoardOrganizationUser />}
+            element={<DashBoardOrganizationUserNew />}
           />
 
           {/* System User */}

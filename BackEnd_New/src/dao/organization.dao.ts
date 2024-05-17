@@ -12,6 +12,7 @@ class OrganizationDao {
     return await OrganizationModel.find({});
   }
 
+
   public pushOrganizationUserEmail = async (reqBody: UpdateOrganizationUserEmail) => {
     return await OrganizationModel.updateOne(
       {name: reqBody.orgName},

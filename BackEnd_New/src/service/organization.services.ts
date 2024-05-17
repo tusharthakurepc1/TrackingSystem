@@ -26,6 +26,22 @@ class OrganizationServices {
     return await this.organizationDao.makeOrganizationAdmin(reqBody);
   }
 
+  public getAllOrganizationName = async () => {
+    const allOrgList = await this.organizationDao.getAllOrganization();
+    const orgList: string[] = allOrgList.map((el)=>{
+      return el.name;
+    })
+
+    return orgList;
+  }
+
+  public isAdminOfOrganization = async (email: string, orgName: string) => {
+    const orgData = await this.organizationDao.getOrganization(orgName);
+    
+    return orgData.admin === email
+  }
+
+
 }
 
 export default OrganizationServices;

@@ -5,6 +5,10 @@ interface ExtendedRequest extends Request {
   user: AuthUser
 }
 
+interface ExtendedRequestForOrg extends Request {
+  user: {email: string, orgName: string}
+}
+
 interface ApplicationRequest {
   _id: string,
   email: string,

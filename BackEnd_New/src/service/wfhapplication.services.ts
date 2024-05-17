@@ -86,6 +86,30 @@ class WfhApplicationServices {
     return this.wfhApplicationDao.getAllEmailApplication(email);
   }
 
+  public getUserCompanyApplicationService = async (email: string, orgName: string) => {
+    return await this.wfhApplicationDao.getUserCompanyApplication(email, orgName);
+  }
+
+  public getUserCompanyApplicationOffsetService = async (email: string, orgName: string, page: string, pageSize: string) => {
+    const applicationRes = await this.wfhApplicationDao.getUserCompanyApplicationOffset(email, orgName, page, pageSize);
+    const totalApplication = await this.wfhApplicationDao.getUserCompanyApplicationCount(orgName, email);
+
+    return {
+      applicationRes, 
+      totalApplication
+    }
+  }
+
+  public getCompanyApplicationService = async (orgName: string, page: string, pageSize: string) => {
+    const applicationRes = await this.wfhApplicationDao.getCompanyApplication(orgName, page, pageSize);
+    const totalApplication = await this.wfhApplicationDao.getCompanyApplicationCount(orgName);
+
+    return {
+      applicationRes,
+      totalApplication
+    }
+  }
+
 }
 
 export default WfhApplicationServices;

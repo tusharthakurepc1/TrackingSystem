@@ -11,7 +11,7 @@ interface User {
 
 interface LoginUser {
   email: string;
-  password: string;
+  orgName: string
   otp: string;
 }
 

@@ -17,6 +17,20 @@ export const organizationUserDashBoardRequest = async (token: string) => {
   }
 };
 
+export const checkIsAdmin = async (email: string, orgName: string) => {
+  const URL = `http://localhost:5500/user/isAdmin/${orgName}/${email}`;
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const api = await axios.get(URL, { headers });
+  
+    return api.data;
+  } catch (err) {
+    return err;
+  }
+};
+
 export const organizationUserApplicationFetch = async (orgList: string[], email: string, page: number, limit: number) => {
   const URL = "http://localhost:5500/application-status/fetch";
   try {
@@ -85,11 +99,11 @@ export const organizationUserRequest = async (token: string) => {
 //Return the User with corrospond email and password
 export const organizationUserLoginRequest = async ({
   email,
-  password,
+  orgName,
   otp,
 }: LoginUser) => {
   const OTP_URL = "http://localhost:5500/user/login";
-  const user = { email, otp };
+  const user = { email, orgName, otp };
 
   try {
     const headers = {
@@ -104,7 +118,7 @@ export const organizationUserLoginRequest = async ({
   } catch (err) {
     console.log(err);
     
-    return "Login Error Throw";
+    return err;
   }
 };
 
@@ -143,6 +157,40 @@ export const organizationUserSignupRequest = async ({
     return err;
   }
 };
+
+export const getAllOrganizationApplication = async (orgName: string, page: string, pageSize: string) => {
+  const URL = `http://localhost:5500/application-status/${orgName}/${page}/${pageSize}`
+
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const response = await axios.get(URL, { headers });
+    return response.data;
+    
+  } catch (err) {
+    return err;
+  }  
+
+}
+
+export const getAllEmailOrganizationApplication = async (orgName: string, email: string, page: string, pageSize: string) => {
+  const URL = `http://localhost:5500/application-status/${orgName}/${email}/${page}/${pageSize}`
+
+  console.log("Fetch from this api: ", URL);
+  
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const response = await axios.get(URL, { headers });
+    return response.data;
+    
+  } catch (err) {
+    return err;
+  }  
+
+}
 
 export const acceptedLeaveRequest = async (_id: string, email: string) => {
   const URL = "http://localhost:5500/application-status/leave";

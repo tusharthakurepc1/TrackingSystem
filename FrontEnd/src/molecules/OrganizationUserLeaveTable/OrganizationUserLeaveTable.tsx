@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Table, Button, ButtonGroup, Pagination } from "rsuite";
+import { Table, Pagination } from "rsuite";
 const { Column, HeaderCell, Cell } = Table;
 import OrganizationUserServices from "../../services/OrganizationUser";
 
@@ -7,10 +7,10 @@ interface Props {
   updatedFlag: boolean;
   setUpdateFlag: Function;
   email: string;
-  orgData: string[];
+  orgName: string;
 }
 
-const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgData }: Props) => {
+const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgName }: Props) => {
   const [wfhApplication, setWfhApplication] = useState([]);
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
@@ -19,11 +19,11 @@ const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgData 
   useEffect(() => {
     const applicationReq = async () => {
       const response =
-        await OrganizationUserServices.organizationUserApplications(
-          orgData,
+        await OrganizationUserServices.getAllEmailOrganizationApplication(
+          orgName,
           email,
-          page,
-          limit
+          page.toString(),
+          limit.toString()
         );
       
       setTotalData(response.data.totalApplication)

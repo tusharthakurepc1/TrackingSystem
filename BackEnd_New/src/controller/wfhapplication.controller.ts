@@ -168,6 +168,71 @@ class WfhApplicationController {
     }
   }
 
+  public getUserCompanyApplicationController = async (req: Request, res: Response, next: NextFunction) => {
+    const { orgName, email } = req.params;
+    
+    console.log("User Company: ", orgName, email);
+    
+    try{
+      const data = await this.wfhApplicationService.getUserCompanyApplicationService(email, orgName)
+            
+
+      return res.status(200).json({
+        data: data,
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })      
+    }
+  }
+
+  public getUserCompanyApplicationOffsetController = async (req: Request, res: Response, next: NextFunction) => {
+    const { orgName, email, page, pageSize } = req.params;
+    
+    console.log("User Offset Company: ", orgName, email, page, pageSize);
+    
+    try{
+      const data = await this.wfhApplicationService.getUserCompanyApplicationOffsetService(email, orgName, page, pageSize)
+
+      return res.status(200).json({
+        data: data,
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })      
+    }
+  }
+
+  
+
+  public getCompanyApplicationController = async (req: Request, res: Response, next: NextFunction) => {
+    const { orgName, page, pageSize } = req.params;
+
+    try{
+      console.log(orgName);
+      const data = await this.wfhApplicationService.getCompanyApplicationService(orgName, page, pageSize)
+        
+
+      return res.status(200).json({
+        data: data,
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })      
+    }
+  }
 
 }
 

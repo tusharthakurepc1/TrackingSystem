@@ -11,7 +11,7 @@ import OrganizationUserServices from "../../services/OrganizationUser";
 import OtpService from "../../services/SendMail";
 
 //Helper
-import { validateEmail, validateOtp } from "../../helpers/InputValidations";
+import { validateEmail, validateOtp, validateName } from "../../helpers/InputValidations";
 
 //css
 import "./OrganizationUserLoginSignup.style.scss";
@@ -32,12 +32,19 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
   const [emailVal, setEmailVal] = useState("");
   const [emailFlag, setEmailFlag] = useState(false);
 
+  const [orgName, setOrgName] = useState("");
+  const [orgNameFlag, setOrgNameFlag] = useState(true);
+
   const [otpVal, setOtpVal] = useState("");
   const [otpFlag, setOtpFlag] = useState(false);
 
   const setValueEmail = (value: string) => {
     setEmailVal(value);
     validateEmail(value, setEmailFlag);
+  };
+  const setValueOrg = (value: string) => {
+    setOrgName(value);
+    validateName(value, setOrgNameFlag);
   };
   const setValueOtp = (value: string) => {
     
@@ -57,6 +64,10 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
       setEmailFlag(true);
       return;
     }
+    if(orgName === ""){
+      setOrgNameFlag(true);
+      return;
+    }
     if (otpVal === "") {
       setOtpFlag(true);
       return;
@@ -64,9 +75,10 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
 
     const data = await OrganizationUserServices.organizationUserLoginRequest({
       email: emailVal,
-      password: "",
+      orgName,
       otp: otpVal,
     });
+    // console.log(data);
     
     
     if (data.data && data.accessToken) {
@@ -79,7 +91,10 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
     }
 
     if(!data.data){
-      toast.error("Invalid Credentials")
+      const msg = data.response.data.data.msg;
+      console.log(msg);
+      
+      toast.error(msg)
     }
   };
 
@@ -116,6 +131,15 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
           </span>
           <br />
         </div>
+        <div className="input-body">
+          Organization
+          <Input type={"text"} onChange={setValueOrg} />
+          <span className="error-msg" hidden={orgNameFlag}>
+            This input is required.
+          </span>
+          <br />
+        </div>
+
         Otp
         <div className="input-body">
           <Input type={"number"} value={otpVal} onChange={setValueOtp} />

@@ -29,6 +29,7 @@ class Routes {
 
   private initilizeOrganizationRoute(prefix: string){
     this.router.get(`${prefix}:orgName`, this.orgController.getOrganization);
+    this.router.get(`${prefix}/all`, this.orgController.getAllOrganizationName);
 
     this.router.post(`${prefix}`, this.orgController.addOrganization);
 
@@ -38,6 +39,7 @@ class Routes {
 
   private initilizeOrganizationUserRoute (prefix: string) {
     this.router.get(`${prefix}/:email`, this.organizationUserController.getOrganizationUser);
+    this.router.get(`${prefix}/isAdmin/:orgName/:email`, this.orgController.isAdminOfOrganization);
 
     this.router.post(`${prefix}`, this.organizationUserController.addOrganizationUser);
     this.router.post(`${prefix}/login`, this.organizationUserController.getOrganizationUserCred);
@@ -66,7 +68,10 @@ class Routes {
 
 
   private initilizeApplicationRoute = async (prefix: string) => {
-    this.router.get(`${prefix}/:email`, this.wfhApplicationController.getUserApplications);
+    // this.router.get(`${prefix}/:email`, this.wfhApplicationController.getUserApplications);      //currently pause for below api
+    this.router.get(`${prefix}/:orgName/:email`, this.wfhApplicationController.getUserCompanyApplicationController);
+    this.router.get(`${prefix}/:orgName/:page/:pageSize`, this.wfhApplicationController.getCompanyApplicationController)
+    this.router.get(`${prefix}/:orgName/:email/:page/:pageSize`, this.wfhApplicationController.getUserCompanyApplicationOffsetController);
 
     this.router.post(`${prefix}`, this.authorizationMiddleware.verfiyToken, this.wfhApplicationController.insertApplication);
     this.router.post(`${prefix}/all`, this.wfhApplicationController.getAllApplication);

@@ -10,10 +10,10 @@ interface Props {
   updatedFlag: boolean;
   setUpdateFlag: Function;
   email: string;
-  orgData: string[];
+  orgName: string;
 }
 
-const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgData }: Props) => {
+const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgName }: Props) => {
   const [wfhApplication, setWfhApplication] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -23,21 +23,20 @@ const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgData }: Props) =>
 
   useEffect(() => {
     const applicationReq = async () => {
-      const response =
-        await OrganizationUserServices.organizationUserApplicationFetch(
-          orgData,
-          email,
-          page,
-          limit
+      const response = await OrganizationUserServices.getAllOrganizationApplication(
+          orgName,
+          page.toString(),
+          limit.toString()
         );
       console.log("Application ans: ",response.data);
+
       
       setTotalData(response.data.totalApplication)
       setWfhApplication(response.data.applicationRes);
     };
 
     applicationReq();
-  }, [totalData, updateLeaveComp, updatedFlag]);
+  }, [totalData, updateLeaveComp, updatedFlag, page]);
 
   const acceptedLeaveReq = async (_id: string) => {
     const response = await OrganizationUserServices.acceptedLeaveRequest(_id, email);

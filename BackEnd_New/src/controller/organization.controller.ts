@@ -144,6 +144,48 @@ class OrganizationController {
 
   }
 
+  public getAllOrganizationName = async (req: Request, res: Response, next: NextFunction) => {
+
+    try{
+      const result = await this.orgService.getAllOrganizationName();
+
+      return res.status(200).json({
+        data: {
+          msg: result
+        }, 
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(200).json({
+        data: err,
+        status: 400
+      })
+    }
+  }
+
+  public isAdminOfOrganization = async (req: Request, res: Response, next: NextFunction) => {
+    const {email, orgName} = req.params;
+
+    console.log(email, orgName);
+    
+    try{
+      const user = await this.orgService.isAdminOfOrganization(email, orgName);
+
+      return res.status(200).json({
+        data: user,
+        status: 200
+      })
+
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })     
+    }
+  }
+
 }
 
 export default OrganizationController;

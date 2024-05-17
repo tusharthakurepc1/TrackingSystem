@@ -69,8 +69,8 @@ export const wFHApplicationFetch = async ({ orgList, email }: OrgList_Type) => {
   }
 };
 
-export const getWfhApplications = async (email: string) => {
-  const URL = `http://localhost:5500/application-status/${email}`;
+export const getWfhApplications = async (orgName: string, email: string) => {
+  const URL = `http://localhost:5500/application-status/${orgName}/${email}`;
 
   try {
     const headers = {

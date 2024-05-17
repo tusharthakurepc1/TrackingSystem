@@ -70,6 +70,35 @@ class WfhApplicationDao {
     return await WfhApplicationModel.find({email});
   }
 
+  public getUserCompanyApplication = async (email: string, orgName: string) => {
+    return await WfhApplicationModel.find({email, orgName})
+  }
+
+  public getUserCompanyApplicationOffset = async (email: string, orgName: string, page: string, pageSize: string) => {
+    const currentPage = parseInt(page) || 1;
+    const currentPageSize = parseInt(pageSize) || 10;
+    const startPage = (currentPage - 1) * currentPageSize;
+
+    return await WfhApplicationModel.find({email, orgName}).skip(startPage).limit(currentPageSize);
+  }
+
+  public getCompanyApplication = async (orgName: string, page: string, pageSize: string) => {
+    const currentPage = parseInt(page) || 1;
+    const currentPageSize = parseInt(pageSize) || 10;
+    const startPage = (currentPage - 1) * currentPageSize;
+    console.log("Company Application API: ", currentPage, startPage, currentPageSize);
+
+    return await WfhApplicationModel.find({orgName}).skip(startPage).limit(currentPageSize);
+  }
+
+  public getCompanyApplicationCount = async(orgName: string) => {
+    return (await WfhApplicationModel.find({orgName})).length
+  }
+
+  public getUserCompanyApplicationCount = async(orgName: string, email: string) => {
+    return (await WfhApplicationModel.find({orgName, email})).length
+  }
+
 }
 
 export default WfhApplicationDao;
