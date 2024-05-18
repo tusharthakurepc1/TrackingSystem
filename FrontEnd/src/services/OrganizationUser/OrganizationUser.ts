@@ -1,7 +1,7 @@
 import axios from "axios";
-import { User, LoginUser, OrganizationUserCompl } from "./OrganizationUser.type";
+import { User, LoginUser } from "./OrganizationUser.type";
 
-//Return the User DashBoard Data while navigate to the DashBoard
+
 export const organizationUserDashBoardRequest = async (token: string) => {
   const URL = "http://localhost:5500/user/dashboard";
   try {
@@ -30,55 +30,6 @@ export const checkIsAdmin = async (email: string, orgName: string) => {
     return err;
   }
 };
-
-export const organizationUserApplicationFetch = async (orgList: string[], email: string, page: number, limit: number) => {
-  const URL = "http://localhost:5500/application-status/fetch";
-  try {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    const api = await axios.post(URL, JSON.stringify({orgList, email, page, pageSize: limit}), { headers });
-    
-
-    return api.data;
-  } catch (err) {
-    return err;
-  }
-};
-
-export const organizationUserApplications = async (orgList: string[], email: string, page: number, limit: number) => {
-  const URL = "http://localhost:5500/application-status/applications";
-  try {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    const api = await axios.post(URL, JSON.stringify({orgList, email, page, pageSize: limit}), { headers });
-  
-    return api.data;
-  } catch (err) {
-    return err;
-  }
-};
-
-export const updateOrganizationUser = async (email: string, user: OrganizationUserCompl) => {
-  console.log(email);
-  console.log(JSON.stringify(user));
-  
-  const URL = "http://localhost:5500/user/update";
-
-  try{
-    const headers = {
-      "Content-Type": "application/json"
-    }
-    const api = await axios.put(URL, JSON.stringify({email, user}), {headers});
-    return api.data;
-    
-  }catch(err){
-    return "Update Error"
-  }
-
-}
-
 
 export const organizationUserRequest = async (token: string) => {
   const URL = "http://localhost:5500/user/dashboard";

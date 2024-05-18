@@ -7,7 +7,3 @@ type Application = {
   reason: string;
   status: number;
 };
-
-type ApplicationList = {
-  wfhApplication: Application[];
-};

@@ -48,7 +48,6 @@ export const wFHApplicationInsert = async (dateVal: string, orgVal: string, reas
   }
 };
 
-
 export const wFHApplicationFetch = async ({ orgList, email }: OrgList_Type) => {
   const URL = "http://localhost:5500/application-status/all";
 

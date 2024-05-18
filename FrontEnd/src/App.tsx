@@ -1,4 +1,4 @@
-import WFHRoutes from "./Routes";
+import WFHRoutes from "./routes";
 
 function App() {
   return (

@@ -1,5 +1,4 @@
 import axios from "axios";
-// import LoginUser from "../../typings/LoginUser";
 import { SystemUser, UserDeleteType, UserAdminType } from "./SystemUser.type";
 
 export const SystemUserWithOffset = async (page: number, pageSize: number) => {
@@ -78,26 +77,6 @@ export const updateSystemUserData = async (email: string, user: SystemUser) => {
 
 }
 
-export const SystemUserRequest = async (token: string) => {
-  const URL = "http://localhost:5500/sysuser-profile";
-
-  try {
-    const headers = {
-      "Content-Type": "application/json",
-      authorization: `BEARER ${token}`,
-    };
-    const post_dashboard_api = await axios.post(URL, JSON.stringify({}), {
-      headers,
-    });
-    const response = post_dashboard_api.data;
-
-    return response;
-  } catch (err) {
-    console.log(err);
-    return "DashBoard Error";
-  }
-};
-
 export const SystemUserLoginRequest = async ({
   email,
   password,
@@ -121,33 +100,6 @@ export const SystemUserLoginRequest = async ({
     console.log(err);
     alert("Invalid Login Credential");
     return "Login Error";
-  }
-};
-
-export const SystemUserSignupRequest = async ({
-  firstName,
-  lastName,
-  email,
-  password,
-  dob,
-}: SystemUser) => {
-  const URL = "http://localhost:5500/sysuser-signup";
-  const user = { firstName, lastName, email, password, dob };
-  try {
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    const response = await axios.post(URL, JSON.stringify({ user }), {
-      headers,
-    });
-    if (response.data.msg) {
-      alert("Account Created Sucessfully");
-    }
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    alert("Account Created Failed");
-    return "Signup Error";
   }
 };
 

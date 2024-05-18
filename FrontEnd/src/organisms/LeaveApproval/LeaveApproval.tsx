@@ -90,7 +90,7 @@ const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgName }: Props) =>
 
       <Modal overflow={true} open={rejectionReasonForm} onClose={handleClose}>
         <Modal.Header>
-          <Modal.Title>Modal Title</Modal.Title>
+          <Modal.Title>Rejection</Modal.Title>
         </Modal.Header>
         <Modal.Body>
 
