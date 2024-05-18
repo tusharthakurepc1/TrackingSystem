@@ -128,7 +128,7 @@ class OrganizationUserController {
       if(!result || !result.orgination_list.includes(orgName)){
         return res.status(400).json({
           data: {
-            msg: "User not part of this Organization"
+            msg: "You are not part of this Organization"
           },
           status: 200
         })
@@ -236,12 +236,14 @@ class OrganizationUserController {
   }
 
   public updateOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
-    const { oldEmail, user } = req.body;
-    const {firstName, lastName, email, dob, doj} = user;
+    const { email, user } = req.body;
+    // const {firstName, lastName, email, dob, doj} = user;
+    
+    // console.log(oldEmail, JSON.stringify(user));
     
 
     try{
-      const response = await this.organizationUserServices.updateOrganizationUser(oldEmail, user);
+      const response = await this.organizationUserServices.updateOrganizationUser(email, user);
       if(response === 945){
         return res.status(200).json({
           data:{

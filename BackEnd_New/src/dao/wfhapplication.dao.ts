@@ -13,19 +13,35 @@ class WfhApplicationDao {
       orgName, 
       status, 
       reason,
+      rejectedReason: "",
       approvedBy: "",
       approvedDate
     })
   }
 
   public updateStatus = async (reqBody: ApplicationRequest) => {
-    const { _id, email, status } = reqBody;
+    const { _id, email, status, rejectedReason } = reqBody;
+
+    if(status === 2){
+      return await WfhApplicationModel.updateOne(
+        {_id},
+        {
+          $set: {
+            status,
+            rejectedReason,
+            approvedBy: email
+          }
+        }
+      )
+  
+    }
 
     return await WfhApplicationModel.updateOne(
       {_id},
       {
         $set: {
           status,
+          rejectedReason: "",
           approvedBy: email
         }
       }

@@ -337,9 +337,9 @@ const DashBoardSystemUser = () => {
           <Modal.Title>Edit Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {organizationValue}
+          {/* {organizationValue} */}
           <div className="profile-item">
-            <RadioGroup name="radio-group" value={organizationValue} onChange={()=>setOrgValue}>
+            <RadioGroup name="radio-group" value={organizationValue} onChange={setOrgValue}>
               {
                 updateData.organization_list.map((org: string) => <Radio key={org} value={org}>{org}</Radio>)
               }

@@ -1,6 +1,6 @@
-interface Props {
+interface SystemUserSignupProps {
   loginFlag: boolean;
-  setLogin: function
+  setLogin: (value: boolean) => void;
 }
 
-export type { Props };
+export type { SystemUserSignupProps };

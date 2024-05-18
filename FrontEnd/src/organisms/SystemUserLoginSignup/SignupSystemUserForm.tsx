@@ -1,13 +1,24 @@
+//module
 import { useState } from "react";
-import "./SystemUserLoginSignup.style.scss";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { Button, Input, Divider } from "rsuite";
+
+//service
 import WFHApplicationServices from "../../services/WfhApplication";
-import { Props } from "./SystemUserLoginSignup.type";
+
+//type
+import { SystemUserSignupProps } from "./SystemUserLoginSignup.type";
+
+//helper
 import {validateEmail} from '../../helpers/InputValidations'
 
-const SignupSystemUserForm = ({ setLogin }: Props) => {
+//css
+import "./SystemUserLoginSignup.style.scss";
+import 'react-toastify/dist/ReactToastify.css';
+
+const SignupSystemUserForm = ({ setLogin }: SystemUserSignupProps) => {
+
+  //state
   const [firstNameVal, setFirstNameVal] = useState("");
   const [firstNameFlag, setFirstNameFlag] = useState(false);
 
@@ -20,6 +31,7 @@ const SignupSystemUserForm = ({ setLogin }: Props) => {
   const [dobVal, setDobVal] = useState("");
   const [dobFlag, setDobFlag] = useState(false);
 
+  //state setter
   const setValueFirstName = (value: string) => {
     if (value === "") setFirstNameFlag(true);
     else setFirstNameFlag(false);
@@ -43,6 +55,7 @@ const SignupSystemUserForm = ({ setLogin }: Props) => {
     setDobVal(value);
   };
 
+  //Signup Request function
   const signupReq = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 

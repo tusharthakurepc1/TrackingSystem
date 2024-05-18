@@ -145,7 +145,6 @@ class OrganizationController {
   }
 
   public getAllOrganizationName = async (req: Request, res: Response, next: NextFunction) => {
-
     try{
       const result = await this.orgService.getAllOrganizationName();
 

@@ -5,11 +5,11 @@ import Cookies from "js-cookie";
 import { Input, Button, Divider } from "rsuite";
 import { ToastContainer, toast } from 'react-toastify';
 
-//Services
+//services
 import SystemUserServices from "../../services/SystemUser";
 import OtpService from "../../services/SendMail";
 
-//Helper
+//helper
 import {validateEmail} from '../../helpers/InputValidations'
 
 //types
@@ -33,6 +33,7 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
   const [otpFlag, setOtpFlag] = useState(false);
 
 
+  //states setter
   const setValueEmail = (value: string) => {
     setEmailVal(value);
     validateEmail(value, setEmailFlag)
@@ -51,6 +52,7 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
     }
   };
 
+  
   const returnToken = async (
     username: string,
     password: string,
@@ -64,6 +66,7 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
     console.log(api);
   };
 
+  //Login Request function
   const submitReq = async () => {
     if (emailVal === "") {
       setEmailFlag(true);
@@ -99,6 +102,7 @@ const LoginSystemUserForm = ({ setLogin }: Props) => {
     
   };
 
+  //Otp Request function
   const sendOtpReq = async () => {
     if (emailVal === "") {
       setEmailFlag(true);

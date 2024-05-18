@@ -201,7 +201,7 @@ export const acceptedLeaveRequest = async (_id: string, email: string) => {
     };
     const response = await axios.put(
       URL,
-      JSON.stringify({ _id, email, status: 1 }),
+      JSON.stringify({ _id, email, status: 1, rejectedReason: ''}),
       { headers },
     );
     
@@ -212,8 +212,7 @@ export const acceptedLeaveRequest = async (_id: string, email: string) => {
   }
 };
 
-export const rejectedLeaveRequest = async (_id: string, email: string) => {
-  // setNewStatus(2);
+export const rejectedLeaveRequest = async (_id: string, email: string, rejectedReason: string) => {
   const URL = "http://localhost:5500/application-status/leave";
 
   try {
@@ -222,7 +221,7 @@ export const rejectedLeaveRequest = async (_id: string, email: string) => {
     };
     const post_dashboard_api = await axios.put(
       URL,
-      JSON.stringify({ _id, email, status: 2 }),
+      JSON.stringify({ _id, email, status: 2, rejectedReason}),
       { headers },
     );
     return post_dashboard_api.data;

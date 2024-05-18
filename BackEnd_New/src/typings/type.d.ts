@@ -12,7 +12,8 @@ interface ExtendedRequestForOrg extends Request {
 interface ApplicationRequest {
   _id: string,
   email: string,
-  status: number
+  status: number,
+  rejectedReason: string,
 }
 
 interface ApplicationFetchRequest {

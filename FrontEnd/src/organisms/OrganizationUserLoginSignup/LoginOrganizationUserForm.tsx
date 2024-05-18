@@ -1,7 +1,7 @@
 //module 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, Button, Divider } from "rsuite";
+import { Input, Button, Divider, SelectPicker } from "rsuite";
 import Cookies from "js-cookie";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 //service
 import OrganizationUserServices from "../../services/OrganizationUser";
 import OtpService from "../../services/SendMail";
+import OrganizationServices from "../../services/Organization";
 
 //Helper
 import { validateEmail, validateOtp, validateName } from "../../helpers/InputValidations";
@@ -29,6 +30,11 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
     setHasClickedOtnBtn
   ] = useState(false);
 
+  const [
+    allOrgList,
+    setAllOrgList
+  ] = useState(['']);
+
   const [emailVal, setEmailVal] = useState("");
   const [emailFlag, setEmailFlag] = useState(false);
 
@@ -38,14 +44,22 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
   const [otpVal, setOtpVal] = useState("");
   const [otpFlag, setOtpFlag] = useState(false);
 
+
+  //state setter
   const setValueEmail = (value: string) => {
     setEmailVal(value);
     validateEmail(value, setEmailFlag);
   };
-  const setValueOrg = (value: string) => {
+
+  const setValueOrg = (value: string | null) => {
+    if(value === null){
+      setOrgNameFlag(true)
+      return;
+    }
     setOrgName(value);
     validateName(value, setOrgNameFlag);
   };
+
   const setValueOtp = (value: string) => {
     
     if (value === "") {
@@ -56,7 +70,7 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
     validateOtp(value, setOtpVal)
   };
 
-  //Submit request to server
+  //Login Request function
   const submitReq = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
@@ -78,7 +92,6 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
       orgName,
       otp: otpVal,
     });
-    // console.log(data);
     
     
     if (data.data && data.accessToken) {
@@ -98,7 +111,7 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
     }
   };
 
-  //Otp request to server
+  //Otp Request function
   const sendOtpReq = async () => {
     if (emailVal === "") {
       setEmailFlag(true);
@@ -116,6 +129,19 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
     }
   };
 
+
+  useEffect(()=> {
+    const getAllOrganization = async () => {
+      const response = await OrganizationServices.getAllOrganization();
+      if(response && response.data && response.data.msg){
+        console.log(response.data.msg);
+        
+        setAllOrgList(response.data.msg)
+      }
+    }
+    getAllOrganization();
+  }, [])
+
   return (
     <div className="form">
       <form>
@@ -131,13 +157,25 @@ const LoginOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
           </span>
           <br />
         </div>
-        <div className="input-body">
+        {/* <div className="input-body">
           Organization
           <Input type={"text"} onChange={setValueOrg} />
           <span className="error-msg" hidden={orgNameFlag}>
             This input is required.
           </span>
           <br />
+        </div> */}
+
+        <div className="input-body">
+          Organization
+          <SelectPicker
+            data={allOrgList.map(item => ({ label: item, value: item }))} 
+            onChange={(value)=>{setValueOrg(value)}}
+            block
+          />
+          <span className="error-msg" hidden={orgNameFlag}>
+            This input is required.
+          </span>
         </div>
 
         Otp

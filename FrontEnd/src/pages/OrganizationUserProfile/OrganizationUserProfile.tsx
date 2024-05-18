@@ -137,6 +137,12 @@ const OrganizationUserProfile = () => {
       
       if (response.status === 200) {
         toast.success("User Updated Sucessfully")
+
+        setTimeout(()=>{
+          Cookies.remove("accessToken")
+          Cookies.remove('user')
+          navigate("/")
+        }, 1000)
       }
       else{
         toast.error("User cannot updated! Something went Wrong")

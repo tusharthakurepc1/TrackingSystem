@@ -1,7 +1,7 @@
 //module
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Message } from "rsuite";
+import { Button, ButtonGroup, Message } from "rsuite";
 import Cookies from "js-cookie";
 
 //service
@@ -88,9 +88,8 @@ const DashBoardOrganizationUserNew = () => {
         Welcome <strong>{adminData.firstName},</strong> you logged as a
         Organization User
       </Message>
-      {adminData.orgName}
+      {/* {adminData.orgName} */}
 
-      {/* adminOrgData.length > 0  :: admin  */}
       {
         isAdmin ? 
         <>
@@ -103,8 +102,10 @@ const DashBoardOrganizationUserNew = () => {
         </> : 
         <>
           <div className="navigationButtonGroup">
-            <Button onClick={()=> setOptionsTab(1)} appearance="primary" className="navigationButton">Calendar</Button> 
-            <Button onClick={()=> setOptionsTab(2)} appearance="primary" className="navigationButton">Applications</Button>
+            <ButtonGroup>
+              <Button onClick={()=> setOptionsTab(1)} appearance={optionsTab === 1 ? "primary" : "default"} >Calendar</Button> 
+              <Button onClick={()=> setOptionsTab(2)} appearance={optionsTab === 2 ? "primary" : "default"} >Applications</Button>
+            </ButtonGroup>
           </div>
 
           {

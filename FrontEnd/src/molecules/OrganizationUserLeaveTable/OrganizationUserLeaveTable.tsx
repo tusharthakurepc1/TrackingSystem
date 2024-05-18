@@ -38,10 +38,6 @@ const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgName 
       <div className="table-user">
         <Table data={wfhApplication} autoHeight={true}>
           <Column flexGrow={1} align="center">
-            <HeaderCell>Name</HeaderCell>
-            <Cell dataKey="orgName" />
-          </Column>
-          <Column flexGrow={1} align="center">
             <HeaderCell>Date</HeaderCell>
             <Cell dataKey="createdDate">
               {
@@ -49,7 +45,7 @@ const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgName 
               }
             </Cell>
           </Column>
-          <Column flexGrow={1} align="center">
+          <Column flexGrow={2} align="center">
             <HeaderCell>Reason</HeaderCell>
             <Cell dataKey="reason" />
           </Column>
@@ -71,9 +67,13 @@ const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgName 
               }
             </Cell>
           </Column>
-          <Column flexGrow={1} align="center">
+          <Column flexGrow={3} align="center">
             <HeaderCell>Approved By</HeaderCell>
             <Cell dataKey="approvedBy" />
+          </Column>
+          <Column flexGrow={2} align="center" >
+            <HeaderCell>Rejected Reason</HeaderCell>
+            <Cell dataKey="rejectedReason" />
           </Column>
         </Table>
       <br />

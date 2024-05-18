@@ -1,15 +1,25 @@
+//module
 import { useState } from "react";
 import { Input, Button, Divider } from "rsuite";
-import "./OrganizationUserLoginSignup.style.scss";
-import OrganizationUserServices from "../../services/OrganizationUser";
-import { Props } from "./OrganizationUserLoginSignup.type";
 import { ToastContainer, toast } from 'react-toastify';
+
+//service
+import OrganizationUserServices from "../../services/OrganizationUser";
+
+//helper
+import { validateEmail, validateName } from "../../helpers/InputValidations";
+
+//types
+import { LoginOrganisationProps } from "./OrganizationUserLoginSignup.type";
+
+//css
+import "./OrganizationUserLoginSignup.style.scss";
 import 'react-toastify/dist/ReactToastify.css';
-import { validateEmail, validateName, validateOtp } from "../../helpers/InputValidations";
 
 
-const SignupOrganizationUserForm = ({ setLogin }: Props) => {
+const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
 
+  //state
   const [firstNameVal, setFirstNameVal] = useState("");
   const [firstNameFlag, setFirstNameFlag] = useState(true);
 
@@ -28,6 +38,8 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
   const [dojVal, setDojVal] = useState("");
   const [dojFlag, setDojFlag] = useState(false);
 
+
+  //state setter
   const setValueFirstName = (value: string) => {
     validateName(value, setFirstNameFlag)
     setFirstNameVal(value);
@@ -53,6 +65,7 @@ const SignupOrganizationUserForm = ({ setLogin }: Props) => {
     setDojVal(value);
   };
 
+  //Signup Request function
   const signupReq = async () => {
 
     if(firstNameVal === ''){

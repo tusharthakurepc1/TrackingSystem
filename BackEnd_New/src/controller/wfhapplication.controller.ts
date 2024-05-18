@@ -42,11 +42,12 @@ class WfhApplicationController {
   }
 
   public updateApplicationStatus = async (req: Request, res: Response, next: NextFunction) => {
-    const { _id, email, status } = req.body;
+    const { _id, email, status, rejectedReason } = req.body;
     const reqBody:ApplicationRequest = {
       _id,
       email,
-      status
+      status,
+      rejectedReason
     }
     console.log(_id, email, status);
     
