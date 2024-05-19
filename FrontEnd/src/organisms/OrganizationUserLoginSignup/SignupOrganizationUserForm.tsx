@@ -1,10 +1,11 @@
 //module
-import { useState } from "react";
-import { Input, Button, Divider } from "rsuite";
+import { useState, useEffect } from "react";
+import { Input, Button, Divider, SelectPicker } from "rsuite";
 import { ToastContainer, toast } from 'react-toastify';
 
 //service
 import OrganizationUserServices from "../../services/OrganizationUser";
+import OrganizationServices from "../../services/Organization";
 
 //helper
 import { validateEmail, validateName } from "../../helpers/InputValidations";
@@ -20,6 +21,11 @@ import 'react-toastify/dist/ReactToastify.css';
 const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
 
   //state
+  const [
+    allOrgList,
+    setAllOrgList
+  ] = useState(['']);
+
   const [firstNameVal, setFirstNameVal] = useState("");
   const [firstNameFlag, setFirstNameFlag] = useState(true);
 
@@ -48,7 +54,11 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
     validateName(value, setLastNameFlag)
     setLastNameVal(value);
   };
-  const setValueOrg = (value: string) => {
+  const setValueOrg = (value: string | null) => {
+    if(value === null){
+      setOrgFlag(true)
+      return;
+    }
     validateName(value, setOrgFlag)
     setOrgVal(value);
   };
@@ -110,8 +120,11 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
     const data =
       await OrganizationUserServices.organizationUserSignupRequest(user);
 
+    console.log(data.data.msg);
+    
     if(data.status === 200){
-      toast.success(data.msg)
+      
+      toast.success(data.data.msg)
       setTimeout(() => {
         setLogin(true);
       }, 1000);
@@ -120,6 +133,18 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
       toast.error("Account Creation Failed")
     }
   };
+
+  useEffect(()=> {
+    const getAllOrganization = async () => {
+      const response = await OrganizationServices.getAllOrganization();
+      if(response && response.data && response.data.msg){
+        console.log(response.data.msg);
+        
+        setAllOrgList(response.data.msg)
+      }
+    }
+    getAllOrganization();
+  }, [])
 
   return (
     <form>
@@ -188,7 +213,7 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
         <br />
       </div>
 
-      <div className="input-body">
+      {/* <div className="input-body">
         Organization
         <Input
           type={"text"}
@@ -198,7 +223,19 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
           This input is required.
         </span>
         <br />
-      </div>
+      </div> */}
+
+        <div className="input-body">
+          Organization
+          <SelectPicker
+            data={allOrgList.map(item => ({ label: item, value: item }))} 
+            onChange={(value)=>{setValueOrg(value)}}
+            block
+          />
+          <span className="error-msg" hidden={orgFlag}>
+            This input is required.
+          </span>
+        </div>
 
       <Button onClick={signupReq} appearance="primary">
         Signup

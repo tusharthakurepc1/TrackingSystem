@@ -48,6 +48,8 @@ const CalendarLeave = ({ email, orgName, updatedFlag, setUpdatedFlag }: Props) =
       const result = await WFHApplicationServices.getWfhApplications(orgName, email);
       console.log("Application from Calendar, ", result);
       
+      console.log(result.data);
+      
       if(result.data){
         setAllApplication(result.data)
       }
@@ -66,13 +68,10 @@ const CalendarLeave = ({ email, orgName, updatedFlag, setUpdatedFlag }: Props) =
         matchedDate.getDate() === date.getDate() &&
         matchedDate.getMonth() === date.getMonth()
       ) {
-        return (
-          <b>
-            {allApplication[i]['orgName']}
-          </b>
-        );
+          return <p>{allApplication[i]['reason']}</p>
       }
     }
+    
   };
 
   const setCellClassName = (date: Date): string | undefined => {
@@ -109,14 +108,29 @@ const CalendarLeave = ({ email, orgName, updatedFlag, setUpdatedFlag }: Props) =
     
   };
 
+  const isValidApplication = async (date: Date) => {
+    for (let i = 0; i < allApplication.length; i++) {
+      const matchedDate = new Date(allApplication[i].createdDate);
+      if (
+        matchedDate.getDate() === date.getDate() &&
+        matchedDate.getMonth() === date.getMonth()
+      ) {
+        toast.error("You already applied on that day!");
+        return;
+      }
+    }
+
+    setDateVal(date.toString())
+    setOpenApplication(true)
+  }
+
   return (
     <>
       <Calendar
         bordered
         renderCell={renderCell}
         onSelect={(date: Date)=>{
-          setOpenApplication(true)
-          setDateVal(date.toString())
+          isValidApplication(date)
         }}
         cellClassName={setCellClassName}
       />

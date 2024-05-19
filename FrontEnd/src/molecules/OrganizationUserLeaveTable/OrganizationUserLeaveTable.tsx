@@ -11,12 +11,14 @@ interface Props {
 }
 
 const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgName }: Props) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [wfhApplication, setWfhApplication] = useState([]);
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
   const [totalData, setTotalData] = useState(10);
 
   useEffect(() => {
+    setIsLoading(true);
     const applicationReq = async () => {
       const response =
         await OrganizationUserServices.getAllEmailOrganizationApplication(
@@ -26,6 +28,8 @@ const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgName 
           limit.toString()
         );
       
+      setIsLoading(false);
+      setUpdateFlag(!updatedFlag)
       setTotalData(response.data.totalApplication)
       setWfhApplication(response.data.applicationRes);
     };
@@ -36,7 +40,7 @@ const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgName 
     <>
       <h1> Work From Home Applications </h1>
       <div className="table-user">
-        <Table data={wfhApplication} autoHeight={true}>
+        <Table data={wfhApplication} autoHeight={true} loading={isLoading}>
           <Column flexGrow={1} align="center">
             <HeaderCell>Date</HeaderCell>
             <Cell dataKey="createdDate">

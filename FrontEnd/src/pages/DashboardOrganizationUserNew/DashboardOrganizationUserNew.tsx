@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 
 //service
 import OrganizationUserServices from "../../services/OrganizationUser";
-import WFHApplicationServices from "../../services/WfhApplication";
 
 //import
 import LeaveApproval from "../../organisms/LeaveApproval/LeaveApproval";
