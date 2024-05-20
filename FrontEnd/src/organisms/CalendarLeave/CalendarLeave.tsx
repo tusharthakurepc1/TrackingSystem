@@ -43,7 +43,7 @@ const CalendarLeave = ({
         orgName,
         email
       );
-      console.log("Application from Calendar, ", result.data);
+      // console.log("Application from Calendar, ", result.data);
       if (result.data) {
         setAllApplication(result.data);
       }

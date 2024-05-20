@@ -19,6 +19,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
+  const currentDate = new Date();
+  const currentDateFormatted = `${currentDate.getFullYear()}-${currentDate.getMonth()+1 < 10 ? '0'+(currentDate.getMonth()+1) : currentDate.getMonth()+1}-${currentDate.getDate() < 10 ? '0'+currentDate.getDate(): currentDate.getDate()}`;
 
   //state
   const [
@@ -68,10 +70,22 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
   };
   const setValueDob = (value: string) => {
     validateName(value, setDobFlag)
+    if(value >= currentDateFormatted){
+      setDobFlag(true);
+    }
+    else{
+      setDobFlag(false);
+    }
     setDobVal(value);
   };
   const setValueDoj = (value: string) => {
     validateName(value, setDojFlag)
+    if(value >= dobVal){
+      setDojFlag(true);
+    }
+    else{
+      setDojFlag(false)
+    }
     setDojVal(value);
   };
 
@@ -194,7 +208,7 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
           onChange={setValueDob}
         />
         <span className="error-msg" hidden={!dobFlag}>
-          This input is required.
+          Invalid Date of Birth.
         </span>
         <br />
       </div>
@@ -208,7 +222,7 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
           }}
         />
         <span className="error-msg" hidden={!dojFlag}>
-          This input is required.
+          Invalid Date of Joining.
         </span>
         <br />
       </div>

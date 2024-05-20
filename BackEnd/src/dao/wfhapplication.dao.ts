@@ -107,13 +107,18 @@ class WfhApplicationDao {
     return await WfhApplicationModel.find({orgName}).skip(startPage).limit(currentPageSize);
   }
 
-  public getCompanyApplicationFilter = async (orgName: string, page: string, pageSize: string, filteredQuery: FilterParameters) => {
+  public getCompanyApplicationFilter = async (orgName: string, page: string, pageSize: string, availedAtStartDate: Date, availedAtEndDate: Date, filteredQuery: FilterParameters) => {
     const currentPage = parseInt(page) || 1;
     const currentPageSize = parseInt(pageSize) || 10;
     const startPage = (currentPage - 1) * currentPageSize;
 
+    
     const findObj = {
       ...filteredQuery,
+      createdDate: {
+        $gte: availedAtStartDate,
+        $lte: availedAtEndDate
+      },
       orgName
     }
     console.log(findObj);
@@ -122,9 +127,13 @@ class WfhApplicationDao {
     return await WfhApplicationModel.find(findObj).skip(startPage).limit(currentPageSize);
   }
 
-  public getApplicationFilterCount = async(orgName: string, filteredQuery: FilterParameters) => {
+  public getApplicationFilterCount = async(orgName: string, availedAtStartDate: Date, availedAtEndDate: Date, filteredQuery: FilterParameters) => {
     const findObj = {
       ...filteredQuery,
+      createdDate: {
+        $gte: availedAtStartDate,
+        $lte: availedAtEndDate
+      },
       orgName
     }
     

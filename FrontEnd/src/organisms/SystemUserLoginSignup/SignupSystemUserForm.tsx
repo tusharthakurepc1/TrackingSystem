@@ -17,6 +17,8 @@ import "./SystemUserLoginSignup.style.scss";
 import 'react-toastify/dist/ReactToastify.css';
 
 const SignupSystemUserForm = ({ setLogin }: SystemUserSignupProps) => {
+  const currentDate = new Date();
+  const currentDateFormatted = `${currentDate.getFullYear()}-${currentDate.getMonth()+1 < 10 ? '0'+(currentDate.getMonth()+1) : currentDate.getMonth()+1}-${currentDate.getDate() < 10 ? '0'+currentDate.getDate(): currentDate.getDate()}`;
 
   //state
   const [firstNameVal, setFirstNameVal] = useState("");
@@ -49,7 +51,7 @@ const SignupSystemUserForm = ({ setLogin }: SystemUserSignupProps) => {
     setEmailVal(value);
   };
   const setValueDob = (value: string) => {
-    if (value === "") setDobFlag(true);
+    if (value === "" || value > currentDateFormatted) setDobFlag(true);
     else setDobFlag(false);
 
     setDobVal(value);
@@ -151,7 +153,7 @@ const SignupSystemUserForm = ({ setLogin }: SystemUserSignupProps) => {
           name=""
         />
         <span className="error-msg" hidden={!dobFlag}>
-          This input is required.
+          Invalid Date of Birth
         </span>
       </div>
 

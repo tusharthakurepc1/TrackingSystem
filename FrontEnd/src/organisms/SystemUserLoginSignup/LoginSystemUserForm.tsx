@@ -13,14 +13,14 @@ import OtpService from "../../services/SendMail";
 import {validateEmail} from '../../helpers/InputValidations'
 
 //types
-import { Props } from "./SystemUserLoginSignup.type";
+import { SystemUserSignupProps } from "./SystemUserLoginSignup.type";
 
 //css
 import "./SystemUserLoginSignup.style.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import "./SystemUserLoginSignup.style.scss";
 
-const LoginSystemUserForm = ({ setLogin }: Props) => {
+const LoginSystemUserForm = ({ setLogin }: SystemUserSignupProps) => {
   const navigate = useNavigate();
 
   //states

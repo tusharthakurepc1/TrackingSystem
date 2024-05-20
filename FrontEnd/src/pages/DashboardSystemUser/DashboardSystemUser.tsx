@@ -1,29 +1,31 @@
-import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import {
-  Table,
-  Button,
-  Pagination,
-  Radio, 
-  RadioGroup
-} from "rsuite";
-import {
-  OrganizationUserStructure,
-  SystemUserStructure,
-} from "./DashBoardSystemUser.type";
-import SystemUserServices from "../../services/SystemUser";
-import { Message } from "rsuite";
-import "./DashboardSystemUser.style.scss";
-import CustomNavbar from "../../molecules/HeaderSystemUser/HeaderSystemUser";
+//module
 import socket from "../../socket";
-const { Column, HeaderCell, Cell } = Table;
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {Table, Button, Pagination, Radio, RadioGroup, Message} from "rsuite";
 import { Modal, Input } from "rsuite";
-import { validateEmail, validateName } from "../../helpers/InputValidations";
 import { ToastContainer, toast } from 'react-toastify';
+const { Column, HeaderCell, Cell } = Table;
+
+//service
+import SystemUserServices from "../../services/SystemUser";
+
+//import
+import CustomNavbar from "../../molecules/HeaderSystemUser/HeaderSystemUser";
+import { validateEmail, validateName } from "../../helpers/InputValidations";
+
+//type
+import { OrganizationUserStructure,SystemUserStructure } from "./DashBoardSystemUser.type";
+
+//css
+import "./DashboardSystemUser.style.scss";
 import 'react-toastify/dist/ReactToastify.css';
 
 const DashBoardSystemUser = () => {
+  const navigate = useNavigate();
+
+  //states
   const [adminData, setAdminData] = useState<SystemUserStructure>({
     _id: "",
     firstName: "",
@@ -44,17 +46,21 @@ const DashBoardSystemUser = () => {
     organization_list: [""],
   });
 
-
   const [totalData, setTotalData] = useState(10);
   const [userData, setUserData] = useState([]);
   const [makeReq, setMakeReq] = useState(true);
   const [organizationValue, setOrganizationValue] = useState("");
   const [orgValFlag, setOrgValFlag] = useState(false)
-  const flagUpdate = false;
+  const [flagUpdate, setFlagUpdate] = useState(false);
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
+  //model open state
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openOrg, setOpenOrg] = useState(false);
+
+  //state setter
   const setOrgValue = (value: string) => {
     if(value === 'Select' || value === ''){
       setOrgValFlag(true);
@@ -78,6 +84,21 @@ const DashBoardSystemUser = () => {
     getUserData();
   }, [page, limit, flagUpdate]);
 
+  useEffect(() => {
+    const token: string | undefined = Cookies.get("accessToken");
+
+    if (!token) {
+      navigate("/sysuser-login");
+    }
+    if (makeReq) {
+      if (typeof token === "string") {
+        dashboardReq(token);
+      }
+      setMakeReq(false);
+    }
+  }, []);
+
+  //Dashboard request function
   const dashboardReq = async (token: string) => {
     const response = await SystemUserServices.SystemUserDashBoardRequest(token);
 
@@ -87,6 +108,7 @@ const DashBoardSystemUser = () => {
     setAdminData(response.data.user);
   };
 
+  //Make the org user data updated
   const makeUserUpdate = async (data: User | any) => {
     if (!data) {
       return;
@@ -107,6 +129,7 @@ const DashBoardSystemUser = () => {
     
   };
 
+  //Delete the organization user
   const deleteUser = async (data: User | any) => {
     if(organizationValue === '' || organizationValue === 'Select'){
       setOrgValFlag(true)
@@ -145,6 +168,7 @@ const DashBoardSystemUser = () => {
     setOrganizationValue("")
   };
 
+  //Make the organization user admin
   const makeUserAdmin = async (data: User | any) => {
     if(organizationValue === '' || organizationValue === 'Select'){
       setOrgValFlag(true)
@@ -181,34 +205,19 @@ const DashBoardSystemUser = () => {
     setOrganizationValue("")
   };
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token: string | undefined = Cookies.get("accessToken");
-
-    if (!token) {
-      navigate("/sysuser-login");
-    }
-    if (makeReq) {
-      if (typeof token === "string") {
-        dashboardReq(token);
-      }
-      setMakeReq(false);
-    }
-  }, []);
-
-  const [openEdit, setOpenEdit] = useState(false);
+  //Handle Edit model 
   const handleEditClose = () => {
     setOrganizationValue("")
     setOpenEdit(false);
   }
 
-  const [openOrg, setOpenOrg] = useState(false);
+  //close the org model
   const handleOrgClose = () => {
     setOrganizationValue("")
     setOpenOrg(false);
   }
 
+  //user details state
   const [firstNameN, setFirstName] = useState("");
   const [firstNameFlag, setFirstNameFlag] = useState(true);
 
@@ -223,6 +232,9 @@ const DashBoardSystemUser = () => {
 
   const [dojN, setDoj] = useState("");
   const [dojFlag, setDojFlag] = useState(false);
+  const currentDate = new Date();
+  const currentDateFormatted = `${currentDate.getFullYear()}-${currentDate.getMonth()+1 < 10 ? '0'+(currentDate.getMonth()+1) : currentDate.getMonth()+1}-${currentDate.getDate() < 10 ? '0'+currentDate.getDate(): currentDate.getDate()}`;
+
 
   useEffect(() => {
     setFirstName(updateData.firstName);
@@ -238,6 +250,7 @@ const DashBoardSystemUser = () => {
     updateData.doj,
   ]);
 
+  //user details state setter 
   const setFirstNameValue = (value: string) => {
     setFirstName(value);
     validateName(value, setFirstNameFlag);
@@ -253,10 +266,25 @@ const DashBoardSystemUser = () => {
   const setDobValue = (value: string) => {
     setDob(value);
     validateName(value, setDobFlag);
+    
+    if(value > currentDateFormatted){
+      setDobFlag(true)
+    }
+    else{
+      setDobFlag(false)
+    }
+    
   };
   const setDojValue = (value: string) => {
     setDoj(value);
     validateName(value, setDojFlag);
+
+    if(value > dobN){
+      setDojFlag(true)
+    }
+    else{
+      setDojFlag(false)
+    }
   };
 
   const updateProfile = async (email: string) => {
@@ -280,6 +308,14 @@ const DashBoardSystemUser = () => {
       setDojFlag(true);
       return;
     }
+    // if(dobN >= Date.now().toString()){
+    //   setDobFlag(true)
+    //   return;
+    // }
+    // if(dojN <= dobN){
+    //   setDojFlag(true);
+    //   return;
+    // }
     
     if (
       firstNameN !== updateData.firstName ||
@@ -306,6 +342,8 @@ const DashBoardSystemUser = () => {
       );
       if (response.status === 200) {
         toast.success("User Updated Sucessfully")
+        handleEditClose()
+        setFlagUpdate(!flagUpdate);
       }
       else{
         toast.error("User cannot updated! Something went Wrong")
@@ -320,6 +358,7 @@ const DashBoardSystemUser = () => {
         Welcome <strong>{adminData.firstName},</strong> you logged as a System
         User
       </Message>
+      
 
       {/* Model for Organization List */}
       <Modal overflow={true} open={openOrg} onClose={handleOrgClose}>
@@ -327,7 +366,6 @@ const DashBoardSystemUser = () => {
           <Modal.Title>Edit Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* {organizationValue} */}
           <div className="profile-item">
             <RadioGroup name="radio-group" value={organizationValue} onChange={setOrgValue}>
               {
@@ -365,18 +403,20 @@ const DashBoardSystemUser = () => {
       </Modal>
 
       {/* Modals for Edit*/}
-      <Modal overflow={true} open={openEdit} onClose={handleEditClose}>
+      <Modal overflow={false} open={openEdit} onClose={handleEditClose}>
         <Modal.Header>
           <Modal.Title>Edit Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          
           <div className="name-grp profile-item">
-            <div>
+            <div style={{marginRight: 20}}>
+              First Name
               <Input
                 type="text"
                 size="lg"
                 value={firstNameN}
-                style={{ width: 200 }}
+                style={{ width: 190 }}
                 onChange={setFirstNameValue}
               />
               <span className="error-msg" hidden={firstNameFlag}>
@@ -384,11 +424,12 @@ const DashBoardSystemUser = () => {
               </span>
             </div>
             <div>
+              Last Name
               <Input
                 type="text"
                 size="lg"
                 value={lastNameN}
-                style={{ width: 200 }}
+                style={{ width: 190 }}
                 onChange={setLastNameValue}
               />
               <span className="error-msg" hidden={lastNameFlag}>
@@ -420,7 +461,7 @@ const DashBoardSystemUser = () => {
               onChange={setDobValue}
             />
             <span className="error-msg" hidden={!dobFlag}>
-              This input is required.
+              Invalid Date of Birth
             </span>
           </div>
 
@@ -434,7 +475,7 @@ const DashBoardSystemUser = () => {
               onChange={setDojValue}
             />
             <span className="error-msg" hidden={!dojFlag}>
-              This input is required.
+              Invalid Date of Joining
             </span>
           </div>
 
@@ -450,11 +491,11 @@ const DashBoardSystemUser = () => {
         </Modal.Footer>
       </Modal>
 
-      <div className="table-user">
+      <div className="orgUserTable">
         <Table data={userData} autoHeight={true}>
-          <Column align="center" flexGrow={1}>
+          <Column align="center" flexGrow={1} >
             <HeaderCell>Name</HeaderCell>
-            <Cell dataKey="firstName" />
+            <Cell dataKey="firstName"/>
           </Column>
 
           <Column align="center" flexGrow={1}>

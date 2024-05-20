@@ -110,12 +110,10 @@ class WfhApplicationServices {
     }
   }
 
-  public getCompanyApplicationFilterService = async (orgName: string, page: string, pageSize: string, filteredQuery: FilterParameters) => {
+  public getCompanyApplicationFilterService = async (orgName: string, page: string, pageSize: string, availedAtStart: string, availedAtEnd: string, filteredQuery: FilterParameters) => {
+    delete filteredQuery.availedAt;
     if(!filteredQuery.email || filteredQuery.email === '' || filteredQuery.email === 'undefined' ){
       delete filteredQuery.email;
-    }
-    if(!filteredQuery.availedAt || filteredQuery.availedAt === '' || filteredQuery.availedAt === 'undefined'){
-      delete filteredQuery.availedAt;
     }
     if(!filteredQuery.reason || filteredQuery.reason === '' || filteredQuery.reason === 'undefined'){
       delete filteredQuery.reason;
@@ -126,9 +124,21 @@ class WfhApplicationServices {
     if(!filteredQuery.approvedBy || filteredQuery.approvedBy === '' || filteredQuery.approvedBy === 'undefined'){
       delete filteredQuery.approvedBy;
     }
+  
+    let availedAtStartDate = new Date(Date.parse(availedAtStart))
+    let availedAtEndDate = new Date(Date.parse(availedAtEnd))    
 
-    const applicationRes = await this.wfhApplicationDao.getCompanyApplicationFilter(orgName, page, pageSize, filteredQuery);
-    const totalApplication = await this.wfhApplicationDao.getApplicationFilterCount(orgName, filteredQuery);
+    if(availedAtStart === '' || availedAtStart === 'undefined'){
+      availedAtStartDate = new Date(0, 0, 0, 0, 0, 0, 0);
+    }
+    if(availedAtEnd === '' || availedAtEnd === 'undefined'){
+      availedAtEndDate = new Date(5100, 0, 0, 0, 0, 0);
+    }
+
+
+    const applicationRes = await this.wfhApplicationDao.getCompanyApplicationFilter(orgName, page, pageSize, availedAtStartDate, availedAtEndDate, filteredQuery);
+    const totalApplication = await this.wfhApplicationDao.getApplicationFilterCount(orgName, availedAtStartDate, availedAtEndDate, filteredQuery);
+    
     
     return {
       applicationRes,

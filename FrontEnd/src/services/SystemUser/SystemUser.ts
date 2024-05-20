@@ -98,7 +98,6 @@ export const SystemUserLoginRequest = async ({
     return resp.data;
   } catch (err) {
     console.log(err);
-    alert("Invalid Login Credential");
     return "Login Error";
   }
 };

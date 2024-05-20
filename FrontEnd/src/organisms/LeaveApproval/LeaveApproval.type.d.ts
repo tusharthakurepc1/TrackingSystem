@@ -13,7 +13,7 @@ type FilterQuery = {
   availedAt?: string,
   reason?: string,
   status?: string,
-  approvedBy?: string
+  approvedBy?: string,
 }
 
 type LeaveApprovalProps = {

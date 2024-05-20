@@ -39,8 +39,6 @@ const DashBoardOrganizationUserNew = () => {
     const response =
       await OrganizationUserServices.organizationUserDashBoardRequest(token);
 
-    console.log(response);
-
     if (response.status !== 200 || !response.data || !response.orgName) {
       Cookies.remove("accessToken");
       return navigate("/");
@@ -54,6 +52,7 @@ const DashBoardOrganizationUserNew = () => {
     });
 
     adminResponse(response.data.email, response.orgName);
+    
   };
 
   //Check user is admin or not

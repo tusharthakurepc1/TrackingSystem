@@ -88,8 +88,8 @@ export const getWfhApplications = async (orgName: string, email: string) => {
 
 };
 
-export const getWfhApplicationsFiltered = async (orgName: string, page: number, pageSize: number, filters: FilterQuery) => {
-  const URL = `http://localhost:5500/application-status/${orgName}/${page}/${pageSize}/filter?email=${filters.email}&availedAt=${filters.availedAt?.replace(/-/g, '/') ?? ''}&reason=${filters.reason}&status=${filters.status}&approvedBy=${filters.approvedBy}`
+export const getWfhApplicationsFiltered = async (orgName: string, page: number, pageSize: number, filters: FilterQuery, dateRange: [Date?, Date?]) => {
+  const URL = `http://localhost:5500/application-status/${orgName}/${page}/${pageSize}/filter?email=${filters.email}&availedAt=${filters.availedAt?.replace(/-/g, '/') ?? ''}&reason=${filters.reason}&status=${filters.status}&approvedBy=${filters.approvedBy}&availedAtStart=${dateRange[0]}&availedAtEnd=${dateRange[1]}`
 
   try{
     const headers = {

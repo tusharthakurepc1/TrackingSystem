@@ -11,16 +11,21 @@ class WfhApplicationController {
   public insertApplication = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
     const { email } = req.user
     const { createdDate, orgName, reason } = req.body;
+    const dateProcessed = new Date(Date.parse(createdDate))
 
     const reqBody: wfhApplication = {
       email,
-      createdDate,
+      createdDate: new Date(dateProcessed.getFullYear(), dateProcessed.getMonth(), dateProcessed.getDate(), 0, 0, 0, 0),
       orgName,
       status: 3,
       reason,
       approvedBy: "",
-      approvedDate: new Date(0, 0, 0)
+      approvedDate: new Date(0, 0, 0, 0, 0, 0, 0)
+
     } 
+
+    console.log(JSON.stringify(reqBody.createdDate.getHours()));
+    
 
     try{
       await this.wfhApplicationService.insertApplication(reqBody)
@@ -236,20 +241,20 @@ class WfhApplicationController {
 
   public getCompanyApplicationFilterController = async (req: Request, res: Response, next: NextFunction) => {
     const { orgName, page, pageSize } = req.params;
-    const { email, availedAt, reason, status, approvedBy } = req.query as Record<string, string | undefined>;;
+    const { email, availedAt, reason, status, approvedBy, availedAtStart, availedAtEnd } = req.query as Record<string, string | undefined>;
     
     const filterQuery: FilterParameters = {
       email,
       availedAt,
       reason,
       status,
-      approvedBy
+      approvedBy,
     }
-    
-    console.log("In the Filter Controller");
+
+    console.log(JSON.stringify(req.query));
+
     try{
-      const data = await this.wfhApplicationService.getCompanyApplicationFilterService(orgName, page, pageSize, filterQuery)
-      
+      const data = await this.wfhApplicationService.getCompanyApplicationFilterService(orgName, page, pageSize, availedAtStart, availedAtEnd, filterQuery)
 
       return res.status(200).json({
         data: data,
