@@ -1,9 +1,16 @@
+//module
 import { useState, useEffect } from "react";
 import { Button, Input, SelectPicker } from "rsuite";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { Props } from "./WfhApplication.type";
+import Cookies from "js-cookie";
+
+//service
 import WFHApplicationServices from "../../services/WfhApplication";
+
+//type
+import { Props } from "./WfhApplication.type";
+
+//css
 import "./WfhApplication.style.scss";
 
 const WFH_Application = ({
@@ -15,6 +22,8 @@ const WFH_Application = ({
   orgData,
 }: Props) => {
   const navigate = useNavigate();
+
+  //state
   const [orgVal, setOrgVal] = useState("none");
   const [dateVal, setDateVal] = useState(availedDate);
   const [reason, setReason] = useState("");
@@ -32,6 +41,8 @@ const WFH_Application = ({
     setReason(value);
   };
 
+
+  //WFH application application request
   const applicationReq = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const token: string | undefined = Cookies.get("accessToken");

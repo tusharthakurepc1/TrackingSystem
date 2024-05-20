@@ -1,4 +1,4 @@
-export interface SystemUser {
+export type SystemUser = {
     dob: string,
     email: string,
     firstName: string,
@@ -7,6 +7,6 @@ export interface SystemUser {
     _id: string
 }
 
-export interface OrganizationUser {
+export type OrganizationUser = {
 
 }

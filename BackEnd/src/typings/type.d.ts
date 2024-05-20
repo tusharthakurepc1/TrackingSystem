@@ -27,3 +27,12 @@ interface ApplicationFetchRequestOffset {
   page: number,
   pageSize: number
 }
+
+interface FilterParameters {
+  email?: string,
+  availedAt?: string,
+  reason?: string,
+  status?: string,
+  approvedBy?: string
+}
+

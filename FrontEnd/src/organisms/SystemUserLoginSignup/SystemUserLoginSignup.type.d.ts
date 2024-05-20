@@ -1,4 +1,4 @@
-interface SystemUserSignupProps {
+type SystemUserSignupProps = {
   loginFlag: boolean;
   setLogin: (value: boolean) => void;
 }

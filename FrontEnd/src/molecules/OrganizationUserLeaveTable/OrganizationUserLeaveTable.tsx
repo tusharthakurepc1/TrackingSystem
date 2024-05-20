@@ -1,16 +1,17 @@
+//module
 import { useEffect, useState } from "react";
 import { Table, Pagination } from "rsuite";
 const { Column, HeaderCell, Cell } = Table;
+
+//services
 import OrganizationUserServices from "../../services/OrganizationUser";
 
-interface Props {
-  updatedFlag: boolean;
-  setUpdateFlag: Function;
-  email: string;
-  orgName: string;
-}
+//type
+import { OrgUserLeaveTableProps } from "./OrganizationUserLeaveTable.type";
 
-const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgName }: Props) => {
+const OrganizationUserLeaveTable = ({updatedFlag, setUpdateFlag, email, orgName }: OrgUserLeaveTableProps) => {
+
+  //state
   const [isLoading, setIsLoading] = useState(true);
   const [wfhApplication, setWfhApplication] = useState([]);
   const [page, setPage] = useState(1)

@@ -71,6 +71,7 @@ class Routes {
     // this.router.get(`${prefix}/:email`, this.wfhApplicationController.getUserApplications);      //currently pause for below api
     this.router.get(`${prefix}/:orgName/:email`, this.wfhApplicationController.getUserCompanyApplicationController);
     this.router.get(`${prefix}/:orgName/:page/:pageSize`, this.wfhApplicationController.getCompanyApplicationController)
+    this.router.get(`${prefix}/:orgName/:page/:pageSize/filter`, this.wfhApplicationController.getCompanyApplicationFilterController)
     this.router.get(`${prefix}/:orgName/:email/:page/:pageSize`, this.wfhApplicationController.getUserCompanyApplicationOffsetController);
 
     this.router.post(`${prefix}`, this.authorizationMiddleware.verfiyToken, this.wfhApplicationController.insertApplication);

@@ -1,10 +1,10 @@
-interface UserStructure {
+type UserStructure = {
   email: string;
   firstName: string;
   lastName: string;
 }
 
-interface SystemUserStructure {
+type SystemUserStructure = {
   _id: string,
   firstName: string,
   lastName: string,
@@ -14,7 +14,7 @@ interface SystemUserStructure {
   organization_list: [string]
 }
 
-interface OrganizationUserStructure {
+type OrganizationUserStructure = {
   _id: string,
   firstName: string,
   lastName: string,
@@ -25,7 +25,7 @@ interface OrganizationUserStructure {
   organization_list: [string]
 }
 
-interface UserWithOrg {
+type UserWithOrg = {
   email: string,
   orgName: string
 }

@@ -1,19 +1,10 @@
+//module
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import SystemUserServices from "../../services/SystemUser";
-import { Input, Button, Dropdown } from "rsuite";
+import { Button, Dropdown } from "rsuite";
 import "./EditPanel.style.scss";
 
-interface Props {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  dob: string;
-  organizationList: [string];
-  editFlag: boolean;
-  setEditFlag: Function;
-}
+//type
+import { EditPanelProps } from "./EditPanel.type";
 
 const EditPanel = ({
   firstName,
@@ -24,8 +15,9 @@ const EditPanel = ({
   organizationList,
   editFlag,
   setEditFlag,
-}: Props) => {
+}: EditPanelProps) => {
 
+  //state
   const [organizationListN, setOrganizationListN] = useState([''])
   
   useEffect(()=>{
@@ -33,7 +25,6 @@ const EditPanel = ({
     
     setOrganizationListN(organizationList);
   }, organizationList)
-  
   
 
   if (editFlag)

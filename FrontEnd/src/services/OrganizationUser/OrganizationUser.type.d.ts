@@ -1,4 +1,4 @@
-interface User {
+type User = {
   _orginizationName: string;
   isActive: boolean;
   firstName: string;
@@ -9,7 +9,7 @@ interface User {
   doj: string;
 }
 
-interface LoginUser {
+type LoginUser = {
   email: string;
   orgName: string
   otp: string;

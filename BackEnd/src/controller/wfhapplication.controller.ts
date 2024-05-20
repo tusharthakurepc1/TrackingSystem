@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import WfhApplicationServices from "../service/wfhapplication.services";
-import { ExtendedRequest, ApplicationRequest } from '../typings/type';
+import { ExtendedRequest, ApplicationRequest, FilterParameters } from '../typings/type';
 import { wfhApplication } from '../typings/common';
+import { filter } from 'lodash';
 
 
 class WfhApplicationController {
@@ -10,8 +11,6 @@ class WfhApplicationController {
   public insertApplication = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
     const { email } = req.user
     const { createdDate, orgName, reason } = req.body;
-
-    
 
     const reqBody: wfhApplication = {
       email,
@@ -221,6 +220,36 @@ class WfhApplicationController {
       console.log(orgName);
       const data = await this.wfhApplicationService.getCompanyApplicationService(orgName, page, pageSize)
         
+
+      return res.status(200).json({
+        data: data,
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })      
+    }
+  }
+
+  public getCompanyApplicationFilterController = async (req: Request, res: Response, next: NextFunction) => {
+    const { orgName, page, pageSize } = req.params;
+    const { email, availedAt, reason, status, approvedBy } = req.query as Record<string, string | undefined>;;
+    
+    const filterQuery: FilterParameters = {
+      email,
+      availedAt,
+      reason,
+      status,
+      approvedBy
+    }
+    
+    console.log("In the Filter Controller");
+    try{
+      const data = await this.wfhApplicationService.getCompanyApplicationFilterService(orgName, page, pageSize, filterQuery)
+      
 
       return res.status(200).json({
         data: data,

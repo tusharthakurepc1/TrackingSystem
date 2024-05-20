@@ -1,3 +1,3 @@
-type CustomNavbarProps = {
+export type CustomNavbarProps = {
   isVisible: boolean,
 };

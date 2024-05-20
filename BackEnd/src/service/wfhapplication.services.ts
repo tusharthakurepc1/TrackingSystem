@@ -1,5 +1,5 @@
 import WfhApplicationDao from "../dao/wfhapplication.dao";
-import { ApplicationRequest, ApplicationFetchRequest, ApplicationFetchRequestOffset } from "../typings/type";
+import { ApplicationRequest, ApplicationFetchRequest, ApplicationFetchRequestOffset, FilterParameters } from "../typings/type";
 import { wfhApplication, Organization } from "../typings/common";
 import OrganizationDao from "../dao/organization.dao";
 
@@ -104,6 +104,32 @@ class WfhApplicationServices {
     const applicationRes = await this.wfhApplicationDao.getCompanyApplication(orgName, page, pageSize);
     const totalApplication = await this.wfhApplicationDao.getCompanyApplicationCount(orgName);
 
+    return {
+      applicationRes,
+      totalApplication
+    }
+  }
+
+  public getCompanyApplicationFilterService = async (orgName: string, page: string, pageSize: string, filteredQuery: FilterParameters) => {
+    if(!filteredQuery.email || filteredQuery.email === '' || filteredQuery.email === 'undefined' ){
+      delete filteredQuery.email;
+    }
+    if(!filteredQuery.availedAt || filteredQuery.availedAt === '' || filteredQuery.availedAt === 'undefined'){
+      delete filteredQuery.availedAt;
+    }
+    if(!filteredQuery.reason || filteredQuery.reason === '' || filteredQuery.reason === 'undefined'){
+      delete filteredQuery.reason;
+    }
+    if(!filteredQuery.status  || filteredQuery.status === '' || filteredQuery.status === 'undefined'){
+      delete filteredQuery.status;
+    }
+    if(!filteredQuery.approvedBy || filteredQuery.approvedBy === '' || filteredQuery.approvedBy === 'undefined'){
+      delete filteredQuery.approvedBy;
+    }
+
+    const applicationRes = await this.wfhApplicationDao.getCompanyApplicationFilter(orgName, page, pageSize, filteredQuery);
+    const totalApplication = await this.wfhApplicationDao.getApplicationFilterCount(orgName, filteredQuery);
+    
     return {
       applicationRes,
       totalApplication

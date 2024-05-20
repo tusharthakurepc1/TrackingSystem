@@ -55,10 +55,6 @@ const DashBoardSystemUser = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  // const [userOrgList, setUserOrgList] = useState<[UserWithOrg]>([
-  //   { email: "demo123@gmail.com", orgName: "" },
-  // ]);
-
   const setOrgValue = (value: string) => {
     if(value === 'Select' || value === ''){
       setOrgValFlag(true);
@@ -76,14 +72,8 @@ const DashBoardSystemUser = () => {
 
     const getUserData = async () => {
       const result = await SystemUserServices.SystemUserWithOffset(page, limit);
-
       setTotalData(result.totalData);
       setUserData(result.data);
-
-      //   (el)=> {
-      //     return el.email === 'manasvi108@gmail.com'
-      //   }
-      // ));
     };
     getUserData();
   }, [page, limit, flagUpdate]);

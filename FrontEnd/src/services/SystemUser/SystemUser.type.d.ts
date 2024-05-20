@@ -1,4 +1,4 @@
-interface SystemUser {
+type SystemUser = {
   firstName: string;
   lastName: string;
   email: string;
@@ -7,13 +7,13 @@ interface SystemUser {
   doj: string
 }
 
-interface UserDeleteType {
+type UserDeleteType = {
   _id: string;
   email: string;
   organizationValue: string;
 }
 
-interface UserAdminType {
+type UserAdminType = {
   email: string;
   organizationValue: string;
 }

@@ -1,5 +1,5 @@
 import { wfhApplication } from "../typings/common";
-import { ApplicationRequest } from "typings/type";
+import { ApplicationRequest, FilterParameters } from "../typings/type";
 import WfhApplicationModel from "../models/wfhapplication.model";
 import OrganizationUserDao from "./organizationuser.dao";
 
@@ -105,6 +105,30 @@ class WfhApplicationDao {
     console.log("Company Application API: ", currentPage, startPage, currentPageSize);
 
     return await WfhApplicationModel.find({orgName}).skip(startPage).limit(currentPageSize);
+  }
+
+  public getCompanyApplicationFilter = async (orgName: string, page: string, pageSize: string, filteredQuery: FilterParameters) => {
+    const currentPage = parseInt(page) || 1;
+    const currentPageSize = parseInt(pageSize) || 10;
+    const startPage = (currentPage - 1) * currentPageSize;
+
+    const findObj = {
+      ...filteredQuery,
+      orgName
+    }
+    console.log(findObj);
+    
+    
+    return await WfhApplicationModel.find(findObj).skip(startPage).limit(currentPageSize);
+  }
+
+  public getApplicationFilterCount = async(orgName: string, filteredQuery: FilterParameters) => {
+    const findObj = {
+      ...filteredQuery,
+      orgName
+    }
+    
+    return (await WfhApplicationModel.find(findObj)).length
   }
 
   public getCompanyApplicationCount = async(orgName: string) => {

@@ -1,4 +1,4 @@
-interface Props {
+type Props = {
   updatedFlag: boolean
   setUpdatedFlag: function,
   availedDate: string;

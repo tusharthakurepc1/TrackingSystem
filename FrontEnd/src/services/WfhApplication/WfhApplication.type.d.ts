@@ -1,7 +1,7 @@
 import Application from "../../typings/Applications";
 import User from "../../typings/User";
 
-interface SystemUser {
+type SystemUser = {
   firstName: string;
   lastName: string;
   email: string;
@@ -9,13 +9,21 @@ interface SystemUser {
   dob: string;
 }
 
-interface OrgList_Type {
+type OrgList_Type = {
   orgList: Array<string>;
   email: string;
 }
 
-interface Leave {
+type Leave = {
   _id: string;
 }
 
-export type { SystemUser, OrgList_Type, Leave };
+type FilterQuery = {
+  email?: string,
+  availedAt?: string,
+  reason?: string,
+  status?: string,
+  approvedBy?: string
+}
+
+export type { SystemUser, OrgList_Type, Leave, FilterQuery };

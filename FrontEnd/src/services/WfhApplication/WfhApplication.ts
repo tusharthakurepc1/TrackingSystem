@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SystemUser, OrgList_Type, Leave } from "./WfhApplication.type";
+import { SystemUser, OrgList_Type, Leave, FilterQuery } from "./WfhApplication.type";
 
 export const wFHApplicationSignupRequest = async ({
   firstName,
@@ -84,6 +84,26 @@ export const getWfhApplications = async (orgName: string, email: string) => {
   } catch (err) {
     console.log(err);
     return "Application Fetch Error";
+  }
+
+};
+
+export const getWfhApplicationsFiltered = async (orgName: string, page: number, pageSize: number, filters: FilterQuery) => {
+  const URL = `http://localhost:5500/application-status/${orgName}/${page}/${pageSize}/filter?email=${filters.email}&availedAt=${filters.availedAt?.replace(/-/g, '/') ?? ''}&reason=${filters.reason}&status=${filters.status}&approvedBy=${filters.approvedBy}`
+
+  try{
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const application = await axios.get(
+      URL,
+      { headers },
+    );
+
+    return application.data;
+  }
+  catch(err){
+    return err;
   }
 
 }

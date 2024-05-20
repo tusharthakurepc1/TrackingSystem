@@ -1,4 +1,4 @@
-interface ApplicationStructure {
+type ApplicationStructure = {
   _id: string;
   email: string;
   createdDate: Date;
@@ -7,7 +7,7 @@ interface ApplicationStructure {
   reason: string;
   approvedDate: Date;
 }
-interface UserStructure {
+type UserStructure = {
   email: string;
   firstName: string;
   lastName: string;

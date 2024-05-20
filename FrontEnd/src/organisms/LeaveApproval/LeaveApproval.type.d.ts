@@ -1,4 +1,4 @@
-interface ApplicationStructure {
+type ApplicationStructure = {
   _id: string;
   email: string;
   createdDate: Date;
@@ -8,4 +8,19 @@ interface ApplicationStructure {
   approvedDate: Date;
 }
 
-export type { ApplicationStructure };
+type FilterQuery = {
+  email?: string,
+  availedAt?: string,
+  reason?: string,
+  status?: string,
+  approvedBy?: string
+}
+
+type LeaveApprovalProps = {
+  updatedFlag: boolean;
+  setUpdateFlag: Function;
+  email: string;
+  orgName: string;
+}
+
+export type { ApplicationStructure, FilterQuery, LeaveApprovalProps };

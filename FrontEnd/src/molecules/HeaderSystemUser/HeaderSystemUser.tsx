@@ -1,10 +1,16 @@
-import "rsuite/dist/rsuite.min.css";
-import { Navbar, Nav, Avatar, Dropdown } from "rsuite";
-import { FaUserLarge } from "react-icons/fa6";
-import HomeIcon from "@rsuite/icons/legacy/Home";
+//module
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { Navbar, Nav, Avatar, Dropdown } from "rsuite";
+import { FaUserLarge } from "react-icons/fa6";
+
+//css
+import HomeIcon from "@rsuite/icons/legacy/Home";
+import "rsuite/dist/rsuite.min.css";
 import "./HeaderSystemUser.style.scss";
+
+//type
+import {CustomNavbarProps} from './HeaderSystemUser.type'
 
 const CustomNavbar = ({ isVisible }: CustomNavbarProps) => {
 

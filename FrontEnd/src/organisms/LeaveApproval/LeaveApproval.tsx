@@ -1,49 +1,72 @@
-import { Table, Button, ButtonGroup, Pagination } from "rsuite";
-import { Modal, Input } from 'rsuite';
-const { Column, HeaderCell, Cell } = Table;
-import "./LeaveApproval.style.scss";
-import OrganizationUserServices from "../../services/OrganizationUser";
+//module
 import { useState, useEffect } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Table, Button, ButtonGroup, Pagination } from "rsuite";
+import { Modal, Input } from "rsuite";
+import { ToastContainer, toast } from "react-toastify";
+const { Column, HeaderCell, Cell } = Table;
+import { FaFilter } from "react-icons/fa";
 
-interface Props {
-  updatedFlag: boolean;
-  setUpdateFlag: Function;
-  email: string;
-  orgName: string;
-}
+//service
+import OrganizationUserServices from "../../services/OrganizationUser";
+import WFHApplicationServices from "../../services/WfhApplication";
 
-const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgName }: Props) => {
+//type
+import { FilterQuery, LeaveApprovalProps } from "./LeaveApproval.type";
+
+//css
+import "./LeaveApproval.style.scss";
+import "react-toastify/dist/ReactToastify.css";
+
+const LeaveApproval = ({
+  updatedFlag,
+  setUpdateFlag,
+  email,
+  orgName,
+}: LeaveApprovalProps) => {
+
+  //states
   const [isLoading, setIsLoading] = useState(true);
+  const [filterQuery, setFilterQuery] = useState<FilterQuery>({
+    email: "",
+    approvedBy: "",
+    status: "",
+    reason: "",
+    availedAt: "",
+  });
+
   const [wfhApplication, setWfhApplication] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalData, setTotalData] = useState(10);
 
   const [rejectReason, setRejectReason] = useState("");
-  const [ID, setID] = useState("")
+  const [ID, setID] = useState("");
   const [rejectionReasonForm, setRejectionReasonForm] = useState(false);
+
+
+  //state setter
   const handleClose = () => setRejectionReasonForm(false);
 
   const setValueRejectReason = (value: string) => {
     setRejectReason(value);
-  }
+  };
 
   const [updateLeaveComp, setupdateLeaveComp] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true)
-    const applicationReq = async () => {
-      const response = await OrganizationUserServices.getAllOrganizationApplication(
-          orgName,
-          page.toString(),
-          limit.toString()
-        );
-      console.log("Application ans: ",response.data);
 
-      
-      setTotalData(response.data.totalApplication)
+  
+  useEffect(() => {
+    setIsLoading(true);
+    const applicationReq = async () => {
+      setIsLoading(true);
+      const response = await WFHApplicationServices.getWfhApplicationsFiltered(
+        orgName,
+        page,
+        limit,
+        filterQuery
+      );
+      console.log(response.data);
+      setTotalData(response.data.totalApplication);
       setWfhApplication(response.data.applicationRes);
       setIsLoading(false);
     };
@@ -51,40 +74,63 @@ const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgName }: Props) =>
     applicationReq();
   }, [totalData, updateLeaveComp, updatedFlag, page]);
 
+  //Rejection Form setter
   const openRejectReasonForm = (_id: string) => {
-    setRejectionReasonForm(true)
+    setRejectionReasonForm(true);
     setID(_id);
-  }
-
-  const acceptedLeaveReq = async (_id: string) => {
-    const response = await OrganizationUserServices.acceptedLeaveRequest(_id, email);
-    if (response.status === 200) {
-      toast.success("Leave Approved")
-      setupdateLeaveComp(!updateLeaveComp)
-    }
-    else{
-      toast.error("Something wrong with Leave accepted!");
-    }
-    setUpdateFlag(!updatedFlag)
   };
 
+  // Accept leave request
+  const acceptedLeaveReq = async (_id: string) => {
+    const response = await OrganizationUserServices.acceptedLeaveRequest(
+      _id,
+      email
+    );
+    if (response.status === 200) {
+      toast.success("Leave Approved");
+      setupdateLeaveComp(!updateLeaveComp);
+    } else {
+      toast.error("Something wrong with Leave accepted!");
+    }
+    setUpdateFlag(!updatedFlag);
+  };
+
+  // Reject leave request
   const rejectedLeaveReq = async () => {
-    if(ID === '' || !ID || rejectReason === '' || !rejectReason){
-      toast.error("Fill all the details")
+    if (ID === "" || !ID || rejectReason === "" || !rejectReason) {
+      toast.error("Fill all the details");
       return;
     }
 
-    const response = await OrganizationUserServices.rejectedLeaveRequest(ID, email, rejectReason);
+    const response = await OrganizationUserServices.rejectedLeaveRequest(
+      ID,
+      email,
+      rejectReason
+    );
     if (response.status === 200) {
       toast.success("Leave Rejected");
-      setupdateLeaveComp(!updateLeaveComp)
-    }
-    else{
+      setupdateLeaveComp(!updateLeaveComp);
+    } else {
       toast.error("Something wrong with Leave rejected!");
     }
-    setUpdateFlag(!updatedFlag)
+    setUpdateFlag(!updatedFlag);
     setID("");
     handleClose();
+  };
+
+  //Filter Api Request
+  const filterRequest = async () => {
+    setIsLoading(true);
+    const response = await WFHApplicationServices.getWfhApplicationsFiltered(
+      orgName,
+      page,
+      limit,
+      filterQuery
+    );
+    console.log(response.data);
+    setTotalData(response.data.totalApplication);
+    setWfhApplication(response.data.applicationRes);
+    setIsLoading(false);
   };
 
   return (
@@ -96,24 +142,18 @@ const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgName }: Props) =>
           <Modal.Title>Rejection</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-
-        <div className="input-body">
-          Reason
-          <Input
-            type={"text"}
-            onChange={setValueRejectReason}
-            style={{ marginBottom: 10 }}
-          />
-        </div>
-          
+          <div className="input-body">
+            Reason
+            <Input
+              type={"text"}
+              onChange={setValueRejectReason}
+              style={{ marginBottom: 10 }}
+            />
+          </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button 
-              onClick={rejectedLeaveReq}
-              appearance="primary"
-              active
-            >
-              Submit
+          <Button onClick={rejectedLeaveReq} appearance="primary" active>
+            Submit
           </Button>
           <Button onClick={handleClose} appearance="subtle">
             Cancel
@@ -121,22 +161,80 @@ const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgName }: Props) =>
         </Modal.Footer>
       </Modal>
 
-      <div className="table-user">
+      {/* {JSON.stringify(filterQuery)} */}
+      <div className="filterBlock">
+        <Input
+          placeholder="Email"
+          onChange={(e) => {
+            const value = e;
+            setFilterQuery((prevState) => ({
+              ...prevState,
+              email: value,
+            }));
+          }}
+        />
+        <Input
+          placeholder="Availed Date"
+          type="date"
+          onChange={(e: string) => {
+            // const date = new Date(e)
+            const value = e;
+            setFilterQuery((prevState) => ({
+              ...prevState,
+              availedAt: value,
+            }));
+          }}
+        />
+        <Input
+          placeholder="Reason"
+          onChange={(e) => {
+            const value = e;
+            setFilterQuery((prevState) => ({
+              ...prevState,
+              reason: value,
+            }));
+          }}
+        />
+        <Input
+          placeholder="Status"
+          onChange={(e) => {
+            const value = e;
+            setFilterQuery((prevState) => ({
+              ...prevState,
+              status: value,
+            }));
+          }}
+        />
+        <Input
+          placeholder="Approved by"
+          onChange={(e) => {
+            const value = e;
+            setFilterQuery((prevState) => ({
+              ...prevState,
+              approvedBy: value,
+            }));
+          }}
+        />
+        <Button
+          appearance="primary"
+          style={{ width: 200 }}
+          onClick={filterRequest}
+        >
+          <FaFilter />
+        </Button>
+      </div>
+
+      <div>
         <Table data={wfhApplication} autoHeight={true} loading={isLoading}>
           <Column flexGrow={1} align="center">
-            <HeaderCell>Name</HeaderCell>
-            <Cell dataKey="orgName" />
-          </Column>
-
-          <Column flexGrow={2} align="center">
             <HeaderCell>Email</HeaderCell>
             <Cell dataKey="email" />
           </Column>
           <Column flexGrow={1} align="center">
-            <HeaderCell>Date</HeaderCell>
+            <HeaderCell>Availed At</HeaderCell>
             <Cell dataKey="createdDate">
-              {
-                rowData => new Date(rowData.createdDate).toLocaleString().split(",")[0]
+              {(rowData) =>
+                new Date(rowData.createdDate).toLocaleString().split(",")[0]
               }
             </Cell>
           </Column>
@@ -144,7 +242,6 @@ const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgName }: Props) =>
             <HeaderCell>Reason</HeaderCell>
             <Cell dataKey="reason" />
           </Column>
-
           <Column align="center" flexGrow={1}>
             <HeaderCell>Status</HeaderCell>
             <Cell style={{ padding: "6px" }}>
@@ -184,6 +281,10 @@ const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgName }: Props) =>
               }
             </Cell>
           </Column>
+          <Column flexGrow={1} align="center">
+            <HeaderCell>Approved By</HeaderCell>
+            <Cell dataKey="approvedBy" />
+          </Column>
         </Table>
 
         <br />
@@ -206,6 +307,7 @@ const LeaveApproval = ({ updatedFlag, setUpdateFlag, email, orgName }: Props) =>
           onChangeLimit={setLimit}
         />
       </div>
+      <br />
 
       <ToastContainer />
     </>

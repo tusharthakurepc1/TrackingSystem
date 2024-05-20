@@ -1,21 +1,19 @@
+//module
 import { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-import SystemUserServices from "../../services/SystemUser";
 import { Input, Button } from "rsuite";
-import "./OrganizationUserProfileUpdate.style.scss";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
 
-interface Props {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  dob: string;
-  organizationList: [string];
-  formFlag: boolean;
-  setFormFlag: Function;
-}
+//service
+import SystemUserServices from "../../services/SystemUser";
+
+//type
+import {OrgUserProfileUpdateProps} from './OrganizationUserProfileUpdate.type'
+
+//css
+import "./OrganizationUserProfileUpdate.style.scss";
+
+
 
 const OrganizationUserProfileUpdate = ({
   firstName,
@@ -26,7 +24,7 @@ const OrganizationUserProfileUpdate = ({
   organizationList,
   formFlag,
   setFormFlag,
-}: Props) => {
+}: OrgUserProfileUpdateProps) => {
   const prevObj = { firstName, lastName, email, password, dob };
   
   const [firstNameN, setFirstName] = useState("");

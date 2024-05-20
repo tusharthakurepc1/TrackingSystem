@@ -1,17 +1,27 @@
-interface UserStructure {
+type UserStructure = {
   email: string;
   firstName: string;
   lastName: string;
 }
 
-interface SystemUserStructure {
+type SystemUserStructure = {
   _id: string,
   firstName: string,
   lastName: string,
   email: string,
   password: string,
   dob: string,
-
 }
 
-export type { UserStructure, SystemUserStructure };
+type OrgUserProfileUpdateProps = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  dob: string;
+  organizationList: [string];
+  formFlag: boolean;
+  setFormFlag: Function;
+}
+
+export type { UserStructure, SystemUserStructure, OrgUserProfileUpdateProps };

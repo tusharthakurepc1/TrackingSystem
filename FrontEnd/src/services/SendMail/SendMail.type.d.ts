@@ -1,4 +1,4 @@
-interface OtpPayload {
+type OtpPayload = {
   emailVal: string;
 }
 

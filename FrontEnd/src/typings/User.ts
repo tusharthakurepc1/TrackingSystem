@@ -1,4 +1,4 @@
-export default interface User {
+export type User = {
   _id: string;
   name: string;
   userEmail: Array<string>;
