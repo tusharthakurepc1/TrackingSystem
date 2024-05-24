@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, ButtonGroup, Message } from "rsuite";
-import { ToastContainer } from "react-toastify";
 
 //service
 import SystemUserServices from "../../services/SystemUser";
@@ -16,10 +15,6 @@ import UsersManage from "../../organisms/UsersManage";
 
 //type
 import { SystemUserStructure } from "./DashBoardSystemUser.type";
-
-//css
-import "./DashboardSystemUser.style.scss";
-import "react-toastify/dist/ReactToastify.css";
 
 const DashBoardSystemUser = () => {
   const navigate = useNavigate();
@@ -88,7 +83,6 @@ const DashBoardSystemUser = () => {
 
       {optionsTab === 1 ? <UsersManage /> : <OrganizationManage />}
 
-      <ToastContainer />
     </>
   );
 };

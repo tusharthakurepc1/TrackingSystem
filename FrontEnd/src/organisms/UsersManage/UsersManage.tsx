@@ -13,6 +13,7 @@ import { OrganizationUserStructure } from "./UsersManage.type";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ValueType } from "rsuite/esm/Checkbox";
 
 const UsersManage = () => {
   //states
@@ -41,13 +42,14 @@ const UsersManage = () => {
   const [openOrg, setOpenOrg] = useState(false);
 
   //state setter
-  const setOrgValue = (value: string) => {
+  const setOrgValue = (value: ValueType) => {
     if (value === "Select" || value === "") {
       setOrgValFlag(true);
     } else {
       setOrgValFlag(false);
     }
-    setOrganizationValue(value);
+    if(typeof(value) === 'string')
+      setOrganizationValue(value);
   };
 
   useEffect(() => {
@@ -384,7 +386,7 @@ const UsersManage = () => {
             <RadioGroup
               name="radio-group"
               value={organizationValue}
-              onChange={setOrgValue}
+              onChange={(value: ValueType)=> setOrgValue(value)}
             >
               {updateData.organization_list.map((org: string) => (
                 <Radio key={org} value={org}>
