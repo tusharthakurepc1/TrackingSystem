@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 //pages
 import Home from "../pages/Home";
-// import DashBoardOrganizationUser from "../pages/DashboardOrganizationUser";
 import DashBoardOrganizationUserNew from "../pages/DashboardOrganizationUserNew"
 import DashBoardSystemUser from "../pages/DashboardSystemUser";
 import OrganizationUser from "../pages/OrganizationUser";
@@ -35,6 +34,7 @@ const RoutesComponent = () => {
           {/* User Profile */}
           <Route path="/profile" element={<OrganizationUserProfile />}/>
           <Route path="/sysprofile" element={<SystemUserProfile />} />
+
         </Routes>
       </BrowserRouter>
     </div>

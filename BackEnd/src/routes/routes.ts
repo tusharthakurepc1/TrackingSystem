@@ -12,7 +12,6 @@ class Routes {
   public sendMailController = new SendMailController()
   public systemUserController = new SystemUserController()
   public wfhApplicationController = new WfhApplicationController()
-  
 
   public authorizationMiddleware = new Authorization();
   public router = Router()
@@ -28,13 +27,16 @@ class Routes {
   }
 
   private initilizeOrganizationRoute(prefix: string){
-    this.router.get(`${prefix}:orgName`, this.orgController.getOrganization);
-    this.router.get(`${prefix}/all`, this.orgController.getAllOrganizationName);
+    this.router.get(`${prefix}/:orgName`, this.orgController.getOrganization);
+    this.router.get(`${prefix}/data/list`, this.orgController.getAllOrganization);
+    this.router.get(`${prefix}/data/all`, this.orgController.getAllOrganizationName);
 
     this.router.post(`${prefix}`, this.orgController.addOrganization);
 
     this.router.put(`${prefix}`, this.orgController.addOrganizationEmail);
-    this.router.put(`${prefix}/admin`, this.orgController.makeOrganizationAdmin)
+    this.router.put(`${prefix}/admin`, this.orgController.makeOrganizationAdmin);
+    // this.router.put(`${prefix}/admin`, this.orgController.makeOrganizationAdmin);
+    this.router.put(`${prefix}/remove`, this.orgController.removeOrganization);
   }
 
   private initilizeOrganizationUserRoute (prefix: string) {
@@ -70,7 +72,8 @@ class Routes {
   private initilizeApplicationRoute = async (prefix: string) => {
     // this.router.get(`${prefix}/:email`, this.wfhApplicationController.getUserApplications);      //currently pause for below api
     this.router.get(`${prefix}/:orgName/:email`, this.wfhApplicationController.getUserCompanyApplicationController);
-    this.router.get(`${prefix}/:orgName/:page/:pageSize`, this.wfhApplicationController.getCompanyApplicationController)
+    this.router.get(`${prefix}/:orgName/filter/application`, this.wfhApplicationController.getCompanyApplicationFilterController)
+    // this.router.get(`${prefix}/:orgName/:page/:pageSize`, this.wfhApplicationController.getCompanyApplicationController)
     this.router.get(`${prefix}/:orgName/:page/:pageSize/filter`, this.wfhApplicationController.getCompanyApplicationFilterController)
     this.router.get(`${prefix}/:orgName/:email/:page/:pageSize`, this.wfhApplicationController.getUserCompanyApplicationOffsetController);
 

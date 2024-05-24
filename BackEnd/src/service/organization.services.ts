@@ -10,7 +10,6 @@ class OrganizationServices {
   }
 
   public addOrganization = async (reqBody: Organization) => {
-    reqBody.isActive = true;
     return await this.organizationDao.insertOrganization(reqBody);
   }
 
@@ -32,13 +31,23 @@ class OrganizationServices {
       return el.name;
     })
 
+    console.log(orgList);
+    
     return orgList;
+  }
+  public getAllOrganization = async () => {
+    return await this.organizationDao.getAllOrganization();
   }
 
   public isAdminOfOrganization = async (email: string, orgName: string) => {
     const orgData = await this.organizationDao.getOrganization(orgName);
     
     return orgData.admin === email
+  }
+
+
+  public removeOrganizationService = async (_id: string) => {
+    return await this.organizationDao.removeOrganization(_id);
   }
 
 

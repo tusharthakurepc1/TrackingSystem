@@ -18,7 +18,6 @@ class OrganizationUserDao {
     const currentPageSize = parseInt(pageSize) || 10;
     const startPage = (currentPage - 1) * currentPageSize;
 
-
     return await OrganizationUserSchema.find({isActive: true}).skip(startPage).limit(currentPageSize);
   }
 
@@ -98,6 +97,19 @@ class OrganizationUserDao {
           email: reqBody.email,
           dob: reqBody.dob,
           doj: reqBody.doj
+        }
+      }
+    )
+  }
+
+
+  //remove organization from the user email list
+  public deleteUserFromOrganization = async(orgName: string) => {
+    return await OrganizationUserSchema.updateMany(
+      {orgination_list: orgName},
+      {
+        $pull: {
+          orgination_list: orgName
         }
       }
     )

@@ -5,10 +5,12 @@ import Cookies from "js-cookie";
 import { ToastContainer, toast } from "react-toastify";
 
 //service
+import OrganizationServices from "../../services/Organization";
 import WFHApplicationServices from "../../services/WfhApplication";
 
 //type
 import { CalendarLeaveProps, Application } from "./CalendarLeave.type";
+import {OrganizationData} from '../../typings/Organization'
 
 //css
 import "react-toastify/dist/ReactToastify.css";
@@ -20,11 +22,21 @@ const CalendarLeave = ({
   updatedFlag,
   setUpdatedFlag,
 }: CalendarLeaveProps) => {
+  const [date, setDate] = useState(new Date());
+
   //state
   const [allApplication, setAllApplication] = useState<Application[]>([]);
   const [openApplication, setOpenApplication] = useState(false);
 
   const [reason, setReason] = useState("");
+  const [orgData, setOrgData] = useState<OrganizationData>({
+    isActive: true,
+    name: "",
+    max_wfh: 0,
+    userEmail: [],
+    admin: ""
+  })
+  const [totalLeavesAvailed, setTotalLeaveAvailed] = useState(0);
 
   const [dateVal, setDateVal] = useState<string>("");
 
@@ -43,9 +55,31 @@ const CalendarLeave = ({
         orgName,
         email
       );
+      
+      const orgResult = await OrganizationServices.getOrganizationData(orgName);
+      // console.log(orgResult);
+      if(orgResult.data){
+        setOrgData(orgResult.data)
+      }
+
       // console.log("Application from Calendar, ", result.data);
       if (result.data) {
+        //set all the application to the state
         setAllApplication(result.data);
+
+
+        //count the leave you availed
+        let count = 0;
+        result.data.forEach((el: Application)=>{
+          const matchedDate = new Date(el.createdDate);
+          
+          if(matchedDate.getMonth() === date.getMonth())
+            if(el.status === 1 || el.status === 3)
+              count += 1;
+        })
+
+        //assign the total wfh application by the organization
+        setTotalLeaveAvailed(count)
       }
     };
 
@@ -74,9 +108,9 @@ const CalendarLeave = ({
         matchedDate.getMonth() === date.getMonth()
       ) {
         const status = allApplication[i].status;
-        if (status === 1) return "completed";
+        if (status === 1) return "completed"; 
         else if (status === 2) return "rejected";
-        else if (status === 3) return "pending";
+        else if (status === 3)  return "pending";
         else return "";
       }
     }
@@ -107,6 +141,10 @@ const CalendarLeave = ({
 
   //Check is the cell already having an application or not
   const isValidApplication = async (date: Date) => {
+    if(totalLeavesAvailed >= orgData.max_wfh){
+      toast.error("You have used all your leave!!");
+      return;
+    }
     for (let i = 0; i < allApplication.length; i++) {
       const matchedDate = new Date(allApplication[i].createdDate);
       if (
@@ -122,8 +160,16 @@ const CalendarLeave = ({
     setOpenApplication(true);
   };
 
-  return (
+  //update the Date accourding to the calendar
+  const checkWfhLeaves = async (event: Date) => {
+    setDate(event)
+    setUpdatedFlag(!updatedFlag)
+  }
+
+  return (  
     <>
+      {/* {orgData.max_wfh}
+      {totalLeavesAvailed} */}
       <Calendar
         bordered
         renderCell={renderCell}
@@ -131,6 +177,7 @@ const CalendarLeave = ({
           isValidApplication(date);
         }}
         cellClassName={setCellClassName}
+        onChange={checkWfhLeaves}
       />
 
       <Modal overflow={true} open={openApplication} onClose={closeApplication}>

@@ -124,7 +124,7 @@ class WfhApplicationDao {
     console.log(findObj);
     
     
-    return await WfhApplicationModel.find(findObj).skip(startPage).limit(currentPageSize);
+    return await WfhApplicationModel.find(findObj).sort({$natural:-1}).skip(startPage).limit(currentPageSize);
   }
 
   public getApplicationFilterCount = async(orgName: string, availedAtStartDate: Date, availedAtEndDate: Date, filteredQuery: FilterParameters) => {

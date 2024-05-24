@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import OrganizationServices from '../service/organization.services'
-import { UpdateOrganizationUserEmail } from '../typings/common'
+import { Organization, UpdateOrganizationUserEmail } from '../typings/common'
+import OrganizationUserServices from '../service/organizationuser.services'
 
 class OrganizationController {
   public orgService = new OrganizationServices()
+  public orgUserService = new OrganizationUserServices()
 
   //Organization Controller Code below
   public getOrganization = async (req: Request, res: Response, next: NextFunction) => {
@@ -38,7 +40,7 @@ class OrganizationController {
   public addOrganization = async (req: Request, res: Response, next: NextFunction) => {
     const body = req.body;
     const { name, max_wfh, userEmail } = body;
-    
+
     if(
       [name, max_wfh, userEmail].some((el)=> {
         return !el
@@ -51,16 +53,34 @@ class OrganizationController {
         status: 400
       })
     }
-    
+
     try{
-      await this.orgService.addOrganization(body)
-      console.log("Organization Added Sucessfully");
+
+      const orgData: Organization = {
+        isActive: true,
+        name,
+        max_wfh: parseInt(max_wfh) | 1,
+        userEmail,
+        admin: ""
+      }
+
+      const status = await this.orgService.addOrganization(orgData)
       
+      if(status === 405){
+        return res.status(200).json({
+          data: {
+            msg: "Organization Already exists"
+          },
+          status: 400
+        }) 
+      }
+      
+      console.log("Organization Added Sucessfully");
       return res.status(200).json({
         data: {
           msg: "Organization Added Sucessfully"
         },
-        status: 400
+        status: 200
       })
     }
     catch(err){
@@ -108,6 +128,31 @@ class OrganizationController {
     }
   } 
 
+  public removeOrganization = async (req: Request, res: Response, next: NextFunction) => {
+    const { _id, orgName } = req.body
+
+    try{
+      await this.orgService.removeOrganizationService(_id);
+      await this.orgUserService.deleteUserFromOrganization(orgName);
+      console.log("Organization Sucessfully Deleted")
+
+      return res.status(200).json({
+        data: {
+          msg: "Organization Deleted Successfully",
+        },
+        status: 200
+      })
+
+    }
+    catch(err){
+      return res.status(400).json({
+        data: err,
+        status: 400
+      })
+    }
+
+  }
+
   public makeOrganizationAdmin = async (req: Request, res: Response, next: NextFunction) => {
     const orgDetail = req.body;
     const {orgName, email} = orgDetail;
@@ -142,6 +187,24 @@ class OrganizationController {
       })
     }
 
+  }
+
+  public getAllOrganization = async (req: Request, res: Response, next: NextFunction) => {
+    try{
+      
+      const result = await this.orgService.getAllOrganization();
+      
+      return res.status(200).json({
+        data: result, 
+        status: 200
+      })
+    }
+    catch(err){
+      return res.status(200).json({
+        data: err,
+        status: 400
+      })
+    }
   }
 
   public getAllOrganizationName = async (req: Request, res: Response, next: NextFunction) => {

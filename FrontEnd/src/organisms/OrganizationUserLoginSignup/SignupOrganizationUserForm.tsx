@@ -80,11 +80,11 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
   };
   const setValueDoj = (value: string) => {
     validateName(value, setDojFlag)
-    if(value >= dobVal){
+    if(value < dobVal){
       setDojFlag(true);
     }
     else{
-      setDojFlag(false)
+      setDojFlag(false);
     }
     setDojVal(value);
   };

@@ -240,8 +240,8 @@ class WfhApplicationController {
   }
 
   public getCompanyApplicationFilterController = async (req: Request, res: Response, next: NextFunction) => {
-    const { orgName, page, pageSize } = req.params;
-    const { email, availedAt, reason, status, approvedBy, availedAtStart, availedAtEnd } = req.query as Record<string, string | undefined>;
+    const { orgName } = req.params;
+    const { page, pageSize, email, availedAt, reason, status, approvedBy, availedAtStart, availedAtEnd } = req.query as Record<string, string | undefined>;
     
     const filterQuery: FilterParameters = {
       email,
@@ -250,7 +250,7 @@ class WfhApplicationController {
       status,
       approvedBy,
     }
-
+    
     console.log(JSON.stringify(req.query));
 
     try{

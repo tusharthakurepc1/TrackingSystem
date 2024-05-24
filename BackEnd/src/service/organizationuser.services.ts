@@ -50,6 +50,11 @@ class OrganizationUserServices {
     return await this.organizationUserDao.updateOrganizationUser(email, reqBody);
   }
 
+  //remove organization from the user email list
+  public deleteUserFromOrganization = async (orgName: string) => {
+    return await this.organizationUserDao.deleteUserFromOrganization(orgName)
+  }
+
 }
 
 export default OrganizationUserServices;

@@ -5,6 +5,11 @@ class OrganizationDao {
   //DB queries of Organization
   
   public insertOrganization = async (reqBody: Organization)=>{
+    const org = await OrganizationModel.findOne({name: reqBody.name})
+    
+    if(org){
+      return 405;
+    }
     return await OrganizationModel.create(reqBody)
   }
 
@@ -50,6 +55,10 @@ class OrganizationDao {
 
   public getOrganization = async (orgName: string) => {
     return await OrganizationModel.findOne({name: orgName, isActive: true})
+  }
+
+  public removeOrganization = async (_id: string) => {
+    return await OrganizationModel.deleteOne({_id});
   }
 
 }
