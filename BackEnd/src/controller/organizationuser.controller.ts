@@ -6,12 +6,37 @@ import SendMailServices from "../service/sendmail.services"
 import { ExtendedRequestForOrg } from "../typings/type"
 import SECRET_KEY from "../constants/common"
 
+interface User {
+  firstName: string,
+  lastName: string,
+  email: string,
+  dob: string,
+  doj: string,
+  _orginizationName: string
+}
+
+
+interface AddOrganizationUserBody {
+  user: User
+}
+
+interface GetOrganizationUserParams {
+  email: string
+}
+
+interface GetOrganizationUserCredBody {
+  email: string, 
+  orgName: string, 
+  otp: string
+}
+
+
 class OrganizationUserController {
   public organizationUserServices = new OrganizationUserServices()
   public organization = new OrganizationServices();
   public sendMailServices = new SendMailServices();
 
-  public addOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
+  public addOrganizationUser = async (req: Request<{}, AddOrganizationUserBody>, res: Response, next: NextFunction) => {
     const user = req.body;
     const { firstName, lastName, email, dob, doj, _orginizationName } = user;
 
@@ -45,12 +70,16 @@ class OrganizationUserController {
     }
 
     try{
-      
       const r1 = await this.organizationUserServices.addOrganizationUser(newUser);
+      if(r1 === null){
+        return res.status(400).json({
+          data: {
+            msg: "You are already in this organization"
+          },
+          status: 400
+        }) 
+      }
       const r2 = await this.organization.addOrganizationEmail(orgDetail)
-
-      console.log("Resp1: ", r1);
-      console.log("Resp2: ", r2);
       
 
       console.log("OrganizationUser Sucessfully Added");
@@ -66,13 +95,13 @@ class OrganizationUserController {
       console.log(err);
       
       return res.status(400).json({
-        data: err,
+        data: "Organization User Created Failed",
         status: 400
       })
     }
   }
 
-  public getOrganizationUser = async (req: Request, res: Response, next: NextFunction) => {
+  public getOrganizationUser = async (req: Request<GetOrganizationUserParams, {}>, res: Response, next: NextFunction) => {
     const { email } = req.params;
     
     if(!email || email === ''){
@@ -103,7 +132,7 @@ class OrganizationUserController {
     }
   }
 
-  public getOrganizationUserCred = async (req: Request, res: Response, next: NextFunction) => {
+  public getOrganizationUserCred = async (req: Request<{}, GetOrganizationUserCredBody>, res: Response, next: NextFunction) => {
     const { email, orgName, otp } = req.body;
     
     console.log(email, orgName, otp);

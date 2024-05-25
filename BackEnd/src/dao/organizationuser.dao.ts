@@ -22,10 +22,13 @@ class OrganizationUserDao {
   }
 
   public insertOrganizationUser = async (reqBody: OrganizationUser) => {
-    const user = await OrganizationUserSchema.find({email: reqBody.email, isActive: true});
+    const user = await OrganizationUserSchema.findOne({email: reqBody.email, isActive: true});
     console.log(user);
     
-    if(user.length > 0){
+    if(user){
+      if(user.orgination_list.includes(reqBody.orgination_list[0])){
+        return null;
+      }
       return await OrganizationUserSchema.updateOne(
         {email: reqBody.email}, 
         {

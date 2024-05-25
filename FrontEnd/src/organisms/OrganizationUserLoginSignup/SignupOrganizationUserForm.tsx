@@ -19,9 +19,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
-  const currentDate = new Date();
-  const currentDateFormatted = `${currentDate.getFullYear()}-${currentDate.getMonth()+1 < 10 ? '0'+(currentDate.getMonth()+1) : currentDate.getMonth()+1}-${currentDate.getDate() < 10 ? '0'+currentDate.getDate(): currentDate.getDate()}`;
-
+  const currentDate = new Date().toISOString().split("T")[0]
+  
   //state
   const [
     allOrgList,
@@ -58,10 +57,13 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
   };
   const setValueOrg = (value: string | null) => {
     if(value === null){
-      setOrgFlag(true)
+      setOrgVal("")
+      setOrgFlag(false)
       return;
     }
-    validateName(value, setOrgFlag)
+    else{
+      setOrgFlag(true)
+    }
     setOrgVal(value);
   };
   const setValueEmail = (value: string) => {
@@ -70,12 +72,6 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
   };
   const setValueDob = (value: string) => {
     validateName(value, setDobFlag)
-    if(value >= currentDateFormatted){
-      setDobFlag(true);
-    }
-    else{
-      setDobFlag(false);
-    }
     setDobVal(value);
   };
   const setValueDoj = (value: string) => {
@@ -91,7 +87,7 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
 
   //Signup Request function
   const signupReq = async () => {
-
+    console.log("Hit")
     if(firstNameVal === ''){
       setFirstNameFlag(true)
       return;
@@ -108,12 +104,12 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
       setDobFlag(true)
       return;
     }
-    if(dojVal === ''){
+    if(dojVal === '' || dojFlag === true){
       setDojFlag(true)
       return;
     }
     if(orgVal === ''){
-      setOrgFlag(true)
+      setOrgFlag(false)
       return;
     }
 
@@ -134,7 +130,7 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
     const data =
       await OrganizationUserServices.organizationUserSignupRequest(user);
 
-    console.log(data.data.msg);
+    // console.log(data.data.msg);
     
     if(data.status === 200){
       
@@ -144,7 +140,7 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
       }, 1000);
     }
     else{
-      toast.error("Account Creation Failed")
+      toast.error(data.response.data.data.msg)
     }
   };
 
@@ -206,6 +202,7 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
         <Input
           type={"date"}
           onChange={setValueDob}
+          max={currentDate}
         />
         <span className="error-msg" hidden={!dobFlag}>
           Invalid Date of Birth.
@@ -217,28 +214,12 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
         <Input
           type={"date"}
           onChange={setValueDoj}
-          onFocus={function () {
-            
-          }}
         />
         <span className="error-msg" hidden={!dojFlag}>
           Invalid Date of Joining.
         </span>
         <br />
       </div>
-
-      {/* <div className="input-body">
-        Organization
-        <Input
-          type={"text"}
-          onChange={setValueOrg}
-        />
-        <span className="error-msg" hidden={orgFlag}>
-          This input is required.
-        </span>
-        <br />
-      </div> */}
-
         <div className="input-body">
           Organization
           <SelectPicker

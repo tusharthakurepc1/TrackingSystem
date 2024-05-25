@@ -22,7 +22,7 @@ type OrganizationUserStructure = {
   password: string,
   dob: string,
   doj: string,
-  organization_list: [string]
+  organization_list: string[]
 }
 
 type UserWithOrg = {

@@ -83,7 +83,7 @@ const OrganizationManage = () => {
     if(!orgDetails.name || orgDetails.name === ''){
       let newFlags: OrganizationFlags = {
         ...orgFlags,
-        max_wfh: true
+        name: true
       } 
       setOrgFlags(newFlags)
       return;

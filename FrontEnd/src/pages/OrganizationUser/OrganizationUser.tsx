@@ -15,7 +15,7 @@ const OrganizationUser = () => {
       {loginFlag ? (
         <LoginOrganizationUserForm setLogin={setLogin} />
       ) : (
-        <SignupOrganizationUserForm loginFlag={loginFlag} setLogin={setLogin} />
+        <SignupOrganizationUserForm setLogin={setLogin} />
       )}
     </div>
   );

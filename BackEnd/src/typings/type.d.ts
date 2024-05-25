@@ -36,3 +36,66 @@ interface FilterParameters {
   approvedBy?: string
 }
 
+
+//--------------  Organization Types --------------------------------
+
+interface GetOrganizationParams {
+  orgName: string
+}
+
+interface PostOrganizationBody {
+  name: string, 
+  max_wfh: number, 
+  userEmail: string 
+}
+
+interface AddOrganizationEmailBody {
+  _id: string, 
+  orgName: string, 
+  email: string
+}
+
+interface RemoveOrganizationBody {
+  _id: string,
+  orgName: string
+}
+
+interface OrgDetails {
+  orgName: string,
+  email: string
+}
+
+interface MakeOrganizationAdminBody {
+  orgDetail: OrgDetails
+}
+
+interface IsAdminOfOrganizationParams {
+  email: string,
+  orgName: string
+}
+
+//--------------  Organization Types --------------------------------
+
+interface User {
+  firstName: string,
+  lastName: string,
+  email: string,
+  dob: string,
+  doj: string,
+  _orginizationName: string
+}
+
+interface AddOrganizationUserBody {
+  user: User
+}
+
+interface GetOrganizationUserParams {
+  email: string
+}
+
+interface GetOrganizationUserCredBody {
+  email: string, 
+  orgName: string, 
+  otp: string
+}
+
