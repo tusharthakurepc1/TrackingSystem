@@ -14,6 +14,11 @@ type SystemUserStructure = {
   organization_list: [string]
 }
 
+type OrgDetails = {
+  orgName: string,
+  doj: string
+}
+
 type OrganizationUserStructure = {
   _id: string,
   firstName: string,
@@ -21,8 +26,7 @@ type OrganizationUserStructure = {
   email: string,
   password: string,
   dob: string,
-  doj: string,
-  organization_list: string[]
+  organization_list: OrgDetails[]
 }
 
 type UserWithOrg = {

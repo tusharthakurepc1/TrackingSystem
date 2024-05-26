@@ -40,9 +40,6 @@ export const SystemUserDashBoardRequest = async (token: string) => {
 };
 
 export const updateSystemUser = async (email: string, user: SystemUser) => {
-  console.log(email);
-  console.log(JSON.stringify(user));
-  
   const URL = "http://localhost:5500/user/update";
 
   try{
@@ -50,6 +47,22 @@ export const updateSystemUser = async (email: string, user: SystemUser) => {
       "Content-Type": "application/json"
     }
     const api = await axios.put(URL, JSON.stringify({email, user}), {headers});
+    return api.data;
+    
+  }catch(err){
+    return "Update Error"
+  }
+
+}
+
+export const updateSystemUserOrgName = async (email: string, orgName: string, user: SystemUser) => {
+  const URL = "http://localhost:5500/user/details/update";
+
+  try{
+    const headers = {
+      "Content-Type": "application/json"
+    }
+    const api = await axios.put(URL, JSON.stringify({email, orgName, user}), {headers});
     return api.data;
     
   }catch(err){

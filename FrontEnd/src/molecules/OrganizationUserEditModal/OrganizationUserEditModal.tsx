@@ -35,19 +35,7 @@ const OrganizationUserEditModal = ({
   const [dobN, setDob] = useState("");
   const [dobFlag, setDobFlag] = useState(false);
 
-  const [dojN, setDoj] = useState("");
-  const [dojFlag, setDojFlag] = useState(false);
-
-  const currentDate = new Date();
-  const currentDateFormatted = `${currentDate.getFullYear()}-${
-    currentDate.getMonth() + 1 < 10
-      ? "0" + (currentDate.getMonth() + 1)
-      : currentDate.getMonth() + 1
-  }-${
-    currentDate.getDate() < 10
-      ? "0" + currentDate.getDate()
-      : currentDate.getDate()
-  }`;
+  const currentDate = new Date().toISOString().split("T")[0];
 
   //user details state setter
   const setFirstNameValue = (value: string) => {
@@ -65,21 +53,6 @@ const OrganizationUserEditModal = ({
   const setDobValue = (value: string) => {
     setDob(value);
     validateName(value, setDobFlag);
-
-    if (value > currentDateFormatted) {
-      setDobFlag(true);
-    } else {
-      setDobFlag(false);
-    }
-  };
-  const setDojValue = (value: string) => {
-    setDoj(value);
-    validateName(value, setDojFlag);
-    if (value < dobN) {
-      setDojFlag(true);
-    } else {
-      setDojFlag(false);
-    }
   };
 
   const handleEditClose = () => {
@@ -104,17 +77,12 @@ const OrganizationUserEditModal = ({
       setDobFlag(true);
       return;
     }
-    if (dojN === "") {
-      setDojFlag(true);
-      return;
-    }
 
     if (
       firstNameN !== updateData.firstName ||
       lastNameN !== updateData.lastName ||
       emailN !== updateData.email ||
-      dobN !== updateData.dob ||
-      dojN !== updateData.doj
+      dobN !== updateData.dob
     ) {
       //Make Call
 
@@ -125,7 +93,7 @@ const OrganizationUserEditModal = ({
         email: emailN,
         password: "",
         dob: dobN,
-        doj: dojN,
+        doj: ""
       };
 
       const response = await SystemUserServices.updateSystemUser(
@@ -147,13 +115,11 @@ const OrganizationUserEditModal = ({
     setLastName(updateData.lastName);
     setEmail(updateData.email);
     setDob(updateData.dob);
-    setDoj(updateData.doj);
   }, [
     updateData.firstName,
     updateData.lastName,
     updateData.email,
     updateData.dob,
-    updateData.doj,
   ]);
 
   return (
@@ -213,23 +179,10 @@ const OrganizationUserEditModal = ({
               value={dobN}
               style={{ width: 400 }}
               onChange={setDobValue}
+              max={currentDate}
             />
             <span className="error-msg" hidden={!dobFlag}>
               Invalid Date of Birth
-            </span>
-          </div>
-
-          <div className="profile-item">
-            Date of Joining
-            <Input
-              type="date"
-              size="lg"
-              value={dojN}
-              style={{ width: 400 }}
-              onChange={setDojValue}
-            />
-            <span className="error-msg" hidden={!dojFlag}>
-              Invalid Date of Joining
             </span>
           </div>
         </Modal.Body>

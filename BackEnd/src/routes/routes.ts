@@ -49,6 +49,7 @@ class Routes {
     this.router.post(`${prefix}/delete`, this.organizationUserController.deleteOrganizationUser);
 
     this.router.put(`${prefix}/update`, this.organizationUserController.updateOrganizationUser);
+    this.router.put(`${prefix}/details/update`, this.organizationUserController.updateOrganizationUserOrg);
   }
 
   private sendMailRoutes(prefix: string) {

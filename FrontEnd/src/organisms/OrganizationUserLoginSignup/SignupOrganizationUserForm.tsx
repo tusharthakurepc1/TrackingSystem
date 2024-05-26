@@ -130,10 +130,8 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
     const data =
       await OrganizationUserServices.organizationUserSignupRequest(user);
 
-    // console.log(data.data.msg);
     
     if(data.status === 200){
-      
       toast.success(data.data.msg)
       setTimeout(() => {
         setLogin(true);

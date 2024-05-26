@@ -10,6 +10,11 @@ import { validateName, validateEmail } from "../../helpers/InputValidations";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+type OrgDetail = {
+  orgName: string,
+  doj: string
+}
+
 
 const OrganizationUserProfile = () => {
   const [firstNameN, setFirstName] = useState("");
@@ -26,6 +31,9 @@ const OrganizationUserProfile = () => {
 
   const [dojN, setDoj] = useState("");
   const [dojFlag, setDojFlag] = useState(false);
+
+  const [orgNameN, setOrgName] = useState("");
+
   const [prevObj, setPrevObj] = useState({
     firstName: "",
     lastName: "",
@@ -76,16 +84,26 @@ const OrganizationUserProfile = () => {
   const profileReq = async (token: string) => {
     const responseOrgData =
       await OrganizationUserServices.organizationUserRequest(token);
-     
-    const { firstName, lastName, email, password, dob, doj } = responseOrgData.data
+    
+    console.log("Profile Data: ", responseOrgData)
+    const { firstName, lastName, email, password, dob, organization_list } = responseOrgData.data
       
+    setOrgName(responseOrgData.orgName);
     setFirstName(firstName)
     setLastName(lastName)
     setEmail(email)
     setDob(dob)
-    setDoj(doj)
     
-    setPrevObj({firstName, lastName, email, password, dob, doj})
+    let temp_doj = ""
+    organization_list.forEach((el: OrgDetail)=>{
+      if(el.orgName === responseOrgData.orgName){
+        setDoj(el.doj)
+        temp_doj = el.doj;
+      }
+    })
+    
+    
+    setPrevObj({firstName, lastName, email, password, dob, doj: temp_doj})
 
   }
 
@@ -130,8 +148,9 @@ const OrganizationUserProfile = () => {
         doj: dojN,
       };
 
-      const response = await SystemUserServices.updateSystemUser(
+      const response = await SystemUserServices.updateSystemUserOrgName(
         email,
+        orgNameN,
         updateUser
       );
       
@@ -156,7 +175,7 @@ const OrganizationUserProfile = () => {
     <>
       <CustomNavbar isVisible={true}/>
       <div className="header-profile">
-          <h2>Profile </h2>
+          <h2>Profile</h2>
         </div>
       <div className="profile-body">
         <div className="profile">

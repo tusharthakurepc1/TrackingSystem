@@ -45,6 +45,7 @@ const UsersManage = () => {
   useEffect(() => {
     const getUserData = async () => {
       const result = await SystemUserServices.SystemUserWithOffset(page, limit);
+      
       setTotalData(result.totalData);
       setUserData(result.data);
     };
@@ -56,7 +57,7 @@ const UsersManage = () => {
     if (!data) {
       return;
     }
-    let { firstName, lastName, email, password, dob, doj, orgination_list } =
+    let { firstName, lastName, email, password, dob, organization_list } =
       data;
 
     setUpdateData({
@@ -66,8 +67,7 @@ const UsersManage = () => {
       email,
       password,
       dob,
-      doj,
-      organization_list: orgination_list,
+      organization_list,
     });
   };
 
@@ -78,11 +78,16 @@ const UsersManage = () => {
       <Panel header="Users Portal">
         <Table data={userData} autoHeight={true}>
           <Column flexGrow={1}>
-            <HeaderCell>Name</HeaderCell>
+            <HeaderCell>First Name</HeaderCell>
             <Cell dataKey="firstName" />
           </Column>
 
           <Column flexGrow={1}>
+            <HeaderCell>Last Name</HeaderCell>
+            <Cell dataKey="lastName" />
+          </Column>
+
+          <Column flexGrow={2}>
             <HeaderCell>Email</HeaderCell>
             <Cell dataKey="email" />
           </Column>
@@ -90,17 +95,13 @@ const UsersManage = () => {
             <HeaderCell>Date of Birth</HeaderCell>
             <Cell dataKey="dob" />
           </Column>
-          <Column flexGrow={1}>
-            <HeaderCell>Date of Joining</HeaderCell>
-            <Cell dataKey="doj" />
-          </Column>
 
           <Column width={120} align="center" fixed="right">
             <HeaderCell>Organization</HeaderCell>
             <Cell style={{ padding: "6px" }}>
               {(rowData) => (
                 <Button
-                  appearance="primary"
+                  appearance="link"
                   onClick={() => {
                     setOpenOrg(true);
                     makeUserUpdate(rowData);
@@ -116,7 +117,7 @@ const UsersManage = () => {
             <Cell style={{ padding: "6px" }}>
               {(rowData) => (
                 <Button
-                  appearance="primary"
+                  appearance="link"
                   onClick={() => {
                     makeUserUpdate(rowData);
                     setOpenEdit(true);

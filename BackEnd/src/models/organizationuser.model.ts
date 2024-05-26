@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
-import { OrganizationUser } from '../typings/common'
+import { OrganizationUser, OrgDetails } from '../typings/common'
+
 
 const OrganizationUserSchema = new Schema(
   {
@@ -9,7 +10,7 @@ const OrganizationUserSchema = new Schema(
     email: {type: String, require: true, unique: true},
     dob: {type: String, require: false},
     doj: {type: String, require: false},
-    orgination_list: {type: Array<String>, require: true}
+    organization_list: {type: Array<OrgDetails>, require: true}
   },
   {
     timestamps: true

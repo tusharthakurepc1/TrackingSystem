@@ -10,12 +10,15 @@ import SystemUserServices from "../../services/SystemUser";
 //css
 import 'react-toastify/dist/ReactToastify.css';
 
+type OrgDetail = {
+  orgName: string,
+  doj: string
+}
 
 const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, updateData}: OrganizationListModelProps) => {
   //states
   const [organizationValue, setOrganizationValue] = useState("");
   const [orgValFlag, setOrgValFlag] = useState(false);
-
   const handleOrgClose = () => {
     setOrganizationValue("");
     setOpenOrg(false);
@@ -46,7 +49,7 @@ const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, 
     let { email } = data;
     if (
       organizationValue === "Select" ||
-      !data.organization_list.includes(organizationValue)
+      !data.organization_list.some((el: OrgDetail)=> el.orgName === organizationValue)
     ) {
       return;
     }
@@ -85,7 +88,7 @@ const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, 
 
     if (
       organizationValue === "Select" ||
-      !data.organization_list.includes(organizationValue)
+      !data.organization_list.some((el: OrgDetail)=> el.orgName === organizationValue)
     ) {
       return;
     }
@@ -124,9 +127,9 @@ const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, 
               value={organizationValue}
               onChange={setOrgValue}
             >
-              {updateData.organization_list.map((org: string) => (
-                <Radio key={org} value={org}>
-                  {org}
+              {updateData.organization_list.map((org: OrgDetail) => (
+                <Radio key={org.orgName} value={org.orgName}>
+                  {org.orgName}
                 </Radio>
               ))}
             </RadioGroup>

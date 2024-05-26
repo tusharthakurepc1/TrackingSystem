@@ -7,7 +7,7 @@ import { CustomProvider } from "rsuite";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <CustomProvider theme="dark">
+    <CustomProvider theme="light">
       <App />
     </CustomProvider>
   </React.StrictMode>

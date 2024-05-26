@@ -1,6 +1,5 @@
-import { parse } from "dotenv";
 import OrganizationUserSchema from "../models/organizationuser.model";
-import { OrganizationUser, UpdateOrganizationUserEmail } from '../typings/common'
+import { OrganizationUser, OrgDetails, OrganizationUserNew, UpdateOrganizationUserEmail } from '../typings/common'
 
 
 class OrganizationUserDao {
@@ -21,19 +20,23 @@ class OrganizationUserDao {
     return await OrganizationUserSchema.find({isActive: true}).skip(startPage).limit(currentPageSize);
   }
 
-  public insertOrganizationUser = async (reqBody: OrganizationUser) => {
-    const user = await OrganizationUserSchema.findOne({email: reqBody.email, isActive: true});
+  public insertOrganizationUser = async (reqBody: OrganizationUserNew) => {
+    const user: OrganizationUserNew = await OrganizationUserSchema.findOne({email: reqBody.email, isActive: true});
     console.log(user);
     
     if(user){
-      if(user.orgination_list.includes(reqBody.orgination_list[0])){
+      const orgExists: boolean = user.organization_list.some((el: OrgDetails)=>{
+        return el.orgName === reqBody.organization_list[0].orgName
+      })
+
+      if(orgExists){
         return null;
       }
       return await OrganizationUserSchema.updateOne(
         {email: reqBody.email}, 
         {
           $push: {
-            orgination_list: reqBody.orgination_list[0]
+            organization_list: reqBody.organization_list[0]
           }
         }
       )
@@ -43,13 +46,12 @@ class OrganizationUserDao {
 
   public pushOrganizationUserOrg = async (orgDetail: UpdateOrganizationUserEmail) => {
     const {email, orgName} = orgDetail;
-    const user = await OrganizationUserSchema.find({})
 
     return await OrganizationUserSchema.updateOne(
       {email},
       {
         $push: {
-          orgination_list: orgName
+          organization_list: {orgName, doj: ""}
         }
       }
     )
@@ -61,7 +63,7 @@ class OrganizationUserDao {
       {email},
       {
         $pull: {
-          orgination_list: orgName
+          organization_list: {orgName}
         }
       }
     )
@@ -73,9 +75,9 @@ class OrganizationUserDao {
 
   public deleteOrganizationUser = async (orgData: UpdateOrganizationUserEmail) => {
     const { email, orgName} = orgData;
-    const data = await OrganizationUserSchema.findOne({email})
+    const data: OrganizationUserNew = await OrganizationUserSchema.findOne({email})
 
-    if(data.orgination_list.length <= 1){
+    if(data.organization_list.length <= 1){
       return await OrganizationUserSchema.deleteOne({email});
     }
     else{
@@ -83,7 +85,7 @@ class OrganizationUserDao {
         {email},
         {
           $pull: {
-            orgination_list: orgName
+            organization_list: { orgName: orgName }
           }
         }
       )
@@ -92,14 +94,28 @@ class OrganizationUserDao {
 
   public updateOrganizationUser = async (email: string, reqBody: OrganizationUser) => {
     return await OrganizationUserSchema.updateOne(
-      {email},
+      {email, isActive: true},
       {
         $set: {
           firstName: reqBody.firstName,
           lastName: reqBody.lastName,
           email: reqBody.email,
           dob: reqBody.dob,
-          doj: reqBody.doj
+        }
+      }
+    )
+  }
+
+  public updateOrganizationUserOrg = async(email: string, orgName: string, reqBody: OrganizationUser) => {
+    return await OrganizationUserSchema.updateOne(
+      {email, 'organization_list.orgName': orgName, isActive: true},
+      {
+        $set: {
+          firstName: reqBody.firstName,
+          lastName: reqBody.lastName,
+          email: reqBody.email,
+          dob: reqBody.dob,
+          'organization_list.$.doj': reqBody.doj
         }
       }
     )

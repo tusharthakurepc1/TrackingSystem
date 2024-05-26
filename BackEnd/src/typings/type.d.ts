@@ -99,3 +99,17 @@ interface GetOrganizationUserCredBody {
   otp: string
 }
 
+interface AddOrganizationUserBody {
+  user: User
+}
+
+interface GetOrganizationUserParams {
+  email: string
+}
+
+interface GetOrganizationUserCredBody {
+  email: string, 
+  orgName: string, 
+  otp: string
+}
+

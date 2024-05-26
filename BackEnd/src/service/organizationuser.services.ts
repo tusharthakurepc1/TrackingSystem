@@ -1,5 +1,5 @@
 import OrganizationUserDao from "../dao/organizationuser.dao"
-import { OrganizationUser, UpdateOrganizationUserEmail } from "../typings/common"
+import { OrganizationUser, OrganizationUserNew, UpdateOrganizationUserEmail } from "../typings/common"
 
 class OrganizationUserServices {
   private organizationUserDao = new OrganizationUserDao()
@@ -20,7 +20,7 @@ class OrganizationUserServices {
     return await this.organizationUserDao.getOrganizationUser(email);
   }
 
-  public addOrganizationUser = async (reqBody: OrganizationUser) => {
+  public addOrganizationUser = async (reqBody: OrganizationUserNew) => {
     return await this.organizationUserDao.insertOrganizationUser(reqBody);
   }
 
@@ -48,6 +48,16 @@ class OrganizationUserServices {
     }
     
     return await this.organizationUserDao.updateOrganizationUser(email, reqBody);
+  }
+
+  public updateOrganizationUserOrg = async (email: string, orgName: string, reqBody: OrganizationUser) => {
+    const user = await this.organizationUserDao.getOrganizationUser(reqBody.email)
+    
+    if(user && email !== reqBody.email){
+      return 945;
+    }
+    
+    return await this.organizationUserDao.updateOrganizationUserOrg(email, orgName, reqBody);
   }
 
   //remove organization from the user email list

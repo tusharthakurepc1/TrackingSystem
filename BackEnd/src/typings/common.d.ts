@@ -21,7 +21,21 @@ export interface OrganizationUser {
   email: string,
   dob: string,
   doj: string,
-  orgination_list: Array<string>
+  organization_list: Array<OrgDetails>
+}
+
+export interface OrgDetails  {
+  orgName: string,
+  doj: string,
+}
+
+export interface OrganizationUserNew {
+  isActive: boolean,
+  firstName: string,
+  lastName: string,
+  email: string,
+  dob: string,
+  organization_list: Array<OrgDetails>
 }
 
 export interface wfhApplication{
@@ -47,6 +61,12 @@ export interface UpdateOrganizationUserEmail {
   email: string
 }
 
+export interface OrganizationUserJoin {
+  isActive: boolean,
+  email: string,
+  orgName: string,
+  doj: Date
+}
 
 export interface AuthUser {
   email: string
