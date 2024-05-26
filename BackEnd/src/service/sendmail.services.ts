@@ -14,7 +14,7 @@ class SendMailServices {
       secure: false,
       auth: {
           user: 'tusharchandthakurepc205@gmail.com',
-          pass: 'vjvz ybun hocf gzxx'                     //need to change....
+          pass: ''                     
       }
     });
 
