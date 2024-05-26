@@ -1,0 +1,72 @@
+form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px 0px #025077;
+  margin-top: 20px !important;
+}
+
+.input-body {
+  height: 70px;
+}
+.error-msg {
+  background-color: #f04f43;
+  color: white;
+  font-size: 12px;
+  line-height: 20px;
+  padding: 3px 7px;
+  position: absolute;
+  white-space: nowrap;
+  z-index: 5;
+  border-radius: 6px;
+  // border-bottom: 1px dotted red;
+}
+
+.header-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.footer-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.full-name{
+  display: flex;
+}
+.firstName{
+  width: 50%;
+  margin-right: 10px;
+}
+.lastName{
+  width: 50%;
+  margin-left: 10px;
+}
+
+// .button-grp {
+//   display: flex;
+// }
+
+.button-nav {
+  flex-grow: 1;
+  margin: 10px;
+  color: white !important;
+}
+
+.primary {
+  background-color: #025077 !important;
+}
+
+.default {
+  background-color: #169de0 !important;
+}
+
+.otpButtonWrapper {
+  margin-bottom: 20px;
+}
