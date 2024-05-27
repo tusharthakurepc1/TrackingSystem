@@ -1,0 +1,2 @@
+import OrganizationUserProfileUpdate from './OrganizationUserProfileUpdate'
+export default OrganizationUserProfileUpdate;

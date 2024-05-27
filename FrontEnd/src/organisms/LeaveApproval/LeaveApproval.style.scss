@@ -1,0 +1,27 @@
+h1,
+p {
+  text-align: center;
+}
+
+.table-user {
+  align-items: center;
+  text-align: center;
+  width: 60%;
+  margin: 50px 10% !important;
+}
+
+.filterBlock{
+  margin: 0px 20px;
+}
+.datePicker{
+  width: 100%;
+}
+.filterItem{
+  margin: 0px 10px;
+}
+
+.overflowContent {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

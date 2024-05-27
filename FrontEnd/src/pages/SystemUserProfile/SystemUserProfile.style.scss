@@ -1,0 +1,25 @@
+.profile-body{
+  // border: 2px solid red;
+  display: flex;
+}
+.profile{
+  margin: 50px auto 100px auto;
+
+}
+.profile-item{
+  margin-bottom: 30px;
+}
+
+.name-grp{
+  display: flex !important;
+}
+
+.password-grp{
+  display: flex;
+}
+
+.header-profile{
+  margin-top: 50px;
+  display: flex;
+  justify-content: center ;
+}
