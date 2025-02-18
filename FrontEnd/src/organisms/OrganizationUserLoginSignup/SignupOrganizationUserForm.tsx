@@ -131,11 +131,14 @@ const SignupOrganizationUserForm = ({ setLogin }: LoginOrganisationProps) => {
       await OrganizationUserServices.organizationUserSignupRequest(user);
 
     
-    if(data.status === 200){
+    if(data.status && data.status === 200){
       toast.success(data.data.msg)
       setTimeout(() => {
         setLogin(true);
       }, 1000);
+    }
+    else if(data.name && data.name === "ZodError"){
+      toast.error(data.issues[0].message)
     }
     else{
       toast.error(data.response.data.data.msg)

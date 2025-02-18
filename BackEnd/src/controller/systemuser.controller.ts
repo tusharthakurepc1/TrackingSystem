@@ -3,19 +3,26 @@ import jwt from 'jsonwebtoken'
 import SystemUserServices from "../service/systemuser.services"
 import OrganizationUserServices from "../service/organizationuser.services"
 import SendMailServices from "../service/sendmail.services"
-import { ExtendedRequest } from "../typings/type"
 import SECRET_KEY from "../constants/common"
+import { SystemUser } from "../typings/common"
+import {
+  ExtendedRequest, 
+  GetEmailParams,
+  GetSystemUserCredParams,
+  GetUserWithOffset,
+  UpdateSystemUserBody
+} from '../typings/type'
 
 class SystemUserController {
   public systemUserServices = new SystemUserServices()
   private organizationUserService = new OrganizationUserServices();
   private sendMailServices = new SendMailServices();
 
-  public addSystemUser = async (req: Request, res: Response, next: NextFunction) => {
-    const body = req.body;
+  public addSystemUser = async (req: Request<{}, SystemUser>, res: Response, next: NextFunction) => {
+    const user: SystemUser = req.body;
     
     try{
-      await this.systemUserServices.addSystemUser(body);
+      await this.systemUserServices.addSystemUser(user);
       
       return res.status(200).json({
         data: {
@@ -33,10 +40,8 @@ class SystemUserController {
     }
   }
 
-  public getSystemUser = async (req: Request, res: Response, next: NextFunction) => {
+  public getSystemUser = async (req: Request<GetEmailParams, {}>, res: Response, next: NextFunction) => {
     const { email } = req.params;
-    // console.log(req)
-    // console.log(email);
     
     try{
       const result = await this.systemUserServices.getSystemUser(email)
@@ -58,7 +63,7 @@ class SystemUserController {
   }
 
 
-  public getSystemUserCred = async (req: Request, res: Response, next: NextFunction) => {
+  public getSystemUserCred = async (req: Request<{}, GetSystemUserCredParams>, res: Response, next: NextFunction) => {
     const { email, otp } = req.body;
     
     try{
@@ -118,7 +123,7 @@ class SystemUserController {
     }
   }
 
-  public getUserWithOffset = async (req: Request, res: Response, next: NextFunction) => {
+  public getUserWithOffset = async (req: Request<GetUserWithOffset, {}>, res: Response, next: NextFunction) => {
     const {page, pageSize} = req.query;
 
     console.log(page, pageSize);
@@ -145,7 +150,7 @@ class SystemUserController {
   }
 
 
-  public deleteSystemUser = async (req: Request, res: Response, next: NextFunction) => {
+  public deleteSystemUser = async (req: Request<GetEmailParams, {}>, res: Response, next: NextFunction) => {
     const { email } = req.params;
 
     try{
@@ -167,7 +172,7 @@ class SystemUserController {
     } 
   }
 
-  public updateSystemUser = async (req: Request, res: Response, next: NextFunction) => {
+  public updateSystemUser = async (req: Request<{}, UpdateSystemUserBody>, res: Response, next: NextFunction) => {
     const { email, user } = req.body;
 
     try{

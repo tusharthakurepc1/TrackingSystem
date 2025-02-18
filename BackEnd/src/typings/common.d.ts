@@ -1,3 +1,4 @@
+
 export interface Organization {
   isActive: boolean, 
   name: string,
