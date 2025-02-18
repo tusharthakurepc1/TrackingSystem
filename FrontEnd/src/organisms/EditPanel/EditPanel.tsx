@@ -7,11 +7,11 @@ import "./EditPanel.style.scss";
 import { EditPanelProps } from "./EditPanel.type";
 
 const EditPanel = ({
-  firstName,
-  lastName,
-  email,
-  password,
-  dob,
+  // firstName,
+  // lastName,
+  // email,
+  // password,
+  // dob,
   organizationList,
   editFlag,
   setEditFlag,

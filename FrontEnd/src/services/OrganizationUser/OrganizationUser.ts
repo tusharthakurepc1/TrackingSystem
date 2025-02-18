@@ -76,11 +76,9 @@ export const organizationUserLoginRequest = async ({
 //Insert data into the db with corrospond User Type
 export const organizationUserSignupRequest = async ({
   _orginizationName,
-  isActive,
   firstName,
   lastName,
   email,
-  password,
   dob,
   doj,
 }: User) => {

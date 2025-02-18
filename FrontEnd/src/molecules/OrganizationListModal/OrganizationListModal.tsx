@@ -2,20 +2,26 @@
 import { useState } from "react";
 import { Button, Modal, RadioGroup, Radio } from "rsuite";
 import { OrganizationListModelProps } from "./OrganizationListModal.type";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 //service
 import SystemUserServices from "../../services/SystemUser";
 
 //css
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 type OrgDetail = {
-  orgName: string,
-  doj: string
-}
+  orgName: string;
+  doj: string;
+};
 
-const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, updateData}: OrganizationListModelProps) => {
+const OrganizationListModal = ({
+  openOrg,
+  setOpenOrg,
+  flagUpdate,
+  setFlagUpdate,
+  updateData,
+}: OrganizationListModelProps) => {
   //states
   const [organizationValue, setOrganizationValue] = useState("");
   const [orgValFlag, setOrgValFlag] = useState(false);
@@ -34,7 +40,7 @@ const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, 
     setOrganizationValue(value);
   };
 
-  //Make User Admin 
+  //Make User Admin
   const makeUserAdmin = async (data: User | any) => {
     if (organizationValue === "" || organizationValue === "Select") {
       setOrgValFlag(true);
@@ -49,7 +55,9 @@ const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, 
     let { email } = data;
     if (
       organizationValue === "Select" ||
-      !data.organization_list.some((el: OrgDetail)=> el.orgName === organizationValue)
+      !data.organization_list.some(
+        (el: OrgDetail) => el.orgName === organizationValue
+      )
     ) {
       return;
     }
@@ -63,7 +71,7 @@ const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, 
 
     if (response.status === 200) {
       toast.success(`${data.firstName} now admin of ${organizationValue}`);
-      
+
       handleOrgClose();
       setFlagUpdate(!flagUpdate);
     } else {
@@ -88,7 +96,9 @@ const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, 
 
     if (
       organizationValue === "Select" ||
-      !data.organization_list.some((el: OrgDetail)=> el.orgName === organizationValue)
+      !data.organization_list.some(
+        (el: OrgDetail) => el.orgName === organizationValue
+      )
     ) {
       return;
     }
@@ -125,7 +135,9 @@ const OrganizationListModal = ({openOrg, setOpenOrg, flagUpdate, setFlagUpdate, 
             <RadioGroup
               name="radio-group"
               value={organizationValue}
-              onChange={setOrgValue}
+              onChange={(value) => {
+                setOrgValue(value as string);
+              }}
             >
               {updateData.organization_list.map((org: OrgDetail) => (
                 <Radio key={org.orgName} value={org.orgName}>

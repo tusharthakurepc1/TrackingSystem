@@ -27,7 +27,7 @@ const UsersManage = () => {
     password: "",
     dob: "",
     doj: "",
-    organization_list: [""],
+    organization_list: [],
   });
 
   const [totalData, setTotalData] = useState(10);

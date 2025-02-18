@@ -15,7 +15,7 @@ export const wFHApplicationSignupRequest = async ({
     const headers = {
       "Content-Type": "application/json",
     };
-    const response = await axios.post(URL, JSON.stringify({ firstName, lastName, email, password, dob }), {
+    const response = await axios.post(URL, JSON.stringify(user), {
       headers,
     });
     
