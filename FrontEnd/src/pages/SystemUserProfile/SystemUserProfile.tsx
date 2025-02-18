@@ -117,9 +117,9 @@ const SystemUserProfile = () => {
         if(response.status === 200){
           const msg = response.data.msg;
           toast.success(msg);
-        //   Cookies.remove('accessToken')
-        //   Cookies.remove('user')
-        //   navigate('/')
+          Cookies.remove('accessToken')
+          Cookies.remove('user')
+          navigate('/')
         }
         else if(response.status === 205){
           const msg = response.data.msg;
@@ -137,7 +137,7 @@ const SystemUserProfile = () => {
     <>
       <CustomNavbar isVisible={true}/>
         <div className="header-profile">
-          <h2>Profile </h2>
+          <h2>Profile</h2>
         </div>
       <div className="profile-body">
         <div className="profile">

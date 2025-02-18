@@ -99,9 +99,11 @@ const OrganizationManage = () => {
 
     const response = await OrganizationServices.addOrganization(orgDetails);
 
-    console.log(response);
     if(response.status && response.status === 200){
       toast.success(response.data.msg)
+    }
+    else if(response.name && response.name === "ZodError"){
+      toast.error(response.issues[0].message)
     }
     else{
       toast.error(response.data.msg)

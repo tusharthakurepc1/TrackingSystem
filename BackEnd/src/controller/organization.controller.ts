@@ -1,14 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import OrganizationServices from "../service/organization.services";
-import { Organization, UpdateOrganizationUserEmail } from "../typings/common";
+import { Organization } from "../typings/common";
 import OrganizationUserServices from "../service/organizationuser.services";
 import {
   GetOrganizationParams,
   PostOrganizationBody,
   AddOrganizationEmailBody,
   RemoveOrganizationBody,
-  MakeOrganizationAdminBody,
-  IsAdminOfOrganizationParams,
+  OrgDetails,
 } from "../typings/type";
 
 class OrganizationController {
@@ -16,21 +15,8 @@ class OrganizationController {
   public orgUserService = new OrganizationUserServices();
 
   //Organization Controller Code below
-  public getOrganization = async (
-    req: Request<GetOrganizationParams>,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const { orgName } = req.params;
-
-    if (!orgName || orgName === "") {
-      return res.json(400).json({
-        data: {
-          msg: "Fill all the details",
-        },
-        status: 400,
-      });
-    }
+  public getOrganization = async (req: Request<GetOrganizationParams>, res: Response, next: NextFunction ) => {
+    let { orgName } = req.params;
 
     try {
       const result = await this.orgService.getOrganization(orgName);
@@ -48,26 +34,9 @@ class OrganizationController {
     }
   };
 
-  public addOrganization = async (
-    req: Request<{}, PostOrganizationBody>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public addOrganization = async (req: Request<{}, PostOrganizationBody>, res: Response, next: NextFunction ) => {
     const body = req.body;
     const { name, max_wfh, userEmail } = body;
-
-    if (
-      [name, max_wfh, userEmail].some((el) => {
-        return !el;
-      })
-    ) {
-      return res.json(400).json({
-        data: {
-          msg: "Fill all the details",
-        },
-        status: 400,
-      });
-    }
 
     try {
       const orgData: Organization = {
@@ -104,11 +73,7 @@ class OrganizationController {
     }
   };
 
-  public addOrganizationEmail = async (
-    req: Request<{}, AddOrganizationEmailBody>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public addOrganizationEmail = async (req: Request<{}, AddOrganizationEmailBody>, res: Response, next: NextFunction ) => {
     const body = req.body;
     const { _id, orgName, email } = body;
 
@@ -143,11 +108,7 @@ class OrganizationController {
     }
   };
 
-  public removeOrganization = async (
-    req: Request<{}, RemoveOrganizationBody>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public removeOrganization = async (req: Request<{}, RemoveOrganizationBody>, res: Response, next: NextFunction ) => {
     const { _id, orgName } = req.body;
 
     try {
@@ -169,11 +130,7 @@ class OrganizationController {
     }
   };
 
-  public makeOrganizationAdmin = async (
-    req: Request<{}, MakeOrganizationAdminBody>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public makeOrganizationAdmin = async (req: Request<{}, OrgDetails>, res: Response, next: NextFunction) => {
     const orgDetail = req.body;
     const { orgName, email } = orgDetail;
 
@@ -207,11 +164,7 @@ class OrganizationController {
     }
   };
 
-  public getAllOrganization = async (
-    req: Request<{}, {}>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public getAllOrganization = async (req: Request<{}, {}>, res: Response, next: NextFunction) => { 
     try {
       const result = await this.orgService.getAllOrganization();
 
@@ -227,16 +180,12 @@ class OrganizationController {
     }
   };
 
-  public getAllOrganizationName = async (
-    req: Request<{}, {}>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public getAllOrganizationName = async (req: Request<{}, {}>, res: Response, next: NextFunction ) => {
     try {
       const result = await this.orgService.getAllOrganizationName();
 
       return res.status(200).json({
-        data: {
+        data: { 
           msg: result,
         },
         status: 200,
@@ -249,11 +198,7 @@ class OrganizationController {
     }
   };
 
-  public isAdminOfOrganization = async (
-    req: Request<IsAdminOfOrganizationParams, {}>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public isAdminOfOrganization = async (req: Request<OrgDetails, {}>, res: Response, next: NextFunction) => {
     const { email, orgName } = req.params;
 
     console.log(email, orgName);

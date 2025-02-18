@@ -5,37 +5,25 @@ import OrganizationServices from "../service/organization.services";
 import SendMailServices from "../service/sendmail.services";
 import {
   ExtendedRequestForOrg,
-  AddOrganizationUserBody,
+  User,
   GetOrganizationUserParams,
   GetOrganizationUserCredBody,
+  DeleteOrganizationUserBody, 
+  UpdateOrganizationUserBody,
+  UpdateOrganizationUserOrgBody
 } from "../typings/type";
 import SECRET_KEY from "../constants/common";
+
+
 
 class OrganizationUserController {
   public organizationUserServices = new OrganizationUserServices();
   public organization = new OrganizationServices();
   public sendMailServices = new SendMailServices();
 
-  public addOrganizationUser = async (
-    req: Request<{}, AddOrganizationUserBody>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public addOrganizationUser = async (req: Request<{}, User>, res: Response, next: NextFunction ) => {
     const user = req.body;
     const { firstName, lastName, email, dob, doj, _orginizationName } = user;
-
-    if (
-      [firstName, lastName, email, dob, doj, _orginizationName].some((el) => {
-        return !el || el === "";
-      })
-    ) {
-      return res.json(400).json({
-        data: {
-          msg: "Fill all the details",
-        },
-        status: 400,
-      });
-    }
 
     const orgDetail = {
       _id: "",
@@ -83,11 +71,7 @@ class OrganizationUserController {
     }
   };
 
-  public getOrganizationUser = async (
-    req: Request<GetOrganizationUserParams, {}>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public getOrganizationUser = async (req: Request<GetOrganizationUserParams, {}>, res: Response, next: NextFunction) => {
     const { email } = req.params;
 
     if (!email || email === "") {
@@ -119,11 +103,7 @@ class OrganizationUserController {
     }
   };
 
-  public getOrganizationUserCred = async (
-    req: Request<{}, GetOrganizationUserCredBody>,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public getOrganizationUserCred = async (req: Request<{}, GetOrganizationUserCredBody>, res: Response, next: NextFunction) => {
     const { email, orgName, otp } = req.body;
 
     console.log(email, orgName, otp);
@@ -187,11 +167,7 @@ class OrganizationUserController {
     }
   };
 
-  public getOrganizationUserAuth = async (
-    req: ExtendedRequestForOrg,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public getOrganizationUserAuth = async (req: ExtendedRequestForOrg, res: Response, next: NextFunction) => {
     const { email, orgName } = req.user;
 
     // if(!email || email === ''){
@@ -224,10 +200,7 @@ class OrganizationUserController {
     }
   };
 
-  public deleteOrganizationUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
+  public deleteOrganizationUser = async (req: Request<{}, DeleteOrganizationUserBody>, res: Response, next: NextFunction
   ) => {
     const orgData = req.body;
     const { _id, orgName, email } = req.body;
@@ -265,11 +238,7 @@ class OrganizationUserController {
     }
   };
 
-  public updateOrganizationUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public updateOrganizationUser = async (req: Request<{}, UpdateOrganizationUserBody>, res: Response, next: NextFunction) => {
     const { email, user } = req.body;
 
     try {
@@ -298,11 +267,7 @@ class OrganizationUserController {
     }
   };
 
-  public updateOrganizationUserOrg = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public updateOrganizationUserOrg = async (req: Request<{}, UpdateOrganizationUserOrgBody>, res: Response, next: NextFunction) => {
     const { email, orgName, user } = req.body;
 
     try {
