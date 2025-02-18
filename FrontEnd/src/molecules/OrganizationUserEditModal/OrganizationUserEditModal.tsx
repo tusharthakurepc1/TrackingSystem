@@ -104,7 +104,11 @@ const OrganizationUserEditModal = ({
         toast.success("User Updated Sucessfully");
         handleEditClose();
         setFlagUpdate(!flagUpdate);
-      } else {
+      } 
+      else if(response.name && response.name === "ZodError"){
+        toast.error(response.issues[0].message)
+      }
+      else {
         toast.error("User cannot updated! Something went Wrong");
       }
     }

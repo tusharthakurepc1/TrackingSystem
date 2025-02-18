@@ -92,6 +92,9 @@ const SignupSystemUserForm = ({ setLogin }: SystemUserSignupProps) => {
         setLogin(true);
       }, 1000);
     }
+    else if(data.name && data.name === "ZodError"){
+      toast.error(data.issues[0].message)
+    }
     else{
       toast.error("Account Creation Failed")
     }

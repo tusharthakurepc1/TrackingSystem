@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
 import SendMailServices from "../service/sendmail.services";
+import {SendOtpParams} from '../typings/type'
 
 class SendMailController {
   public sendMailServices = new SendMailServices();
 
 
-  public sendOtp = async (req: Request, res: Response, next: NextFunction) => {
+  public sendOtp = async (req: Request<SendOtpParams, {}>, res: Response, next: NextFunction) => {
     const { email } = req.params;
     
     try{

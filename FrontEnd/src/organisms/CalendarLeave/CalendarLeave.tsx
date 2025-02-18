@@ -177,7 +177,7 @@ const CalendarLeave = ({
           isValidApplication(date);
         }}
         cellClassName={setCellClassName}
-        onChange={checkWfhLeaves}
+        onMonthChange={checkWfhLeaves}
       />
 
       <Modal overflow={true} open={openApplication} onClose={closeApplication}>

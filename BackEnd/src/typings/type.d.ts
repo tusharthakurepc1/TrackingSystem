@@ -1,5 +1,6 @@
 import { Request } from 'express'
-import { AuthUser } from "./common"
+import { AuthUser, OrganizationUser, SystemUser } from "./common"
+import {z} from 'zod'
 
 interface ExtendedRequest extends Request {
   user: AuthUser
@@ -37,11 +38,16 @@ interface FilterParameters {
 }
 
 
+interface GetEmailParams {
+  email: string
+}
+
 //--------------  Organization Types --------------------------------
 
 interface GetOrganizationParams {
   orgName: string
 }
+
 
 interface PostOrganizationBody {
   name: string, 
@@ -65,16 +71,7 @@ interface OrgDetails {
   email: string
 }
 
-interface MakeOrganizationAdminBody {
-  orgDetail: OrgDetails
-}
-
-interface IsAdminOfOrganizationParams {
-  email: string,
-  orgName: string
-}
-
-//--------------  Organization Types --------------------------------
+// -------------------- Organization User ---------------------------------
 
 interface User {
   firstName: string,
@@ -85,8 +82,14 @@ interface User {
   _orginizationName: string
 }
 
-interface AddOrganizationUserBody {
-  user: User
+interface GetOrganizationUserParams {
+  email: string
+}
+
+interface GetOrganizationUserCredBody {
+  email: string, 
+  orgName: string, 
+  otp: string
 }
 
 interface GetOrganizationUserParams {
@@ -99,17 +102,43 @@ interface GetOrganizationUserCredBody {
   otp: string
 }
 
-interface AddOrganizationUserBody {
-  user: User
-}
-
-interface GetOrganizationUserParams {
+interface DeleteOrganizationUserBody {
+  _id: string,
+  orgName: string,
   email: string
 }
 
-interface GetOrganizationUserCredBody {
-  email: string, 
-  orgName: string, 
+interface UpdateOrganizationUserBody {
+  email: string,
+  user: OrganizationUser
+}
+
+interface UpdateOrganizationUserOrgBody {
+  email: string,
+  orgName: string,
+  user: OrganizationUser
+}
+
+// -------------------- Otp ---------------------------------
+
+interface SendOtpParams {
+  email: string
+}
+
+// -------------------- System User ---------------------------------
+
+interface GetSystemUserCredParams {
+  email: string,
   otp: string
+}
+
+interface GetUserWithOffset {
+  page: string,
+  pageSize: string
+}
+
+interface UpdateSystemUserBody {
+  email: string,
+  user: SystemUser
 }
 

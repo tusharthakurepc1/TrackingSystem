@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 import WfhApplicationServices from "../service/wfhapplication.services";
 import { ExtendedRequest, ApplicationRequest, FilterParameters } from '../typings/type';
 import { wfhApplication } from '../typings/common';
-import { filter } from 'lodash';
 
 
 class WfhApplicationController {
@@ -47,6 +46,7 @@ class WfhApplicationController {
 
   public updateApplicationStatus = async (req: Request, res: Response, next: NextFunction) => {
     const { _id, email, status, rejectedReason } = req.body;
+
     const reqBody:ApplicationRequest = {
       _id,
       email,
@@ -73,28 +73,6 @@ class WfhApplicationController {
       })
     }
   }
-
-  // public getUserApplications = async(req: Request, res: Response, next: NextFunction) => {
-  //   const {email} = req.params
-
-  //   try{
-  //     const applications = await this.wfhApplicationService.getUserEmailApplication(email);
-
-  //     return res.status(200).json({
-  //       data: applications,
-  //       status: 200
-  //     })
-  //   }
-  //   catch(err){
-  //     return res.status(400).json({
-  //       data: {
-  //         msg: "Cannot get application"
-  //       }, 
-  //       status: 400
-  //     })
-  //   }
-
-  // }
 
   public getAllApplication = async (req: Request, res: Response, next: NextFunction) => {
     const { orgList, email } = req.body;

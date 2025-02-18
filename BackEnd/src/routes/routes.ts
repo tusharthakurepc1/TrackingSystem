@@ -5,6 +5,11 @@ import Authorization from '../middleware/authorization.middleware'
 import SendMailController from '../controller/sendmail.controller';
 import SystemUserController from '../controller/systemuser.controller'
 import WfhApplicationController from "../controller/wfhapplication.controller"
+import Validation from '../middleware/validator.middleware';
+
+import {OrganizationValidationSchema} from '../validator/organization.validation'
+import {OrganizationUserValidationSchema, OrganizationUserUpdateValidationSchema} from '../validator/organizationuser.validation'
+import {SystemUserValidationSchema} from '../validator/systemuser.validation'
 
 class Routes {
   public orgController = new OrganizationController()  
@@ -13,7 +18,9 @@ class Routes {
   public systemUserController = new SystemUserController()
   public wfhApplicationController = new WfhApplicationController()
 
+
   public authorizationMiddleware = new Authorization();
+  public validation = new Validation();
   public router = Router()
 
 
@@ -31,7 +38,7 @@ class Routes {
     this.router.get(`${prefix}/data/list`, this.orgController.getAllOrganization);
     this.router.get(`${prefix}/data/all`, this.orgController.getAllOrganizationName);
 
-    this.router.post(`${prefix}`, this.orgController.addOrganization);
+    this.router.post(`${prefix}`, this.validation.validate(OrganizationValidationSchema), this.orgController.addOrganization);
 
     this.router.put(`${prefix}`, this.orgController.addOrganizationEmail);
     this.router.put(`${prefix}/admin`, this.orgController.makeOrganizationAdmin);
@@ -43,13 +50,13 @@ class Routes {
     // this.router.get(`${prefix}/:email`, this.organizationUserController.getOrganizationUser);
     this.router.get(`${prefix}/isAdmin/:orgName/:email`, this.orgController.isAdminOfOrganization);
 
-    this.router.post(`${prefix}`, this.organizationUserController.addOrganizationUser);
+    this.router.post(`${prefix}`, this.validation.validate(OrganizationUserValidationSchema), this.organizationUserController.addOrganizationUser);
     this.router.post(`${prefix}/login`, this.organizationUserController.getOrganizationUserCred);
     this.router.post(`${prefix}/dashboard`, this.authorizationMiddleware.verfiyToken, this.organizationUserController.getOrganizationUserAuth);
     this.router.post(`${prefix}/delete`, this.organizationUserController.deleteOrganizationUser);
 
-    this.router.put(`${prefix}/update`, this.organizationUserController.updateOrganizationUser);
-    this.router.put(`${prefix}/details/update`, this.organizationUserController.updateOrganizationUserOrg);
+    this.router.put(`${prefix}/update`, this.validation.validate(OrganizationUserUpdateValidationSchema), this.organizationUserController.updateOrganizationUser);
+    this.router.put(`${prefix}/details/update`, this.validation.validate(OrganizationUserUpdateValidationSchema), this.organizationUserController.updateOrganizationUserOrg);
   }
 
   private sendMailRoutes(prefix: string) {
@@ -61,11 +68,10 @@ class Routes {
 
     this.router.post(`${prefix}/login`, this.systemUserController.getSystemUserCred);
     this.router.post(`${prefix}/dashboard`, this.authorizationMiddleware.verfiyToken, this.systemUserController.getSystemUserAuth);
-    this.router.post(`${prefix}/signup`, this.systemUserController.addSystemUser);
+    this.router.post(`${prefix}/signup`, this.validation.validate(SystemUserValidationSchema), this.systemUserController.addSystemUser);
 
     this.router.put(`${prefix}/update`, this.systemUserController.updateSystemUser);
   }
-
 
   private initilizeApplicationRoute = async (prefix: string) => {
     // this.router.get(`${prefix}/:email`, this.wfhApplicationController.getUserApplications);      //currently pause for below api

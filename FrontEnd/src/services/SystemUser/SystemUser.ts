@@ -50,7 +50,7 @@ export const updateSystemUser = async (email: string, user: SystemUser) => {
     return api.data;
     
   }catch(err){
-    return "Update Error"
+    return err;
   }
 
 }
@@ -88,6 +88,12 @@ export const updateSystemUserData = async (email: string, user: SystemUser) => {
     return err;
   }
 
+}
+
+type LoginUser = {
+  email: string,
+  password: string,
+  otp: string
 }
 
 export const SystemUserLoginRequest = async ({
