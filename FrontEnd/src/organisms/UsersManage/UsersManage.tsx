@@ -16,6 +16,7 @@ import OrganizationUserEditModal from "../../molecules/OrganizationUserEditModal
 
 //css
 import "react-toastify/dist/ReactToastify.css";
+import { User } from "../../typings/User";
 
 const UsersManage = () => {
   //states

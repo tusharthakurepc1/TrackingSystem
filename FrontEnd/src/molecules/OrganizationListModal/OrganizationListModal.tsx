@@ -9,6 +9,7 @@ import SystemUserServices from "../../services/SystemUser";
 
 //css
 import "react-toastify/dist/ReactToastify.css";
+import { User } from "../../typings/User";
 
 type OrgDetail = {
   orgName: string;
